@@ -1,5 +1,5 @@
 export const environment = {
     production: false,
-    apiUrl: 'http://89.168.46.217',
+    apiUrl: 'https://api.dev.tripmemories.fr',
     peerPort: 3001,
 };

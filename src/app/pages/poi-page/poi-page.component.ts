@@ -11,6 +11,8 @@ import { CreatePostCardComponent } from '../../components/create-post-card/creat
 import { DialogModule } from 'primeng/dialog';
 import { SharedModule } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { BuyTicketPoiCardComponent } from '../../components/buy-ticket-poi-card/buy-ticket-poi-card.component';
+import { TicketModel } from '../../models/ticket.model';
 
 @Component({
     selector: 'app-poi-page',
@@ -26,6 +28,7 @@ import { ButtonModule } from 'primeng/button';
         DialogModule,
         SharedModule,
         ButtonModule,
+        BuyTicketPoiCardComponent,
     ],
     templateUrl: './poi-page.component.html',
     styleUrl: './poi-page.component.css',
@@ -40,6 +43,42 @@ export class PoiPageComponent implements OnInit {
     widthImage: number = 1;
     heightImage: number = 1;
     showDialog: boolean = false;
+
+    tickets: TicketModel[] = [
+        {
+            poiId: 1,
+            title: 'Ticket 1',
+            price: 10,
+            description: 'Description ticket 1',
+            image: {
+                url: 'https://via.placeholder.com/150',
+            },
+            nbrPeople: 2,
+            stock: 3,
+        },
+        {
+            poiId: 1,
+            title: 'Ticket 1',
+            price: 10,
+            description: 'Description ticket 1',
+            image: {
+                url: 'https://via.placeholder.com/150',
+            },
+            nbrPeople: 3,
+            stock: 4,
+        },
+        {
+            poiId: 1,
+            title: 'Ticket 1',
+            price: 10,
+            description: 'Description ticket 1',
+            image: {
+                url: 'https://via.placeholder.com/150',
+            },
+            nbrPeople: 1,
+            stock: 5,
+        },
+    ];
 
     constructor(
         private _activatedRoute: ActivatedRoute,

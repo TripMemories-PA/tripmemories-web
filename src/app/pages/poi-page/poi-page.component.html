@@ -102,6 +102,17 @@
                 Aucun lieu proche dans ce coin</span
             >
         </div>
+        <div class="mt-16">
+            <h3 class="text-4xl font-bold font-['Urbanist']">
+                Acheter des billets pour {{ poi.name }}
+            </h3>
+            <div class="flex flex-row ml-auto gap-2">
+                <app-buy-ticket-poi-card
+                    *ngFor="let ticket of tickets"
+                    [ticket]="ticket"
+                ></app-buy-ticket-poi-card>
+            </div>
+        </div>
     </div>
 </div>
 <p-dialog

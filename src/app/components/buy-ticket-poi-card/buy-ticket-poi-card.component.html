@@ -1,0 +1,31 @@
+<div class="relative w-60 h-40 cursor-pointer">
+    <div class="text-white z-10 relative mt-14 ml-2 h-full">
+        <p class="text-sm text-shadow-sm shadow-black font-['Urbanist'] font-bold">
+            {{ ticket?.title }}
+        </p>
+        <p class="text-xs text-shadow-sm shadow-black font-['Urbanist']">
+            {{ ticket?.description?.slice(0, 70) }}...
+        </p>
+        <p class="text-xs text-shadow-sm shadow-black font-['Urbanist'] font-bold">
+            {{ ticket?.price }}€
+        </p>
+    </div>
+    <div
+        class="absolute flex justify-center items-center cursor-pointer rounded-full w-6 h-6 bg-[var(--primary)]"
+    >
+        <p-inputIcon class="text-lg" [styleClass]="'pi pi-shopping-cart'" />
+    </div>
+    <img
+        [ngSrc]="
+            ticket?.image?.url ??
+            'https://www.timographie360.fr/photos/realisations/principal/vignettes/visite-virtuelle-arc-triomphe_80.jpg'
+        "
+        alt="avatar"
+        class="object-cover rounded-xl z-0"
+        fill
+        [loading]="'auto'"
+        (load)="isLoadingImage = false"
+        (error)="isLoadingImage = false"
+    />
+    <div class="spinner" *ngIf="isLoadingImage">Loading...</div>
+</div>

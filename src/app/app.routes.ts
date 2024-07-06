@@ -12,7 +12,7 @@ import { FeedPageComponent } from './pages/feed-page/feed-page.component';
 import { UserPageComponent } from './pages/user-page/user-page.component';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { ShopPageComponent } from './pages/shop-page/shop-page.component';
-import { BasketComponent } from './components/basket/basket.component';
+import { BasketPageComponent } from './pages/basket-page/basket-page.component';
 
 export const routes: Routes = [
     {
@@ -61,7 +61,7 @@ export const routes: Routes = [
     },
     {
         path: 'basket',
-        component: BasketComponent,
+        component: BasketPageComponent,
     },
     {
         path: 'user/:id',

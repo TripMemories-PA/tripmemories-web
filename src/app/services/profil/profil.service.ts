@@ -4,6 +4,7 @@ import { User } from '../../models/user';
 import { environment } from '../../../environments/environment';
 import { PostsResponse } from '../../models/response/posts.response';
 import { TicketBuyRequest } from '../../models/request/ticketBuy.request';
+import { BuyTicketsResponse } from '../../models/response/buyTickets.response';
 
 const URL = environment.apiUrl + '/me';
 
@@ -49,6 +50,6 @@ export class ProfilService {
     }
 
     buyTicket(ticket: TicketBuyRequest) {
-        return this.http.post(`${URL}/tickets/buy`, ticket);
+        return this.http.post<BuyTicketsResponse>(`${URL}/tickets/buy`, ticket);
     }
 }

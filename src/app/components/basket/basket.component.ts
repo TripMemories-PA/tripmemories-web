@@ -17,6 +17,7 @@ import { StripeCardElementOptions, StripeElementsOptions } from '@stripe/stripe-
 import { InputTextModule } from 'primeng/inputtext';
 import { Router } from '@angular/router';
 import { MessageModule } from 'primeng/message';
+import { BuyTicketsResponse } from '../../models/response/buyTickets.response';
 
 @Component({
     selector: 'app-basket',
@@ -119,7 +120,7 @@ export class BasketComponent {
         };
 
         this.profilService.buyTicket(ticketBuy).subscribe({
-            next: (response: any) => {
+            next: (response: BuyTicketsResponse) => {
                 this.paymentIntent = response.paymentIntent;
                 this.showPaymentDialog = true;
                 this.messageService.add({

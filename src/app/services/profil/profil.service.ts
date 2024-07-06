@@ -5,6 +5,7 @@ import { environment } from '../../../environments/environment';
 import { PostsResponse } from '../../models/response/posts.response';
 import { TicketBuyRequest } from '../../models/request/ticketBuy.request';
 import { BuyTicketsResponse } from '../../models/response/buyTickets.response';
+import { MyTicketsModel } from '../../models/myTickets.model';
 
 const URL = environment.apiUrl + '/me';
 
@@ -42,7 +43,7 @@ export class ProfilService {
     }
 
     getMyTickets() {
-        return this.http.get(`${URL}/tickets`);
+        return this.http.get<MyTicketsModel[]>(`${URL}/tickets`);
     }
 
     deleteMe() {

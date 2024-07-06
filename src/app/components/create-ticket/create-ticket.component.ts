@@ -56,7 +56,7 @@ export class CreateTicketComponent implements OnInit {
 
     ticketRequest: TicketModel = {
         createdAt: '',
-        groupeSize: 0,
+        groupSize: 0,
         id: 0,
         poi: {
             id: 0,

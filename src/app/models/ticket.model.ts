@@ -10,7 +10,7 @@ export class TicketModel {
     quantity: number;
     title: string;
     description: string;
-    groupeSize: number;
+    groupSize: number;
     createdAt: string;
     updatedAt: string;
     image: IFileImage;
@@ -24,7 +24,7 @@ export class TicketModel {
         quantity: number,
         title: string,
         description: string,
-        groupeSize: number,
+        groupSize: number,
         createdAt: string,
         updatedAt: string,
         image: IFileImage,
@@ -37,7 +37,7 @@ export class TicketModel {
         this.quantity = quantity;
         this.title = title;
         this.description = description;
-        this.groupeSize = groupeSize;
+        this.groupSize = groupSize;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.image = image;

@@ -21,7 +21,7 @@ export class ShopPageComponent implements OnInit {
         for (let i = 0; i < 10; i++) {
             this.tickets.push({
                 createdAt: '',
-                groupeSize: 0,
+                groupSize: 0,
                 id: 0,
                 poi: {
                     id: 3407,

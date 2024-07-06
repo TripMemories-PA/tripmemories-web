@@ -37,6 +37,7 @@ export class ProfilPageComponent implements OnInit {
     activeTab: string = 'posts';
     isHoveredBanner: boolean = false;
     user: User = JSON.parse(localStorage.getItem('user') as string);
+    userType: number = -1;
 
     setActiveTab(tab: string) {
         this.activeTab = tab;
@@ -61,7 +62,10 @@ export class ProfilPageComponent implements OnInit {
         this.profilService.getMe().subscribe({
             next: (user) => {
                 user.access_token = this.authServices.user?.access_token;
-                this.authServices.user = user;
+                this.authServices.setUser(user);
+                if (user.userTypeId) {
+                    this.userType = user.userTypeId;
+                }
                 this.user = user;
                 this.nbrMonuments = user.poisCount;
                 this.banner = user.banner?.url;

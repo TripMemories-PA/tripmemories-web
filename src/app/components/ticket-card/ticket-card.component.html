@@ -1,4 +1,4 @@
-<div (click)="visible = true" class="card flex justify-content-center cursor-pointer">
+<div class="card flex justify-content-center cursor-pointer">
     <p-card styleClass="ui-card-shadow" class="bg-white" [style]="{ width: '360px' }">
         <ng-template pTemplate="header">
             <div class="w-full h-[16rem] relative">
@@ -16,7 +16,7 @@
         </ng-template>
         <div class="flex flex-col gap-2">
             <div class="flex flex-row justify-between text-sm">
-                <p>nbr personnes: {{ ticket?.nbrPeople }}</p>
+                <p>Nbr personnes: {{ ticket?.groupSize }}</p>
                 <div class="flex flex-row items-center gap-2">
                     <p>Prix: {{ ticket?.price }}€</p>
                     <svg
@@ -35,11 +35,50 @@
             <h2 class="p-mt-2 text-xl font-bold">{{ ticket?.title }}</h2>
             <h3 class="text-sm">{{ ticket?.description }}</h3>
         </div>
+        <ng-template pTemplate="footer">
+            <div class="flex flex-row justify-between">
+                <button
+                    pButton
+                    type="button"
+                    label="Modifier"
+                    class="p-button-rounded p-button-raised p-button-primary"
+                    (click)="visible = true"
+                ></button>
+                <button
+                    pButton
+                    type="button"
+                    label="Supprimer"
+                    class="p-button-rounded p-button-raised p-button-danger"
+                    (click)="visibleDelete = true"
+                ></button>
+            </div>
+        </ng-template>
     </p-card>
+</div>
+<div>
+    <p-dialog
+        header="Supprimer le ticket"
+        [modal]="true"
+        [(visible)]="visibleDelete"
+        [style]="{ width: '25rem' }"
+    >
+        <span class="p-text-secondary block mb-5"
+            >Êtes vous sur de vouloir supprimer le ticket, cette action est irréversible ?</span
+        >
+        <div class="flex justify-content-end gap-2">
+            <p-button label="Non" severity="secondary" (click)="visibleDelete = false" />
+            <p-button label="Oui" (click)="deleteTicket()" />
+        </div>
+        <p-progressBar
+            mode="indeterminate"
+            *ngIf="loading"
+            [style]="{ height: '6px', width: '100%' }"
+        ></p-progressBar>
+    </p-dialog>
 </div>
 <div class="card flex justify-content-center">
     <p-dialog
-        header="Modifier le billet un billet"
+        header="Modifier le billet"
         class="flex flex-col"
         [modal]="true"
         [draggable]="false"
@@ -48,7 +87,7 @@
         [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
     >
         <ng-template pTemplate="content">
-            <app-create-ticket [ticket]="ticket"></app-create-ticket>
+            <app-create-ticket [ticket]="ticket" [update]="true"></app-create-ticket>
         </ng-template>
     </p-dialog>
 </div>

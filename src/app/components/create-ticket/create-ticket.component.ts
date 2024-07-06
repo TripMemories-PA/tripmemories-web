@@ -11,6 +11,8 @@ import { PaginatorModule } from 'primeng/paginator';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { RatingModule } from 'primeng/rating';
 import { TicketModel } from '../../models/ticket.model';
+import { TicketService } from '../../services/ticket/ticket.service';
+import { CreateTicketRequest } from '../../models/request/createTicket.request';
 
 @Component({
     selector: 'app-create-ticket',
@@ -33,9 +35,12 @@ import { TicketModel } from '../../models/ticket.model';
 })
 export class CreateTicketComponent implements OnInit {
     @Input() ticket?: TicketModel;
+    @Input() update: boolean = false;
     loading = false;
     success = '';
     error = '';
+
+    constructor(private ticketService: TicketService) {}
 
     nbrPeopleOptions = [
         { label: '1', value: 1 },
@@ -76,7 +81,39 @@ export class CreateTicketComponent implements OnInit {
     };
 
     createTicket() {
-        console.log('Ticket created', this.ticketRequest);
+        const ticket: CreateTicketRequest = {
+            title: this.ticketRequest.title,
+            description: this.ticketRequest.description,
+            price: this.ticketRequest.price,
+            groupSize: this.ticketRequest.groupSize,
+            quantity: this.ticketRequest.quantity,
+        };
+        this.ticketService.createTicket(ticket).subscribe({
+            next: (_) => {
+                this.success = 'Ticket updated successfully';
+            },
+            error: (_) => {
+                this.error = 'An error occurred';
+            },
+        });
+    }
+
+    updateTicket() {
+        const ticket: CreateTicketRequest = {
+            title: this.ticketRequest.title,
+            description: this.ticketRequest.description,
+            price: this.ticketRequest.price,
+            groupSize: this.ticketRequest.groupSize,
+            quantity: this.ticketRequest.quantity,
+        };
+        this.ticketService.updateTicket(this.ticketRequest.id.toString(), ticket).subscribe({
+            next: (_) => {
+                this.success = 'Ticket updated successfully';
+            },
+            error: (_) => {
+                this.error = 'An error occurred';
+            },
+        });
     }
 
     ngOnInit(): void {

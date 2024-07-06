@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { NgIf, NgOptimizedImage } from '@angular/common';
@@ -8,6 +8,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-header',
@@ -25,7 +26,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     templateUrl: './header.component.html',
     styleUrl: './header.component.css',
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
+    private subscriptions: Subscription = new Subscription();
     constructor(
         public auth: AuthService,
         private router: Router,
@@ -40,44 +42,21 @@ export class HeaderComponent implements OnInit {
     items: MenuItem[] | undefined;
     showSearchInput: boolean = false;
 
+    ngOnChanges() {
+        this.ngOnInit();
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
     ngOnInit() {
-        this.items = [
-            /*            {
-                label: 'Carte',
-                style: {
-                    color: 'white',
-                },
-                routerLink: ['/'],
-            },*/
-            {
-                label: 'Feed',
-                style: {
-                    color: 'white',
-                },
-                routerLink: ['/'],
-            },
-            {
-                label: 'Magasin',
-                style: {
-                    color: 'white',
-                },
-                routerLink: ['/shop'],
-            },
-            {
-                label: 'Mon Panier',
-                style: {
-                    color: 'white',
-                },
-                routerLink: ['/basket'],
-            },
-            {
-                label: 'Profil',
-                style: {
-                    color: 'white',
-                },
-                routerLink: ['/profil'],
-            },
-        ];
+        this.updateMenuItems();
+        this.subscriptions.add(
+            this.auth.user$.subscribe(() => {
+                this.updateMenuItems();
+            }),
+        );
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
                 const url = event.urlAfterRedirects;
@@ -90,6 +69,43 @@ export class HeaderComponent implements OnInit {
                 );
             }
         });
+    }
+
+    updateMenuItems() {
+        this.items = [
+            {
+                label: 'Feed',
+                style: {
+                    color: 'white',
+                },
+                routerLink: ['/'],
+            },
+            {
+                label: 'Profil',
+                style: {
+                    color: 'white',
+                },
+                routerLink: ['/profil'],
+            },
+        ];
+        if (this.auth.user?.userTypeId === 3) {
+            this.items.push({
+                label: 'Magasin',
+                style: {
+                    color: 'white',
+                },
+                routerLink: ['/shop'],
+            });
+        }
+        if (this.auth.user?.userTypeId === 2) {
+            this.items.push({
+                label: 'Mon Panier',
+                style: {
+                    color: 'white',
+                },
+                routerLink: ['/basket'],
+            });
+        }
     }
 
     toggleSearchInput() {

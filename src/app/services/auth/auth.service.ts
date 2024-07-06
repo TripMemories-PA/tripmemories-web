@@ -6,6 +6,7 @@ import { NO_AUTH } from '../request.interceptor';
 import { environment } from '../../../environments/environment';
 import { ResetPasswordModel } from '../../models/reset-password.model';
 import { LoginResponse } from '../../models/response/login.response';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 
 const URL = environment.apiUrl + '/auth/';
 const httpOptions = {
@@ -16,14 +17,29 @@ const httpOptions = {
     providedIn: 'root',
 })
 export class AuthService {
-    user: User | null = null;
+    private userSubject: BehaviorSubject<User | null> = new BehaviorSubject<User | null>(null);
+    public user$: Observable<User | null> = this.userSubject.asObservable();
 
     constructor(
         private http: HttpClient,
         private router: Router,
     ) {
-        if (localStorage.getItem('user') !== null) {
-            this.user = JSON.parse(localStorage.getItem('user')!);
+        const storedUser = localStorage.getItem('user');
+        if (storedUser !== null) {
+            this.userSubject.next(JSON.parse(storedUser));
+        }
+    }
+
+    get user(): User | null {
+        return this.userSubject.value;
+    }
+
+    setUser(user: User | null) {
+        this.userSubject.next(user);
+        if (user) {
+            localStorage.setItem('user', JSON.stringify(user));
+        } else {
+            localStorage.removeItem('user');
         }
     }
 
@@ -53,8 +69,7 @@ export class AuthService {
     }
 
     logout() {
-        this.user = null;
-        localStorage.removeItem('user');
+        this.setUser(null);
         localStorage.removeItem('token');
         this.router.navigate(['/login']);
     }

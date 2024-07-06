@@ -5,6 +5,9 @@ import { NgForOf } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { CreateTicketComponent } from '../../components/create-ticket/create-ticket.component';
+import { AuthService } from '../../services/auth/auth.service';
+import { Router } from '@angular/router';
+import { PoisService } from '../../services/pois/pois.service';
 
 @Component({
     selector: 'app-shop-page',
@@ -17,27 +20,35 @@ export class ShopPageComponent implements OnInit {
     tickets: TicketModel[] = [];
     visible = false;
 
+    constructor(
+        private authService: AuthService,
+        private router: Router,
+        private poisService: PoisService,
+    ) {}
+
     ngOnInit() {
-        for (let i = 0; i < 10; i++) {
-            this.tickets.push({
-                createdAt: '',
-                groupSize: 0,
-                id: 0,
-                poi: {
-                    id: 3407,
-                    description: '',
-                },
-                updatedAt: '',
-                poiId: 3407,
-                title: 'Ticket ' + i,
-                nbrPeople: 2,
-                quantity: 300,
-                price: i * 10,
-                description: 'Description ' + i,
-                image: {
-                    url: 'https://picsum.photos/200/300',
-                },
-            });
+        if (!this.authService.user) {
+            this.router.navigate(['/login']);
+            return;
         }
+        if (this.authService.user.userTypeId !== 3 && this.authService.user.userTypeId !== 1) {
+            this.router.navigate(['/']);
+            return;
+        }
+        this.getPoiTickets();
+    }
+
+    getPoiTickets() {
+        if (!this.authService.user?.poiId) {
+            return;
+        }
+        this.poisService.getPoisTickets(this.authService.user.poiId.toString()).subscribe({
+            next: (value: any) => {
+                this.tickets = value;
+            },
+            error: (error) => {
+                console.error(error);
+            },
+        });
     }
 }

@@ -6,11 +6,12 @@ import { InputIconModule } from 'primeng/inputicon';
 import { BasketService } from '../../services/basket/basket.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-buy-ticket-poi-card',
     standalone: true,
-    imports: [NgIf, RouterLink, NgOptimizedImage, InputIconModule, ToastModule],
+    imports: [NgIf, RouterLink, NgOptimizedImage, InputIconModule, ToastModule, ButtonModule],
     providers: [MessageService],
     templateUrl: './buy-ticket-poi-card.component.html',
     styleUrl: './buy-ticket-poi-card.component.css',

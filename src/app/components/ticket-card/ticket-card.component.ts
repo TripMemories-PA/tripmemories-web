@@ -8,6 +8,7 @@ import { SharedModule } from 'primeng/api';
 import { TicketModel } from '../../models/ticket.model';
 import { CreatePostCardComponent } from '../create-post-card/create-post-card.component';
 import { CreateTicketComponent } from '../create-ticket/create-ticket.component';
+import { TicketService } from '../../services/ticket/ticket.service';
 
 @Component({
     selector: 'app-ticket-card',
@@ -29,9 +30,22 @@ import { CreateTicketComponent } from '../create-ticket/create-ticket.component'
 export class TicketCardComponent {
     @Input() ticket?: TicketModel;
     visible: boolean = false;
+    visibleDelete: boolean = false;
     loading: boolean = false;
 
-    gotToShop() {
-        this.visible = false;
+    constructor(private ticketService: TicketService) {}
+
+    deleteTicket() {
+        if (!this.ticket) return;
+        this.loading = true;
+        this.ticketService.deleteTicket(this.ticket.id.toString()).subscribe({
+            next: () => {
+                this.loading = false;
+                this.visible = false;
+            },
+            error: () => {
+                this.loading = false;
+            },
+        });
     }
 }

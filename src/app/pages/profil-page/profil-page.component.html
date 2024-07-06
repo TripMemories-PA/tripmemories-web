@@ -26,14 +26,22 @@
                     <li [class.active]="activeTab === 'posts'" (click)="setActiveTab('posts')">
                         Mes posts
                     </li>
-                    <li [class.active]="activeTab === 'friends'" (click)="setActiveTab('friends')">
+                    <li
+                        *ngIf="userType > -1 && userType < 3"
+                        [class.active]="activeTab === 'friends'"
+                        (click)="setActiveTab('friends')"
+                    >
                         Mes amis
+                    </li>
+                    <li
+                        *ngIf="userType > -1 && userType < 3"
+                        [class.active]="activeTab === 'tickets'"
+                        (click)="setActiveTab('tickets')"
+                    >
+                        Mes tickets
                     </li>
                     <li [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')">
                         Mon profil
-                    </li>
-                    <li [class.active]="activeTab === 'tickets'" (click)="setActiveTab('tickets')">
-                        Mes tickets
                     </li>
                 </ul>
             </nav>

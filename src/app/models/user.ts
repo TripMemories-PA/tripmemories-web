@@ -3,6 +3,7 @@ import { IUserType } from './interface/IUserType';
 
 export class User {
     id?: string;
+    poiId?: string | number;
     firstname?: string;
     lastname?: string;
     username?: string;

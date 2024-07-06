@@ -63,7 +63,7 @@ export class ChangeProfilPicComponent {
                 const user: User = JSON.parse(localStorage.getItem('user') as string);
                 user.avatar = { url: value.pic };
                 localStorage.setItem('user', JSON.stringify(user));
-                this.authService.user = user;
+                this.authService.setUser(user);
 
                 setTimeout(() => {
                     this.ok = undefined;

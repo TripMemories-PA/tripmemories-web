@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BasketComponent } from './basket.component';
+import { HttpClientModule } from '@angular/common/http';
+import { NgxStripeModule, StripeService } from 'ngx-stripe';
 
 describe('BasketComponent', () => {
     let component: BasketComponent;
@@ -8,7 +10,8 @@ describe('BasketComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [BasketComponent],
+            imports: [BasketComponent, HttpClientModule, NgxStripeModule.forRoot('')],
+            providers: [StripeService],
         }).compileComponents();
 
         fixture = TestBed.createComponent(BasketComponent);

@@ -35,6 +35,7 @@ import { TicketModel } from '../../models/ticket.model';
 })
 export class PoiPageComponent implements OnInit {
     @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef;
+    @ViewChild('scrollContainerTicket', { static: true }) scrollContainerTicket!: ElementRef;
 
     poi: PoiModel = new PoiModel();
     poiPosts: PostModel[] = [];
@@ -136,6 +137,20 @@ export class PoiPageComponent implements OnInit {
 
     scrollRight(): void {
         this.scrollContainer.nativeElement.scrollBy({
+            left: 200, // Défilement à droite par 200 pixels
+            behavior: 'smooth',
+        });
+    }
+
+    scrollLeftTicket(): void {
+        this.scrollContainerTicket.nativeElement.scrollBy({
+            left: -200, // Défilement à gauche par 200 pixels
+            behavior: 'smooth',
+        });
+    }
+
+    scrollRightTicket(): void {
+        this.scrollContainerTicket.nativeElement.scrollBy({
             left: 200, // Défilement à droite par 200 pixels
             behavior: 'smooth',
         });

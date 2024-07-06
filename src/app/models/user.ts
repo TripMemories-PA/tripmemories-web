@@ -1,4 +1,5 @@
 import { IFileImage } from './interface/FileImage';
+import { IUserType } from './interface/IUserType';
 
 export class User {
     id?: string;
@@ -15,6 +16,8 @@ export class User {
     hasReceivedFriendRequest?: boolean;
     hasSentFriendRequest?: boolean;
     poisCount?: number = 0;
+    userTypeId?: number;
+    userType?: IUserType;
 }
 
 export class UserRegister {

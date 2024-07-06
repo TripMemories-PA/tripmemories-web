@@ -4,6 +4,7 @@ import { HttpClient, HttpContext } from '@angular/common/http';
 import { NO_AUTH } from '../request.interceptor';
 import { PoiModel } from '../../models/Poi.model';
 import { PoisPostResponse, PoisSearchResponse } from '../../models/response/pois.response';
+import { TicketModel } from '../../models/ticket.model';
 
 const URL = environment.apiUrl + '/pois';
 const httpOptions = {
@@ -54,5 +55,9 @@ export class PoisService {
             `${URL}/${id}/posts?${params.toString()}`,
             httpOptions,
         );
+    }
+
+    getPoisTickets(id: string) {
+        return this.http.get<TicketModel[]>(`${URL}/${id}/tickets`, httpOptions);
     }
 }

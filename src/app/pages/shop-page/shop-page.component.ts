@@ -20,10 +20,18 @@ export class ShopPageComponent implements OnInit {
     ngOnInit() {
         for (let i = 0; i < 10; i++) {
             this.tickets.push({
-                poiId: i,
+                createdAt: '',
+                groupeSize: 0,
+                id: 0,
+                poi: {
+                    id: 3407,
+                    description: '',
+                },
+                updatedAt: '',
+                poiId: 3407,
                 title: 'Ticket ' + i,
                 nbrPeople: 2,
-                stock: 300,
+                quantity: 300,
                 price: i * 10,
                 description: 'Description ' + i,
                 image: {

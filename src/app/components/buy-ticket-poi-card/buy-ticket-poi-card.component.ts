@@ -3,11 +3,15 @@ import { NgIf, NgOptimizedImage } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { TicketModel } from '../../models/ticket.model';
 import { InputIconModule } from 'primeng/inputicon';
+import { BasketService } from '../../services/basket/basket.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
     selector: 'app-buy-ticket-poi-card',
     standalone: true,
-    imports: [NgIf, RouterLink, NgOptimizedImage, InputIconModule],
+    imports: [NgIf, RouterLink, NgOptimizedImage, InputIconModule, ToastModule],
+    providers: [MessageService],
     templateUrl: './buy-ticket-poi-card.component.html',
     styleUrl: './buy-ticket-poi-card.component.css',
 })
@@ -15,7 +19,22 @@ export class BuyTicketPoiCardComponent {
     @Input() ticket?: TicketModel;
     isLoadingImage = true;
 
-    addTicketToBasket(ticket: TicketModel): void {
-        console.log('Ticket added to basket', ticket);
+    constructor(
+        private basketService: BasketService,
+        private messageService: MessageService,
+    ) {}
+
+    addTicketToBasket(): void {
+        if (!this.ticket) {
+            return;
+        }
+        const addTicket: TicketModel = { ...this.ticket, quantity: 1 };
+        this.basketService.addTicket(addTicket);
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Element ajouté au panier',
+            detail: 'Element ajouté au panier avec succès',
+        });
+        console.log('Ticket added to basket', this.ticket);
     }
 }

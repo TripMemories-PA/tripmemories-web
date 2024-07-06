@@ -40,7 +40,7 @@
         <h3>Stock</h3>
         <p-dropdown
             [options]="nbrStockOptions"
-            [(ngModel)]="ticketRequest.stock"
+            [(ngModel)]="ticketRequest.quantity"
             [filter]="true"
             filterBy="label"
             [showClear]="true"
@@ -48,7 +48,7 @@
             [virtualScrollItemSize]="38"
             optionLabel="label"
             [placeholder]="
-                ticketRequest.stock ? ticketRequest.stock.toString() : 'Séléctionne le stock'
+                ticketRequest.quantity ? ticketRequest.quantity.toString() : 'Séléctionne le stock'
             "
         />
     </div>

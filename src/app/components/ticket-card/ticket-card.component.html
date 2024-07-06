@@ -28,8 +28,8 @@
                     >
                         <circle cx="5.5" cy="5.5" r="5.5" fill="#767676" />
                     </svg>
-                    <p *ngIf="ticket && ticket.stock > 0">En stock: {{ ticket.stock }}</p>
-                    <p *ngIf="ticket && ticket.stock <= 0">Rupture de stock</p>
+                    <p *ngIf="ticket && ticket.quantity > 0">En stock: {{ ticket.quantity }}</p>
+                    <p *ngIf="ticket && ticket.quantity <= 0">Rupture de stock</p>
                 </div>
             </div>
             <h2 class="p-mt-2 text-xl font-bold">{{ ticket?.title }}</h2>

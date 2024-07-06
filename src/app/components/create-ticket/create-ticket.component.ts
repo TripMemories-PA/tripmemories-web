@@ -55,6 +55,14 @@ export class CreateTicketComponent implements OnInit {
         .map((_, i) => ({ label: (i + 1).toString(), value: i + 1 }));
 
     ticketRequest: TicketModel = {
+        createdAt: '',
+        groupeSize: 0,
+        id: 0,
+        poi: {
+            id: 0,
+            description: '',
+        },
+        updatedAt: '',
         image: {
             id: 0,
             url: '',
@@ -62,7 +70,7 @@ export class CreateTicketComponent implements OnInit {
         nbrPeople: 0,
         poiId: 0,
         price: 0,
-        stock: 0,
+        quantity: 0,
         title: '',
         description: '',
     };

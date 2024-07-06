@@ -44,41 +44,7 @@ export class PoiPageComponent implements OnInit {
     heightImage: number = 1;
     showDialog: boolean = false;
 
-    tickets: TicketModel[] = [
-        {
-            poiId: 1,
-            title: 'Ticket 1',
-            price: 10,
-            description: 'Description ticket 1',
-            image: {
-                url: 'https://via.placeholder.com/150',
-            },
-            nbrPeople: 2,
-            stock: 3,
-        },
-        {
-            poiId: 1,
-            title: 'Ticket 1',
-            price: 10,
-            description: 'Description ticket 1',
-            image: {
-                url: 'https://via.placeholder.com/150',
-            },
-            nbrPeople: 3,
-            stock: 4,
-        },
-        {
-            poiId: 1,
-            title: 'Ticket 1',
-            price: 10,
-            description: 'Description ticket 1',
-            image: {
-                url: 'https://via.placeholder.com/150',
-            },
-            nbrPeople: 1,
-            stock: 5,
-        },
-    ];
+    tickets: TicketModel[] = [];
 
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -90,6 +56,7 @@ export class PoiPageComponent implements OnInit {
             const param = params.get('id');
             this.getPoiDetails(param);
             this.getPoiPosts(param);
+            this.getPoiTickets(param);
         });
     }
 
@@ -124,6 +91,20 @@ export class PoiPageComponent implements OnInit {
         this.poisService.getPoiPosts(id, '5').subscribe({
             next: (response) => {
                 this.poiPosts = response.data;
+            },
+            error: (error) => {
+                console.error(error);
+            },
+        });
+    }
+
+    getPoiTickets(id: string | null): void {
+        if (!id) {
+            return;
+        }
+        this.poisService.getPoisTickets(id).subscribe({
+            next: (response) => {
+                this.tickets = response;
             },
             error: (error) => {
                 console.error(error);

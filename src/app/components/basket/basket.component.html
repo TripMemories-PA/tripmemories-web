@@ -17,7 +17,7 @@
                 <p-inputNumber
                     [(ngModel)]="item.quantity"
                     [min]="1"
-                    (change)="updateQuantity(item, item.quantity)"
+                    (change)="addItem(item)"
                 ></p-inputNumber>
             </td>
             <td>{{ item.price * item.quantity }}€</td>
@@ -36,7 +36,47 @@
         <tr>
             <td colspan="3" style="text-align: right">Total:</td>
             <td>{{ getTotal() }}€</td>
-            <td><button pButton label="Payer"></button></td>
+            <td><button pButton label="Payer" (click)="pay()"></button></td>
         </tr>
     </ng-template>
 </p-table>
+<div>
+    <p-dialog
+        header="Confirmer votre paiement"
+        class="flex flex-col"
+        [modal]="true"
+        [draggable]="false"
+        [(visible)]="showPaymentDialog"
+        [style]="{ width: '50rem' }"
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    >
+        <ng-template
+            pTemplate="content"
+            class="w-full border-gray-400 border-solid border-2 rounded shadow p-4"
+        >
+            <form [formGroup]="checkoutForm" (ngSubmit)="payWithStripe()">
+                <div class="p-field mb-6">
+                    <input pInputText placeholder="Nom sur la carte" formControlName="name" />
+                </div>
+                <div class="p-field mb-6">
+                    <input
+                        pInputText
+                        placeholder="Votre email"
+                        type="email"
+                        formControlName="email"
+                    />
+                </div>
+                <ngx-stripe-elements [stripe]="stripeService" [elementsOptions]="elementsOptions">
+                    <ngx-stripe-card [options]="cardOptions" />
+                </ngx-stripe-elements>
+                <button pButton class="mt-6 mb-6" type="submit">Payer</button>
+            </form>
+            <p-message
+                *ngIf="successMessage"
+                severity="success"
+                text="Paiement effectué avec succès"
+            ></p-message>
+            <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage"></p-message>
+        </ng-template>
+    </p-dialog>
+</div>

@@ -1,42 +1,95 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { MessageService } from 'primeng/api';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-import { InputNumberModule } from 'primeng/inputnumber';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PaginatorModule } from 'primeng/paginator';
 import { ButtonModule } from 'primeng/button';
-
-interface CartItem {
-    id: number;
-    name: string;
-    price: number;
-    quantity: number;
-}
+import { BasketService } from '../../services/basket/basket.service';
+import { TicketModel } from '../../models/ticket.model';
+import { ProfilService } from '../../services/profil/profil.service';
+import { TicketBuyRequest } from '../../models/request/ticketBuy.request';
+import { StripeCardComponent, StripeElementsDirective, StripeService } from 'ngx-stripe';
+import { DialogModule } from 'primeng/dialog';
+import { FriendRequestCardComponent } from '../friend-request-card/friend-request-card.component';
+import { NgForOf, NgIf } from '@angular/common';
+import { StripeCardElementOptions, StripeElementsOptions } from '@stripe/stripe-js';
+import { InputTextModule } from 'primeng/inputtext';
+import { Router } from '@angular/router';
+import { MessageModule } from 'primeng/message';
 
 @Component({
     selector: 'app-basket',
     standalone: true,
-    imports: [TableModule, ToastModule, FormsModule, PaginatorModule, ButtonModule],
-    providers: [MessageService],
+    imports: [
+        TableModule,
+        ToastModule,
+        FormsModule,
+        PaginatorModule,
+        ButtonModule,
+        DialogModule,
+        FriendRequestCardComponent,
+        NgForOf,
+        ReactiveFormsModule,
+        InputTextModule,
+        StripeCardComponent,
+        StripeElementsDirective,
+        MessageModule,
+        NgIf,
+    ],
+    providers: [MessageService, StripeService],
     templateUrl: './basket.component.html',
     styleUrl: './basket.component.css',
 })
 export class BasketComponent {
-    cartItems: CartItem[] = [
-        { id: 1, name: 'Item 1', price: 10, quantity: 1 },
-        { id: 2, name: 'Item 2', price: 20, quantity: 2 },
-        { id: 3, name: 'Item 3', price: 30, quantity: 1 },
-    ];
+    cartItems: TicketModel[];
+    showPaymentDialog = false;
+    paymentIntent = '';
+    successMessage = '';
+    errorMessage? = '';
 
-    constructor(private messageService: MessageService) {}
+    @ViewChild(StripeCardComponent) cardElement!: StripeCardComponent;
+    cardOptions: StripeCardElementOptions = {
+        style: {
+            base: {
+                iconColor: '#666EE8',
+                color: '#31325F',
+                fontWeight: '300',
+                fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                fontSize: '18px',
+                '::placeholder': {
+                    color: '#CFD7E0',
+                },
+            },
+        },
+    };
+
+    elementsOptions: StripeElementsOptions = {
+        locale: 'fr-FR',
+    };
+    checkoutForm = this.fb.group({
+        name: ['', [Validators.required]],
+        email: ['', [Validators.required, Validators.email]],
+    });
+
+    constructor(
+        private messageService: MessageService,
+        private basketService: BasketService,
+        private profilService: ProfilService,
+        protected stripeService: StripeService,
+        private router: Router,
+        private fb: FormBuilder,
+    ) {
+        this.cartItems = this.basketService.getBasket();
+    }
 
     getTotal(): number {
         return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
     }
 
-    updateQuantity(item: CartItem, quantity: number): void {
+    updateQuantity(item: TicketModel, quantity: number): void {
         item.quantity = quantity;
+        this.basketService.updateTicket(item);
         this.messageService.add({
             severity: 'success',
             summary: 'Updated',
@@ -44,8 +97,73 @@ export class BasketComponent {
         });
     }
 
-    removeItem(item: CartItem): void {
-        this.cartItems = this.cartItems.filter((i) => i.id !== item.id);
+    removeItem(item: TicketModel): void {
+        this.basketService.removeTicket(item.id);
+        this.cartItems = this.basketService.getBasket();
         this.messageService.add({ severity: 'info', summary: 'Removed', detail: 'Item removed' });
+    }
+
+    addItem(item: TicketModel): void {
+        this.basketService.addTicket(item);
+        this.cartItems = this.basketService.getBasket();
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Added',
+            detail: 'Item added to basket',
+        });
+    }
+
+    pay(): void {
+        const ticketBuy: TicketBuyRequest = {
+            tickets: this.cartItems.map((item) => ({ id: item.id, quantity: item.quantity })),
+        };
+
+        this.profilService.buyTicket(ticketBuy).subscribe({
+            next: (response: any) => {
+                this.paymentIntent = response.paymentIntent;
+                this.showPaymentDialog = true;
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Success',
+                    detail: 'Tickets bought',
+                });
+            },
+            error: (error) => {
+                console.log(error);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Error',
+                    detail: 'An error occurred',
+                });
+            },
+        });
+    }
+
+    payWithStripe(): void {
+        const name = this.checkoutForm.get('name')?.value;
+        const email = this.checkoutForm.get('email')?.value;
+
+        this.stripeService
+            .confirmCardPayment(this.paymentIntent, {
+                payment_method: {
+                    card: this.cardElement.element,
+                    billing_details: { name, email },
+                },
+            })
+            .subscribe((result) => {
+                if (result.error) {
+                    this.errorMessage = result.error.message;
+                    console.error('Payment failed', result.error.message);
+                } else if (result.paymentIntent.status === 'succeeded') {
+                    this.basketService.clearBasket();
+                    this.successMessage = 'Payment succeeded!';
+                    this.cartItems = [];
+                    setTimeout(() => {
+                        this.showPaymentDialog = false;
+                        this.router.navigate(['/profil']);
+                    }, 6000);
+                    console.log('Payment succeeded!');
+                }
+            });
     }
 }

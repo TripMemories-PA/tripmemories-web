@@ -1,0 +1,79 @@
+<div class="review-container">
+    <div class="title-input">
+        <input
+            pInputText
+            type="text"
+            [(ngModel)]="ticketRequest.title"
+            placeholder="Entrez un titre"
+        />
+    </div>
+
+    <div class="rating">
+        <h3>Description du ticket</h3>
+        <input
+            pInputText
+            type="text"
+            [(ngModel)]="ticketRequest.description"
+            placeholder="Entrez une description"
+        />
+    </div>
+
+    <div class="experience">
+        <h3>Nombre de personne pour le ticket</h3>
+        <p-dropdown
+            [options]="nbrPeopleOptions"
+            [(ngModel)]="ticketRequest.nbrPeople"
+            [filter]="true"
+            filterBy="label"
+            [showClear]="true"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="38"
+            optionLabel="label"
+            [placeholder]="
+                ticketRequest.nbrPeople
+                    ? ticketRequest.nbrPeople.toString()
+                    : 'Séléctionne le nombre de personne'
+            "
+        />
+    </div>
+    <div class="experience">
+        <h3>Stock</h3>
+        <p-dropdown
+            [options]="nbrStockOptions"
+            [(ngModel)]="ticketRequest.quantity"
+            [filter]="true"
+            filterBy="label"
+            [showClear]="true"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="38"
+            optionLabel="label"
+            [placeholder]="
+                ticketRequest.quantity ? ticketRequest.quantity.toString() : 'Séléctionne le stock'
+            "
+        />
+    </div>
+    <button
+        pButton
+        (click)="createTicket()"
+        type="button"
+        label="Valider"
+        class="p-button-rounded p-button-raised p-button-primary"
+    ></button>
+    <p-progressBar
+        mode="indeterminate"
+        *ngIf="loading"
+        [style]="{ height: '6px', width: '100%', marginTop: '25px' }"
+    ></p-progressBar>
+    <p-message
+        *ngIf="success"
+        class="self-center mt-6"
+        severity="success"
+        text="{{ success }}"
+    ></p-message>
+    <p-message
+        *ngIf="error"
+        class="self-center mt-6"
+        severity="error"
+        text="{{ error }}"
+    ></p-message>
+</div>

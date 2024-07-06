@@ -9,6 +9,7 @@ import { MyFriendsComponent } from '../../container/profil/my-friends/my-friends
 import { MyProfilComponent } from '../../container/profil/my-profil/my-profil.component';
 import { User } from '../../models/user';
 import { BannerProfilComponent } from '../../components/banner-profil/banner-profil.component';
+import { MyTicketsComponent } from '../../container/profil/my-tickets/my-tickets.component';
 
 @Component({
     selector: 'app-profil-page',
@@ -23,6 +24,7 @@ import { BannerProfilComponent } from '../../components/banner-profil/banner-pro
         NgOptimizedImage,
         NgIf,
         BannerProfilComponent,
+        MyTicketsComponent,
     ],
     templateUrl: './profil-page.component.html',
     styleUrl: './profil-page.component.css',

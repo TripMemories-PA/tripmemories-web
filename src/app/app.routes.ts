@@ -11,6 +11,8 @@ import { PostPageComponent } from './pages/post-page/post-page.component';
 import { FeedPageComponent } from './pages/feed-page/feed-page.component';
 import { UserPageComponent } from './pages/user-page/user-page.component';
 import { SearchPageComponent } from './pages/search-page/search-page.component';
+import { ShopPageComponent } from './pages/shop-page/shop-page.component';
+import { BasketPageComponent } from './pages/basket-page/basket-page.component';
 
 export const routes: Routes = [
     {
@@ -52,6 +54,14 @@ export const routes: Routes = [
     {
         path: 'profil',
         component: ProfilPageComponent,
+    },
+    {
+        path: 'shop',
+        component: ShopPageComponent,
+    },
+    {
+        path: 'basket',
+        component: BasketPageComponent,
     },
     {
         path: 'user/:id',

@@ -11,10 +11,14 @@
                         monument.cover?.url ??
                             'https://decizia.com/blog/wp-content/uploads/2017/06/default-placeholder.png'
                     }}"
+                    [loading]="'auto'"
                     alt="{{ monument.name }}"
                     class="rounded-md absolute object-cover"
+                    (load)="loadingImage = false"
+                    (error)="loadingImage = false"
                     fill
                 />
+                <div class="spinner" *ngIf="loadingImage">Loading...</div>
             </div>
         </ng-template>
         <div class="flex flex-col gap-3">

@@ -32,6 +32,9 @@
                     <li [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')">
                         Mon profil
                     </li>
+                    <li [class.active]="activeTab === 'tickets'" (click)="setActiveTab('tickets')">
+                        Mes tickets
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -44,6 +47,9 @@
             </ng-container>
             <ng-container *ngSwitchCase="'profile'">
                 <app-my-profil></app-my-profil>
+            </ng-container>
+            <ng-container *ngSwitchCase="'tickets'">
+                <app-my-tickets></app-my-tickets>
             </ng-container>
         </div>
     </div>

@@ -5,6 +5,7 @@ import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RequestInterceptor } from './services/request.interceptor';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideNgxStripe } from 'ngx-stripe';
 
 export const appConfig: ApplicationConfig = {
     providers: [
@@ -16,5 +17,6 @@ export const appConfig: ApplicationConfig = {
             multi: true,
         },
         provideAnimations(),
+        provideNgxStripe(import.meta.env['NG_APP_STRIPE_PUBLIC_KEY']),
     ],
 };

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PoisService } from '../../services/pois/pois.service';
 import { PoiModel } from '../../models/Poi.model';
@@ -11,6 +11,8 @@ import { CreatePostCardComponent } from '../../components/create-post-card/creat
 import { DialogModule } from 'primeng/dialog';
 import { SharedModule } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
+import { BuyTicketPoiCardComponent } from '../../components/buy-ticket-poi-card/buy-ticket-poi-card.component';
+import { TicketModel } from '../../models/ticket.model';
 
 @Component({
     selector: 'app-poi-page',
@@ -26,11 +28,14 @@ import { ButtonModule } from 'primeng/button';
         DialogModule,
         SharedModule,
         ButtonModule,
+        BuyTicketPoiCardComponent,
     ],
     templateUrl: './poi-page.component.html',
     styleUrl: './poi-page.component.css',
 })
 export class PoiPageComponent implements OnInit {
+    @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef;
+
     poi: PoiModel = new PoiModel();
     poiPosts: PostModel[] = [];
     poiNear: PoiModel[] = [];
@@ -38,6 +43,8 @@ export class PoiPageComponent implements OnInit {
     widthImage: number = 1;
     heightImage: number = 1;
     showDialog: boolean = false;
+
+    tickets: TicketModel[] = [];
 
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -49,6 +56,7 @@ export class PoiPageComponent implements OnInit {
             const param = params.get('id');
             this.getPoiDetails(param);
             this.getPoiPosts(param);
+            this.getPoiTickets(param);
         });
     }
 
@@ -90,6 +98,20 @@ export class PoiPageComponent implements OnInit {
         });
     }
 
+    getPoiTickets(id: string | null): void {
+        if (!id) {
+            return;
+        }
+        this.poisService.getPoisTickets(id).subscribe({
+            next: (response) => {
+                this.tickets = response;
+            },
+            error: (error) => {
+                console.error(error);
+            },
+        });
+    }
+
     openDialog() {
         this.showDialog = true;
     }
@@ -102,6 +124,20 @@ export class PoiPageComponent implements OnInit {
             error: (error) => {
                 console.error(error);
             },
+        });
+    }
+
+    scrollLeft(): void {
+        this.scrollContainer.nativeElement.scrollBy({
+            left: -200, // Défilement à gauche par 200 pixels
+            behavior: 'smooth',
+        });
+    }
+
+    scrollRight(): void {
+        this.scrollContainer.nativeElement.scrollBy({
+            left: 200, // Défilement à droite par 200 pixels
+            behavior: 'smooth',
         });
     }
 }

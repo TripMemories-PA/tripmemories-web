@@ -1,0 +1,54 @@
+<div (click)="visible = true" class="card flex justify-content-center cursor-pointer">
+    <p-card styleClass="ui-card-shadow" class="bg-white" [style]="{ width: '360px' }">
+        <ng-template pTemplate="header">
+            <div class="w-full h-[16rem] relative">
+                <img
+                    ngSrc="{{
+                        ticket?.image?.url ??
+                            'https://decizia.com/blog/wp-content/uploads/2017/06/default-placeholder.png'
+                    }}"
+                    alt="{{ ticket?.poiId }}"
+                    class="absolute rounded-2xl object-cover"
+                    fill
+                    priority
+                />
+            </div>
+        </ng-template>
+        <div class="flex flex-col gap-2">
+            <div class="flex flex-row justify-between text-sm">
+                <p>nbr personnes: {{ ticket?.nbrPeople }}</p>
+                <div class="flex flex-row items-center gap-2">
+                    <p>Prix: {{ ticket?.price }}€</p>
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="11"
+                        height="11"
+                        viewBox="0 0 11 11"
+                        fill="none"
+                    >
+                        <circle cx="5.5" cy="5.5" r="5.5" fill="#767676" />
+                    </svg>
+                    <p *ngIf="ticket && ticket.quantity > 0">En stock: {{ ticket.quantity }}</p>
+                    <p *ngIf="ticket && ticket.quantity <= 0">Rupture de stock</p>
+                </div>
+            </div>
+            <h2 class="p-mt-2 text-xl font-bold">{{ ticket?.title }}</h2>
+            <h3 class="text-sm">{{ ticket?.description }}</h3>
+        </div>
+    </p-card>
+</div>
+<div class="card flex justify-content-center">
+    <p-dialog
+        header="Modifier le billet un billet"
+        class="flex flex-col"
+        [modal]="true"
+        [draggable]="false"
+        [(visible)]="visible"
+        [style]="{ width: '50rem', borderRadius: '9999px' }"
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    >
+        <ng-template pTemplate="content">
+            <app-create-ticket [ticket]="ticket"></app-create-ticket>
+        </ng-template>
+    </p-dialog>
+</div>

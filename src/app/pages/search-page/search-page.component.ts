@@ -126,6 +126,10 @@ export class SearchPageComponent implements OnInit {
     }
 
     sortSearch() {
+        if (this.pois.length === 0) {
+            this.getPOIs(this.searchMonument.monument, this.currentPage, this.itemsPerPage);
+            return;
+        }
         if (this.searchMonument.monument === '') {
             this.sortedPois = [...this.pois];
         } else {

@@ -61,7 +61,14 @@ export class HeaderComponent implements OnInit {
                 style: {
                     color: 'white',
                 },
-                routerLink: ['/'],
+                routerLink: ['/shop'],
+            },
+            {
+                label: 'Mon Panier',
+                style: {
+                    color: 'white',
+                },
+                routerLink: ['/basket'],
             },
             {
                 label: 'Profil',

@@ -1,0 +1,19 @@
+<div class="p-8 mt-16">
+    <div class="mb-8">
+        <h1 class="text-5xl font-['Urbanist'] font-bold text-center">Magasin</h1>
+    </div>
+    <button
+        pButton
+        label="Ajouter un billet"
+        class="p-button-rounded p-button-raised p-button-primary mb-10"
+        (click)="visible = true"
+    ></button>
+    <div class="flex flex-row gap-6 flex-wrap justify-center">
+        <app-ticket-card *ngFor="let ticket of tickets" [ticket]="ticket" />
+    </div>
+</div>
+<p-dialog [(visible)]="visible" [draggable]="false" [modal]="true" header="Créer un ticket">
+    <ng-template pTemplate="content">
+        <app-create-ticket></app-create-ticket>
+    </ng-template>
+</p-dialog>

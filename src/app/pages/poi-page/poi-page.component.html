@@ -60,8 +60,35 @@
             >
         </div>
         <div class="mt-16">
-            <h3 class="text-4xl font-bold font-['Urbanist'] mb-6">Autour de {{ poi.name }}</h3>
-            <div class="flex flex-row flex-nowrap gap-10 overflow-hidden">
+            <div class="flex flex-row justify-between">
+                <h3 class="text-4xl font-bold font-['Urbanist']">Autour de {{ poi.name }}</h3>
+                <div class="flex flex-row ml-auto gap-2">
+                    <div
+                        class="rounded-full w-10 h-10 bg-[var(--primary)] flex justify-center items-center cursor-pointer select-none"
+                        (click)="scrollLeft()"
+                    >
+                        <img
+                            ngSrc="assets/poi/arrow_scroll.png"
+                            width="12"
+                            height="12"
+                            alt="fleche scroll"
+                            class="rotate-180"
+                        />
+                    </div>
+                    <div
+                        class="rounded-full w-10 h-10 bg-[var(--primary)] flex justify-center items-center cursor-pointer select-none"
+                        (click)="scrollRight()"
+                    >
+                        <img
+                            ngSrc="assets/poi/arrow_scroll.png"
+                            width="12"
+                            height="12"
+                            alt="fleche scroll"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div #scrollContainer class="flex flex-row flex-nowrap gap-10 overflow-hidden">
                 <app-currently-at-card
                     *ngFor="let currentlyAt of poiNear"
                     [image]="currentlyAt.cover?.url"
@@ -74,6 +101,17 @@
             <span *ngIf="poiNear.length === 0" class="text-2xl text-red-500 font-['Urbanist']">
                 Aucun lieu proche dans ce coin</span
             >
+        </div>
+        <div class="mt-16">
+            <h3 class="text-4xl font-bold font-['Urbanist']">
+                Acheter des billets pour {{ poi.name }}
+            </h3>
+            <div class="flex flex-row ml-auto gap-2">
+                <app-buy-ticket-poi-card
+                    *ngFor="let ticket of tickets"
+                    [ticket]="ticket"
+                ></app-buy-ticket-poi-card>
+            </div>
         </div>
     </div>
 </div>

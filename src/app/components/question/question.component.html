@@ -24,17 +24,16 @@
             <p-progressBar
                 mode="determinate"
                 [style]="{ height: '20px', width: '250px' }"
-                [value]="(this.nbrQuestion / this.totalQuestions) * 100"
+                [value]="((this.nbrQuestion + 1) / this.totalQuestions) * 100"
             >
-                <ng-template pTemplate="content" let-value>
-                    <span>{{ value }}/100</span>
+                <ng-template pTemplate="content">
+                    <span>{{ this.nbrQuestion + 1 }}/{{ this.totalQuestions }}</span>
                 </ng-template>
             </p-progressBar>
         </div>
     </div>
     <div class="relative w-full h-72">
         <img
-            *ngIf="questionModel?.image"
             [ngSrc]="
                 questionModel?.image?.url ??
                 'https://static.vecteezy.com/system/resources/previews/008/020/629/non_2x/banner-web-template-abstract-blue-and-golden-curved-lines-overlapping-layer-design-on-dark-blue-background-luxury-style-vector.jpg'

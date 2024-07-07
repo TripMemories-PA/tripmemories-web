@@ -1,0 +1,32 @@
+<div class="card">
+    <div class="header">
+        <div class="user">
+            <img src="assets/truc.png" alt="avatar" class="avatar" />
+            <span>Marco</span>
+            <span class="score">156</span>
+        </div>
+        <div class="category">
+            <span>Cinema</span>
+            <p-progressBar mode="determinate" value="50"></p-progressBar>
+        </div>
+        <div class="user">
+            <img src="assets/truc.png" alt="avatar" class="avatar" />
+            <span>Jade</span>
+            <span class="score">134</span>
+        </div>
+    </div>
+    <img src="assets/truc.png" alt="question" class="question-image" />
+    <div class="question">
+        <h2>Question 5</h2>
+        <p>{{ question }}</p>
+    </div>
+    <div class="answers">
+        <button
+            *ngFor="let answer of answers"
+            pButton
+            [label]="answer.label"
+            [ngClass]="{ correct: answer.value === selectedAnswer }"
+            class="answer-button"
+        ></button>
+    </div>
+</div>

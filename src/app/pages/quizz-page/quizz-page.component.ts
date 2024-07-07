@@ -44,7 +44,6 @@ export class QuizzPageComponent implements OnInit {
     score = 0;
 
     startQuiz() {
-        //this.router.navigate(['/quizz', this.idQuizz, '1']);
         this.quizStarted = true;
         this.question = this.questions[0];
     }

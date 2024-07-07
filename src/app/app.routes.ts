@@ -53,10 +53,6 @@ export const routes: Routes = [
         path: 'quiz/:id',
         component: QuizzPageComponent,
     },
-    // {
-    //     path: 'quizz/:id/:questionId',
-    //     component: QuestionComponent,
-    // },
     {
         path: 'post/:id',
         component: PostPageComponent,

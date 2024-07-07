@@ -43,6 +43,12 @@
                         label="Créer un memories sur ce lieu"
                         (click)="openDialog()"
                     ></button>
+                    <button
+                        pButton
+                        class="p-button-rounded p-button-primary p-button-outlined"
+                        label="Démarrer un quiz sur ce lieu"
+                        (click)="openDialogQuiz()"
+                    ></button>
                 </div>
             </div>
             <div
@@ -156,5 +162,37 @@
             [inputPoiId]="poi.id"
             [inputPoiName]="poi.name"
         ></app-create-post-card>
+    </ng-template>
+</p-dialog>
+<p-dialog
+    header="Difficulté du quiz"
+    class="flex flex-col"
+    [modal]="true"
+    [draggable]="false"
+    [(visible)]="showDialogQuiz"
+    [style]="{ width: '50rem', borderRadius: '9999px' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+>
+    <ng-template pTemplate="content">
+        <div class="flex flex-col justify-center gap-6">
+            <button
+                pButton
+                class="p-button-rounded p-button-primary p-button-outlined"
+                label="Facile"
+                (click)="goToQuiz('easy')"
+            ></button>
+            <button
+                pButton
+                class="p-button-rounded p-button-primary p-button-outlined"
+                label="Moyen"
+                (click)="goToQuiz('medium')"
+            ></button>
+            <button
+                pButton
+                class="p-button-rounded p-button-primary p-button-outlined"
+                label="Difficile"
+                (click)="goToQuiz('hard')"
+            ></button>
+        </div>
     </ng-template>
 </p-dialog>

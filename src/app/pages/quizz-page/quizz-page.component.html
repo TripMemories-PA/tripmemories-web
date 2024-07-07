@@ -3,7 +3,7 @@
         [name]="name"
         (startQuiz)="startQuiz()"
         [nbrQuestions]="nbrQuestions"
-        [poiName]="'Arc de triomphe'"
+        [poiName]="poiName"
     ></app-welcome-quizz>
 </div>
 <div class="mt-28" *ngIf="quizStarted && !endQuiz">
@@ -21,6 +21,6 @@
         [score]="score"
         [nbrQuestions]="nbrQuestions"
         [answers]="summary"
-        [poiName]="'Arc de triomphe'"
+        [poiName]="poiName"
     ></app-end-quiz>
 </div>

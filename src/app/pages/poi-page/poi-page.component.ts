@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PoisService } from '../../services/pois/pois.service';
 import { PoiModel } from '../../models/Poi.model';
 import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
@@ -44,11 +44,13 @@ export class PoiPageComponent implements OnInit {
     widthImage: number = 1;
     heightImage: number = 1;
     showDialog: boolean = false;
+    showDialogQuiz: boolean = false;
 
     tickets: TicketModel[] = [];
 
     constructor(
         private _activatedRoute: ActivatedRoute,
+        private router: Router,
         private poisService: PoisService,
         private imageService: ImageServiceService,
     ) {}
@@ -115,6 +117,16 @@ export class PoiPageComponent implements OnInit {
 
     openDialog() {
         this.showDialog = true;
+    }
+
+    openDialogQuiz() {
+        this.showDialogQuiz = true;
+    }
+
+    goToQuiz(difficulty: string = 'medium') {
+        this.router.navigate(['/quiz', this.poi.id], {
+            queryParams: { difficulty: difficulty },
+        });
     }
 
     getPoiNear() {

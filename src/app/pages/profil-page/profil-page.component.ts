@@ -32,6 +32,7 @@ import { MyTicketsComponent } from '../../container/profil/my-tickets/my-tickets
 export class ProfilPageComponent implements OnInit {
     profilPic: string | undefined = undefined;
     nbrFriends: number = 0;
+    nbrPoints: number = 0;
     nbrMonuments?: number = 0;
     banner: string | undefined | null = undefined;
     activeTab: string = 'posts';
@@ -68,6 +69,7 @@ export class ProfilPageComponent implements OnInit {
                 }
                 this.user = user;
                 this.nbrMonuments = user.poisCount;
+                this.nbrPoints = user.score ?? 0;
                 this.banner = user.banner?.url;
                 localStorage.setItem('user', JSON.stringify(user));
                 if (this.authServices.user?.avatar) {

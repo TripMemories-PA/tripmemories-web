@@ -36,6 +36,5 @@ export class BuyTicketPoiCardComponent {
             summary: 'Element ajouté au panier',
             detail: 'Element ajouté au panier avec succès',
         });
-        console.log('Ticket added to basket', this.ticket);
     }
 }

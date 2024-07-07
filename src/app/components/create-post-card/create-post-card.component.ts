@@ -69,7 +69,6 @@ export class CreatePostCardComponent implements OnInit {
 
     submitPost() {
         this.loading = true;
-        console.log(this.post);
         if (!this.file) {
             console.log('no file');
             this.error = 'Veuillez ajouter une image';

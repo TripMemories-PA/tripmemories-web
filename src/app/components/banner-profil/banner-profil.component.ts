@@ -28,7 +28,6 @@ export class BannerProfilComponent {
     ) {}
 
     private getImageValue(event: Event): File {
-        console.log(event);
         const file = (event.target as HTMLInputElement).files as FileList;
         this.banner = this.sanitizer.sanitize(
             SecurityContext.RESOURCE_URL,

@@ -19,6 +19,7 @@ export class User {
     poisCount?: number = 0;
     userTypeId?: number;
     userType?: IUserType;
+    score?: number;
 }
 
 export class UserRegister {

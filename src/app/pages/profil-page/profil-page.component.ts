@@ -10,6 +10,7 @@ import { MyProfilComponent } from '../../container/profil/my-profil/my-profil.co
 import { User } from '../../models/user';
 import { BannerProfilComponent } from '../../components/banner-profil/banner-profil.component';
 import { MyTicketsComponent } from '../../container/profil/my-tickets/my-tickets.component';
+import { MyQuizComponent } from '../../container/profil/my-quiz/my-quiz.component';
 
 @Component({
     selector: 'app-profil-page',
@@ -25,6 +26,7 @@ import { MyTicketsComponent } from '../../container/profil/my-tickets/my-tickets
         NgIf,
         BannerProfilComponent,
         MyTicketsComponent,
+        MyQuizComponent,
     ],
     templateUrl: './profil-page.component.html',
     styleUrl: './profil-page.component.css',

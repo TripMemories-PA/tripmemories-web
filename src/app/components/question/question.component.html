@@ -1,32 +1,72 @@
+<p-toast></p-toast>
 <div class="card">
     <div class="header">
         <div class="user">
-            <img src="assets/truc.png" alt="avatar" class="avatar" />
-            <span>Marco</span>
-            <span class="score">156</span>
+            <div class="relative w-8 h-8">
+                <img
+                    [ngSrc]="
+                        authService.user?.avatar?.url ??
+                        'https://oasys.ch/wp-content/uploads/2019/03/photo-avatar-profil.png'
+                    "
+                    alt="avatar"
+                    class="avatar"
+                    fill
+                />
+            </div>
+            <span>{{ authService.user?.firstname }}</span>
+            <span class="score"
+                >Score de la partie: {{ score }} pts, Votre score total:
+                {{ authService.user?.score }} pts</span
+            >
         </div>
         <div class="category">
-            <span>Cinema</span>
-            <p-progressBar mode="determinate" value="50"></p-progressBar>
-        </div>
-        <div class="user">
-            <img src="assets/truc.png" alt="avatar" class="avatar" />
-            <span>Jade</span>
-            <span class="score">134</span>
+            <span>{{ questionModel?.poi?.type?.name }}</span>
+            <p-progressBar
+                mode="determinate"
+                [style]="{ height: '20px', width: '250px' }"
+                [value]="(this.nbrQuestion / this.totalQuestions) * 100"
+            >
+                <ng-template pTemplate="content" let-value>
+                    <span>{{ value }}/100</span>
+                </ng-template>
+            </p-progressBar>
         </div>
     </div>
-    <img src="assets/truc.png" alt="question" class="question-image" />
+    <div class="relative w-full h-72">
+        <img
+            *ngIf="questionModel?.image"
+            [ngSrc]="
+                questionModel?.image?.url ??
+                'https://static.vecteezy.com/system/resources/previews/008/020/629/non_2x/banner-web-template-abstract-blue-and-golden-curved-lines-overlapping-layer-design-on-dark-blue-background-luxury-style-vector.jpg'
+            "
+            alt="question"
+            class="question-image"
+            fill
+        />
+    </div>
+
     <div class="question">
-        <h2>Question 5</h2>
-        <p>{{ question }}</p>
+        <h2 class="text-2xl font-bold">Question n°{{ nbrQuestion + 1 }}</h2>
+        <p class="text-xl font-semibold">{{ questionModel?.question }}</p>
     </div>
     <div class="answers">
         <button
-            *ngFor="let answer of answers"
+            *ngFor="let answer of questionModel?.answers"
             pButton
-            [label]="answer.label"
-            [ngClass]="{ correct: answer.value === selectedAnswer }"
+            [label]="answer.answer"
+            [ngClass]="{
+                correct: answer.id === selectedAnswer,
+                incorrect: answer.id === selectedAnswer && hasValidate && !isCorrect
+            }"
+            (click)="chooseAnswer(answer.id)"
             class="answer-button"
         ></button>
     </div>
+    <button
+        [disabled]="selectedAnswer === -1 || hasValidate"
+        pButton
+        label="Valider la réponse"
+        (click)="goNextQuestion()"
+        class="next-button"
+    ></button>
 </div>

@@ -5,6 +5,7 @@ import { NO_AUTH } from '../request.interceptor';
 import { PoiModel } from '../../models/Poi.model';
 import { PoisPostResponse, PoisSearchResponse } from '../../models/response/pois.response';
 import { TicketModel } from '../../models/ticket.model';
+import { QuestionResponse } from '../../models/response/question.response';
 
 const URL = environment.apiUrl + '/pois';
 const httpOptions = {
@@ -45,6 +46,16 @@ export class PoisService {
 
     getPOI(id: string) {
         return this.http.get<PoiModel>(`${URL}/${id}`, httpOptions);
+    }
+
+    getPoiQuestions(id: string, page: string = '1', perPage: string = '10') {
+        const params = new URLSearchParams();
+        params.append('page', page);
+        params.append('perPage', perPage);
+        return this.http.get<QuestionResponse>(
+            `${URL}/${id}/questions?${params.toString()}`,
+            httpOptions,
+        );
     }
 
     getPoiPosts(id: string, perPage?: string) {

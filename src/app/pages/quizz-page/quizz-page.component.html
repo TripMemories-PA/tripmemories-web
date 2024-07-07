@@ -1,36 +1,17 @@
-<div class="container-fluid mt-28 flex align-content-center justify-center">
-    <div
-        class="bg-white p-8 border rounded-3xl border-slate-300 shadow-lg shadow-gray-500/50 sm:w-full mx-5 lg:w-5/6"
-    >
-        <h1 class="text-4xl font-extrabold text-left">Bienvenue dans l'application de quiz</h1>
-        <p class="text-left text-lg">
-            Ce quiz contiendra un total de 9 questions. Chaque question vaut 10 points
-        </p>
-        <h4 class="text-2xl font-bold mt-5">Règles :</h4>
-        <ol class="list-decimal ml-5 text-lg">
-            <li>Une question correcte vous donne 10 points</li>
-            <li>Une question incorrecte vous retire 5 points</li>
-            <li>Vous aurez 10 secondes pour répondre à chaque question</li>
-            <li>Rafraîchir la page réinitialisera la question</li>
-        </ol>
-        <h1 class="text-center font-semibold text-4xl">Bonne chance !</h1>
-
-        <div class="flex justify-center">
-            <div class="flex flex-row flex-wrap justify-center sm:w-full md:w-11/12 lg:w-1/2">
-                <input
-                    [placeholder]="name"
-                    pInputText
-                    [disabled]="name"
-                    class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-100 focus:outline-none focus:shadow-lg focus:ring-0 ring-offset-current ring-offset-1 ring-gray-400"
-                />
-                <button
-                    class="transition mt-5 ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 duration-300 shadow-lg shadow-blue-500/50 py-2 px-3 rounded-lg font-bold text-white hover:bg-blue-600"
-                    routerLink="/question"
-                    (click)="startQuiz()"
-                >
-                    Commencer le quiz
-                </button>
-            </div>
-        </div>
-    </div>
+<div *ngIf="!quizzStarted">
+    <app-welcome-quizz
+        [name]="name"
+        (startQuiz)="startQuiz()"
+        [nbrQuestions]="nbrQuestions"
+        [poiName]="'Arc de triomphe'"
+    ></app-welcome-quizz>
+</div>
+<div class="mt-28" *ngIf="quizzStarted">
+    <app-question
+        [questionModel]="question"
+        [totalQuestions]="nbrQuestions"
+        [nbrQuestion]="indexQuestion"
+        [score]="score"
+        (nextQuestion)="nextQuestion($event)"
+    ></app-question>
 </div>

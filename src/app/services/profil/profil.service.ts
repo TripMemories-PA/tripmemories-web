@@ -3,6 +3,9 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user';
 import { environment } from '../../../environments/environment';
 import { PostsResponse } from '../../models/response/posts.response';
+import { TicketBuyRequest } from '../../models/request/ticketBuy.request';
+import { BuyTicketsResponse } from '../../models/response/buyTickets.response';
+import { MyTicketsModel } from '../../models/myTickets.model';
 
 const URL = environment.apiUrl + '/me';
 
@@ -39,7 +42,15 @@ export class ProfilService {
         return this.http.get<PostsResponse>(`${URL}/posts?${params.toString()}`);
     }
 
+    getMyTickets() {
+        return this.http.get<MyTicketsModel[]>(`${URL}/tickets`);
+    }
+
     deleteMe() {
         return this.http.delete(`${URL}`);
+    }
+
+    buyTicket(ticket: TicketBuyRequest) {
+        return this.http.post<BuyTicketsResponse>(`${URL}/tickets/buy`, ticket);
     }
 }

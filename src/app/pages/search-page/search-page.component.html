@@ -1,0 +1,54 @@
+<div>
+    <div class="w-full h-96 z-0 relative">
+        <img
+            ngSrc="assets/search-city/background-search-city.png"
+            class="absolute object-cover opacity-70"
+            alt="Monument Search"
+            fill
+        />
+    </div>
+    <div class="relative">
+        <div class="p-toolbar-group-center text-center mt-10">
+            <span class="p-input-icon-right">
+                <input
+                    [(ngModel)]="searchMonument.monument"
+                    type="text"
+                    class="w-full"
+                    pInputText
+                    placeholder="Cherche ce que te propose la France..."
+                    (keyup.enter)="sortSearch()"
+                />
+                <i (click)="sortSearch()" class="pi pi-search cursor-pointer mr-4"></i>
+            </span>
+        </div>
+        <p-progressBar
+            mode="indeterminate"
+            *ngIf="loading"
+            [style]="{ marginTop: '25px', height: '6px', width: '100%' }"
+        ></p-progressBar>
+        <div *ngIf="sortedPois.length > 0">
+            <div class="p-9 justify-center flex flex-row flex-wrap gap-10">
+                <app-monument-card
+                    *ngFor="let monument of sortedPois"
+                    [monument]="monument"
+                    [city]="value"
+                ></app-monument-card>
+            </div>
+            <p-paginator
+                *ngIf="lastPage > 1 || itemsPerPage > 12"
+                (onPageChange)="onPageChange($event)"
+                [first]="firstPage"
+                [rows]="meta.perPage"
+                [totalRecords]="totalPages"
+                [rowsPerPageOptions]="[12, 24, 36]"
+            >
+            </p-paginator>
+        </div>
+        <p-message
+            *ngIf="sortedPois.length === 0 && !loading && searchMonument.monument !== ''"
+            class="flex justify-center mt-10"
+            severity="error"
+            text="Aucun résultat trouvé pour la recherche. Veuillez réessayer."
+        ></p-message>
+    </div>
+</div>

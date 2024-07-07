@@ -76,7 +76,7 @@ export class LoginFormComponent {
                     access_token: '',
                 };
                 user.access_token = res.token;
-                this.authService.user = user;
+                this.authService.setUser(user);
                 localStorage.setItem('user', JSON.stringify(user));
                 localStorage.setItem('token', <string>res.token);
                 this.router.navigate(['/profil']);

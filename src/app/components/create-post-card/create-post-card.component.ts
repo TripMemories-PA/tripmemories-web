@@ -69,7 +69,6 @@ export class CreatePostCardComponent implements OnInit {
 
     submitPost() {
         this.loading = true;
-        console.log(this.post);
         if (!this.file) {
             console.log('no file');
             this.error = 'Veuillez ajouter une image';
@@ -121,7 +120,7 @@ export class CreatePostCardComponent implements OnInit {
         if (this.inputPoiId && this.inputPoiName) {
             return;
         }
-        this.poiService.getPOIs('100000000').subscribe({
+        this.poiService.getPOIs('1', '100000000').subscribe({
             next: (response) => {
                 this.loadingPoi = false;
                 this.poi = response.data;

@@ -1,0 +1,84 @@
+<p-toast></p-toast>
+<p-table [value]="cartItems" responsiveLayout="scroll">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Nom</th>
+            <th>Prix</th>
+            <th>Quantité</th>
+            <th>Total</th>
+            <th>Action</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+        <tr>
+            <td class="font-bold text-xl">Ticket "{{ item.title }}"</td>
+            <td>{{ item.price }}€</td>
+            <td>
+                <p-inputNumber
+                    [(ngModel)]="item.quantity"
+                    [min]="1"
+                    (change)="addItem(item)"
+                ></p-inputNumber>
+            </td>
+            <td>{{ item.price * item.quantity }}€</td>
+            <td>
+                <button
+                    pButton
+                    type="button"
+                    icon="pi pi-trash"
+                    class="p-button-danger"
+                    (click)="removeItem(item)"
+                ></button>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="footer">
+        <tr>
+            <td colspan="3" style="text-align: right">Total:</td>
+            <td>{{ getTotal() }}€</td>
+            <td>
+                <button *ngIf="cartItems.length > 0" pButton label="Payer" (click)="pay()"></button>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+<div>
+    <p-dialog
+        header="Confirmer votre paiement"
+        class="flex flex-col"
+        [modal]="true"
+        [draggable]="false"
+        [(visible)]="showPaymentDialog"
+        [style]="{ width: '50rem' }"
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    >
+        <ng-template
+            pTemplate="content"
+            class="w-full border-gray-400 border-solid border-2 rounded shadow p-4"
+        >
+            <form [formGroup]="checkoutForm" (ngSubmit)="payWithStripe()">
+                <div class="p-field mb-6">
+                    <input pInputText placeholder="Nom sur la carte" formControlName="name" />
+                </div>
+                <div class="p-field mb-6">
+                    <input
+                        pInputText
+                        placeholder="Votre email"
+                        type="email"
+                        formControlName="email"
+                    />
+                </div>
+                <ngx-stripe-elements [stripe]="stripeService" [elementsOptions]="elementsOptions">
+                    <ngx-stripe-card [options]="cardOptions" />
+                </ngx-stripe-elements>
+                <button pButton class="mt-6 mb-6" type="submit">Payer</button>
+            </form>
+            <p-message
+                *ngIf="successMessage"
+                severity="success"
+                text="Paiement effectué avec succès"
+            ></p-message>
+            <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage"></p-message>
+        </ng-template>
+    </p-dialog>
+</div>

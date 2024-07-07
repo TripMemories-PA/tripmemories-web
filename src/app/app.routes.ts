@@ -10,6 +10,12 @@ import { PoiPageComponent } from './pages/poi-page/poi-page.component';
 import { PostPageComponent } from './pages/post-page/post-page.component';
 import { FeedPageComponent } from './pages/feed-page/feed-page.component';
 import { UserPageComponent } from './pages/user-page/user-page.component';
+import { SearchPageComponent } from './pages/search-page/search-page.component';
+import { ShopPageComponent } from './pages/shop-page/shop-page.component';
+import { BasketPageComponent } from './pages/basket-page/basket-page.component';
+import { QuizzPageComponent } from './pages/quizz-page/quizz-page.component';
+import { QuestionComponent } from './components/question/question.component';
+import { RankingPageComponent } from './pages/ranking-page/ranking-page.component';
 
 export const routes: Routes = [
     {
@@ -29,6 +35,10 @@ export const routes: Routes = [
         component: NewPasswordPageComponent,
     },
     {
+        path: 'search',
+        component: SearchPageComponent,
+    },
+    {
         path: 'search-city',
         component: CitySearchPageComponent,
     },
@@ -41,12 +51,28 @@ export const routes: Routes = [
         component: PoiPageComponent,
     },
     {
+        path: 'quiz/:id',
+        component: QuizzPageComponent,
+    },
+    {
         path: 'post/:id',
         component: PostPageComponent,
     },
     {
+        path: 'ranking',
+        component: RankingPageComponent,
+    },
+    {
         path: 'profil',
         component: ProfilPageComponent,
+    },
+    {
+        path: 'shop',
+        component: ShopPageComponent,
+    },
+    {
+        path: 'basket',
+        component: BasketPageComponent,
     },
     {
         path: 'user/:id',

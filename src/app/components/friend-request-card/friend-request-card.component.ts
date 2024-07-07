@@ -39,11 +39,9 @@ export class FriendRequestCardComponent implements OnInit {
     constructor(private friendsRequestService: FriendsRequestsService) {}
 
     ngOnInit(): void {
-        console.log(this.friendRequest);
         if (this.friendRequest?.createdAt) {
             const date = new Date(this.friendRequest.createdAt);
             this.receivedDate = date.toLocaleDateString('fr-FR');
-            console.log(this.receivedDate);
         }
     }
 

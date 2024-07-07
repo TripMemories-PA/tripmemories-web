@@ -5,9 +5,11 @@
                 type="text"
                 class="w-full rounded-full"
                 pInputText
+                [(ngModel)]="searchValue"
                 placeholder="Cherche un lieu"
+                (keyup.enter)="search()"
             />
-            <i class="pi pi-search cursor-pointer mr-4"></i>
+            <i (click)="search()" class="pi pi-search cursor-pointer mr-4"></i>
         </span>
     </div>
     <div class="flex flex-col justify-center items-center">

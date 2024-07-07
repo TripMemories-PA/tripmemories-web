@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
 import { NgIf, NgOptimizedImage } from '@angular/common';
@@ -8,6 +8,7 @@ import { NavigationEnd, Router } from '@angular/router';
 import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-header',
@@ -25,7 +26,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     templateUrl: './header.component.html',
     styleUrl: './header.component.css',
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
+    private subscriptions: Subscription = new Subscription();
     constructor(
         public auth: AuthService,
         private router: Router,
@@ -40,15 +42,37 @@ export class HeaderComponent implements OnInit {
     items: MenuItem[] | undefined;
     showSearchInput: boolean = false;
 
+    ngOnChanges() {
+        this.ngOnInit();
+    }
+
+    ngOnDestroy() {
+        this.subscriptions.unsubscribe();
+    }
+
     ngOnInit() {
+        this.updateMenuItems();
+        this.subscriptions.add(
+            this.auth.user$.subscribe(() => {
+                this.updateMenuItems();
+            }),
+        );
+        this.router.events.subscribe((event) => {
+            if (event instanceof NavigationEnd) {
+                const url = event.urlAfterRedirects;
+                this.showBackgroundColor = !(
+                    url.includes('/search-city') ||
+                    url.includes('/search') ||
+                    url.includes('/profil') ||
+                    url.includes('/user') ||
+                    url.includes('/poi')
+                );
+            }
+        });
+    }
+
+    updateMenuItems() {
         this.items = [
-            /*            {
-                label: 'Carte',
-                style: {
-                    color: 'white',
-                },
-                routerLink: ['/'],
-            },*/
             {
                 label: 'Feed',
                 style: {
@@ -57,11 +81,11 @@ export class HeaderComponent implements OnInit {
                 routerLink: ['/'],
             },
             {
-                label: 'Magasin',
+                label: 'Classement',
                 style: {
                     color: 'white',
                 },
-                routerLink: ['/'],
+                routerLink: ['/ranking'],
             },
             {
                 label: 'Profil',
@@ -71,17 +95,24 @@ export class HeaderComponent implements OnInit {
                 routerLink: ['/profil'],
             },
         ];
-        this.router.events.subscribe((event) => {
-            if (event instanceof NavigationEnd) {
-                const url = event.urlAfterRedirects;
-                this.showBackgroundColor = !(
-                    url.includes('/search-city') ||
-                    url.includes('/profil') ||
-                    url.includes('/user') ||
-                    url.includes('/poi')
-                );
-            }
-        });
+        if (this.auth.user?.userTypeId === 3) {
+            this.items.push({
+                label: 'Magasin',
+                style: {
+                    color: 'white',
+                },
+                routerLink: ['/shop'],
+            });
+        }
+        if (this.auth.user?.userTypeId === 2) {
+            this.items.push({
+                label: 'Mon Panier',
+                style: {
+                    color: 'white',
+                },
+                routerLink: ['/basket'],
+            });
+        }
     }
 
     toggleSearchInput() {

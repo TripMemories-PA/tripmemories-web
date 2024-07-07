@@ -40,6 +40,7 @@ export class MyInformationsComponent implements OnInit {
     @Input() user?: User;
     @Input() nbrFriends?: number;
     @Input() nbrMonuments?: number;
+    @Input() nbrPoints?: number;
 
     userValues: User = {
         firstname: '',

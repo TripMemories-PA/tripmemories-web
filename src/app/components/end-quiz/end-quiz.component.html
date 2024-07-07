@@ -1,0 +1,38 @@
+<div class="container-fluid mt-28 flex align-content-center justify-center">
+    <div
+        class="bg-white p-8 border rounded-3xl border-slate-300 shadow-lg shadow-gray-500/50 sm:w-full mx-5 lg:w-5/6"
+    >
+        <h1 class="text-4xl font-extrabold text-left">
+            Félicitations {{ name.split(' ')[0] }}! Tu as terminé le quiz
+        </h1>
+        <p class="text-left text-lg">
+            Ce quiz sur {{ poiName }} t'a permis de répondre à un total de
+            {{ nbrQuestions }} questions. Tu as obtenu un score de
+            <span class="font-semibold">{{ score }} points</span>
+        </p>
+        <h4 class="text-2xl font-bold mt-5">Voici un petit résumé de tes réponses</h4>
+        <ol class="list-decimal ml-5 text-lg">
+            <li *ngFor="let answer of answers">
+                Á la question
+                <span class="italic font-semibold">"{{ answer.question?.question }}"</span>, ta
+                réponse était
+                {{ answer.isCorrect ? 'correcte, bien joué !' : 'incorrecte malheureusement !' }}
+            </li>
+        </ol>
+        <h1 class="text-center font-semibold text-4xl mt-10 mb-10">
+            On se retrouve bientôt sur TripMemories!<br />Continue ton entrainement et tes visites
+            et grimpe le plus haut possible dans le classement !
+        </h1>
+        <div class="flex justify-center">
+            <div class="flex flex-row flex-wrap justify-center sm:w-full md:w-11/12 lg:w-1/2">
+                <button
+                    pButton
+                    class="transition mt-5 ease-in-out delay-150 bg-blue-500 hover:-translate-y-1 hover:scale-110 duration-300 shadow-lg shadow-blue-500/50 py-2 px-3 rounded-lg font-bold text-white hover:bg-blue-600"
+                    [routerLink]="['/']"
+                >
+                    Retourner à l'accueil
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

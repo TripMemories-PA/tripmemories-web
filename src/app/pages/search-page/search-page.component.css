@@ -1,0 +1,7 @@
+::ng-deep .p-input-icon-right {
+  width: 70%;
+}
+
+::ng-deep .p-input-icon-right .p-inputtext {
+  border-radius: 9999px;
+}

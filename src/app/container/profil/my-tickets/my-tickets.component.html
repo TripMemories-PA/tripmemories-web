@@ -1,0 +1,11 @@
+<div class="flex flex-row flex-wrap gap-20">
+    <ng-container *ngIf="myTickets && myTickets.length > 0; else noTickets">
+        <app-my-ticket-card
+            *ngFor="let myticket of myTickets"
+            [ticket]="myticket"
+        ></app-my-ticket-card>
+    </ng-container>
+    <ng-template #noTickets>
+        <p class="text-center text-red-500">Vous n'avez aucun ticket pour le moment acheté</p>
+    </ng-template>
+</div>

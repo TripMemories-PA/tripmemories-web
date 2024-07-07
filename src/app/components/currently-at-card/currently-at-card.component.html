@@ -16,5 +16,9 @@
         alt="avatar"
         class="object-cover rounded-xl z-0"
         fill
+        [loading]="'auto'"
+        (load)="isLoadingImage = false"
+        (error)="isLoadingImage = false"
     />
+    <div class="spinner" *ngIf="isLoadingImage">Loading...</div>
 </div>

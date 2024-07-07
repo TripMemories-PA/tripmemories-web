@@ -1,0 +1,72 @@
+<div class="card flex justify-content-center">
+    <p-card
+        styleClass="ui-card-shadow"
+        class="bg-white"
+        [style]="{ width: '360px', boxShadow: 'inherit', borderRadius: 'inherit' }"
+    >
+        <ng-template pTemplate="header">
+            <div class="w-[22rem] h-[22rem] relative">
+                <img
+                    ngSrc="{{
+                        ticket?.ticket?.poi?.cover?.url ??
+                            'https://decizia.com/blog/wp-content/uploads/2017/06/default-placeholder.png'
+                    }}"
+                    alt="{{ ticket?.id }}"
+                    class="absolute rounded-2xl object-cover"
+                    fill
+                    priority
+                />
+            </div>
+        </ng-template>
+        <div class="flex flex-col gap-2">
+            <div class="flex flex-row justify-between text-sm">
+                <p>A été utilisé: {{ ticket?.usedAt ?? 'Non' }}</p>
+                <div class="flex flex-row items-center gap-2 font-bold">
+                    <p>Acheté le: {{ dateParsed[0] }} à {{ dateParsed[1] }}</p>
+                </div>
+            </div>
+            <h4 class="text-sm">
+                Nombre de personne pour le billet: {{ ticket?.ticket?.groupSize }}
+            </h4>
+            <h2 class="p-mt-2 text-xl font-bold">{{ ticket?.ticket?.title }}</h2>
+            <h3 class="text-sm">Monument: {{ ticket?.ticket?.poi?.name }}</h3>
+            <h3 class="text-sm">{{ ticket?.ticket?.description }}</h3>
+            <div class="flex flex-row justify-between">
+                <span
+                    *ngIf="ticket?.paid"
+                    (click)="visible = true"
+                    class="flex flex-row text-[var(--primary)] font-['Urbanist'] gap-2 cursor-pointer"
+                >
+                    Voir le qrCode
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="28"
+                        height="29"
+                        viewBox="0 0 28 29"
+                        fill="none"
+                    >
+                        <path
+                            d="M7.46634 21.5002L5.83301 19.8668L17.033 8.66683H6.99967V6.3335H20.9997V20.3335H18.6663V10.3002L7.46634 21.5002Z"
+                            fill="#4169E1"
+                        />
+                    </svg>
+                </span>
+                <span *ngIf="ticket?.paid" class="text-green-500 font-['Urbanist'] cursor-pointer">
+                    Payé
+                </span>
+                <span *ngIf="!ticket?.paid" class="text-red-500 font-['Urbanist'] cursor-pointer">
+                    Non payé
+                </span>
+            </div>
+        </div>
+    </p-card>
+</div>
+<div class="card flex justify-content-center">
+    <p-dialog
+        header="Votre qrCode pour {{ ticket?.ticket?.title }}"
+        [modal]="true"
+        [(visible)]="visible"
+    >
+        <qrcode [qrdata]="qrCodeValue" [width]="512" [errorCorrectionLevel]="'M'"></qrcode>
+    </p-dialog>
+</div>

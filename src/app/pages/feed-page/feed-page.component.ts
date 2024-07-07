@@ -8,6 +8,7 @@ import { PostModel } from '../../models/post.model';
 import { NgForOf, NgIf } from '@angular/common';
 import { AuthService } from '../../services/auth/auth.service';
 import { MessageModule } from 'primeng/message';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-feed-page',
@@ -28,11 +29,13 @@ export class FeedPageComponent implements OnInit {
     constructor(
         private postsService: PostsService,
         private authServices: AuthService,
+        private router: Router,
     ) {}
 
     posts: PostModel[] = [];
     number = 2;
     isEnd = false;
+    searchValue = '';
 
     ngOnInit(): void {
         this.getPosts();
@@ -71,6 +74,14 @@ export class FeedPageComponent implements OnInit {
                     console.error(error);
                 },
             });
+    }
+
+    search() {
+        if (!this.searchValue) {
+            this.router.navigate(['/search']);
+            return;
+        }
+        this.router.navigate(['/search'], { queryParams: { search: this.searchValue } });
     }
 
     @HostListener('window:scroll', ['$event'])

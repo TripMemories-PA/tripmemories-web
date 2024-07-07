@@ -1,0 +1,7 @@
+::ng-deep .p-card-body {
+  padding: 0;
+}
+
+::ng-deep .p-card-content {
+  padding-top: 10px;
+}

@@ -17,6 +17,7 @@
                 [profilPic]="profilPic"
                 [nbrFriends]="nbrFriends"
                 [nbrMonuments]="nbrMonuments"
+                [nbrPoints]="nbrPoints"
                 [user]="user"
             ></app-profil-info>
         </div>
@@ -26,8 +27,26 @@
                     <li [class.active]="activeTab === 'posts'" (click)="setActiveTab('posts')">
                         Mes posts
                     </li>
-                    <li [class.active]="activeTab === 'friends'" (click)="setActiveTab('friends')">
+                    <li
+                        *ngIf="userType > -1 && userType < 3"
+                        [class.active]="activeTab === 'friends'"
+                        (click)="setActiveTab('friends')"
+                    >
                         Mes amis
+                    </li>
+                    <li
+                        *ngIf="userType > -1 && userType < 3"
+                        [class.active]="activeTab === 'tickets'"
+                        (click)="setActiveTab('tickets')"
+                    >
+                        Mes tickets
+                    </li>
+                    <li
+                        *ngIf="userType === 1 || userType === 3"
+                        [class.active]="activeTab === 'quiz'"
+                        (click)="setActiveTab('quiz')"
+                    >
+                        Mon quiz
                     </li>
                     <li [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')">
                         Mon profil
@@ -44,6 +63,12 @@
             </ng-container>
             <ng-container *ngSwitchCase="'profile'">
                 <app-my-profil></app-my-profil>
+            </ng-container>
+            <ng-container *ngSwitchCase="'tickets'">
+                <app-my-tickets></app-my-tickets>
+            </ng-container>
+            <ng-container *ngSwitchCase="'quiz'">
+                <app-my-quiz></app-my-quiz>
             </ng-container>
         </div>
     </div>

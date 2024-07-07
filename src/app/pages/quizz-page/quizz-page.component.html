@@ -1,0 +1,26 @@
+<div *ngIf="!quizStarted && !endQuiz">
+    <app-welcome-quizz
+        [name]="name"
+        (startQuiz)="startQuiz()"
+        [nbrQuestions]="nbrQuestions"
+        [poiName]="poiName"
+    ></app-welcome-quizz>
+</div>
+<div class="mt-28" *ngIf="quizStarted && !endQuiz">
+    <app-question
+        [questionModel]="question"
+        [totalQuestions]="nbrQuestions"
+        [nbrQuestion]="indexQuestion"
+        [score]="score"
+        (nextQuestion)="nextQuestion($event)"
+    ></app-question>
+</div>
+<div *ngIf="endQuiz">
+    <app-end-quiz
+        [name]="name"
+        [score]="score"
+        [nbrQuestions]="nbrQuestions"
+        [answers]="summary"
+        [poiName]="poiName"
+    ></app-end-quiz>
+</div>

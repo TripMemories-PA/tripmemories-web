@@ -44,6 +44,15 @@ export class UsersService {
         return this.http.get<PostsResponse>(`${URL}/${id}/posts?${params.toString()}`);
     }
 
+    getUserRanking(perPage: number = 20, page: number = 1) {
+        const params = new URLSearchParams();
+        params.append('page', page.toString());
+        params.append('perPage', perPage.toString());
+        params.append('sortBy', 'score');
+        params.append('order', 'desc');
+        return this.http.get<SearchUsersResponse>(`${URL}?${params.toString()}`);
+    }
+
     search(search: string) {
         const params = new URLSearchParams();
         params.append('page', '1');

@@ -1,0 +1,82 @@
+<form [formGroup]="questionForm" (ngSubmit)="update ? updateQuestion() : save()" class="mb-4">
+    <div class="p-field question-field">
+        <label for="question" class="mr-6 text-xl font-semibold text-['Urbanist']"
+            >Question :</label
+        >
+        <input id="question" type="text" pInputText formControlName="question" />
+        <div
+            *ngIf="questionForm.get('question')?.invalid && questionForm.get('question')?.touched"
+            class="p-error"
+        >
+            La question est obligatoire.
+        </div>
+    </div>
+    <div formArrayName="answers">
+        <div
+            *ngFor="let answer of answers.controls; let i = index"
+            [formGroupName]="i"
+            class="answer-group"
+        >
+            <input
+                type="text"
+                pInputText
+                formControlName="answer"
+                placeholder="Réponse {{ i + 1 }}"
+                class="answer-input"
+            />
+            <div class="answer-checkbox">
+                <p-checkbox binary="true" formControlName="isCorrect"></p-checkbox>
+                <label class="checkbox-label">Bonne réponse ?</label>
+            </div>
+            <button
+                pButton
+                type="button"
+                icon="pi pi-times"
+                class="remove-button"
+                (click)="removeAnswer(i)"
+            ></button>
+            <div
+                *ngIf="answer.get('answer')?.invalid && answer.get('answer')?.touched"
+                class="p-error"
+            >
+                <div *ngIf="answer.get('answer')?.errors?.['required']">
+                    La réponse est obligatoire.
+                </div>
+                <div *ngIf="answer.get('answer')?.errors?.['minLength']">
+                    Minimum 1 caractère requis.
+                </div>
+                <div *ngIf="answer.get('answer')?.errors?.['maxLength']">
+                    Maximum 4 caractères autorisés.
+                </div>
+            </div>
+        </div>
+        <div *ngIf="answers.errors?.['minAnswers'] && questionForm.touched" class="p-error">
+            Vous devez ajouter au moins une réponse.
+        </div>
+        <div *ngIf="answers.errors?.['maxAnswers'] && questionForm.touched" class="p-error">
+            Vous ne pouvez pas ajouter plus de 4 réponses.
+        </div>
+    </div>
+    <div class="footer-buttons">
+        <button
+            type="button"
+            pButton
+            icon="pi pi-plus"
+            label="Ajouter une réponse"
+            (click)="addAnswer()"
+        ></button>
+        <button type="submit" pButton icon="pi pi-check" label="Valider"></button>
+    </div>
+</form>
+<p-progressBar
+    mode="indeterminate"
+    *ngIf="loading"
+    [style]="{ height: '6px', width: '100%', marginTop: '25px' }"
+></p-progressBar>
+<p-message
+    *ngIf="success"
+    class="self-center mt-6"
+    severity="success"
+    text="{{ success }}"
+></p-message>
+<p-message *ngIf="error" class="self-center mt-6" severity="error" text="{{ error }}"></p-message>

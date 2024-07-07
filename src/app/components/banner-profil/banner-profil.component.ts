@@ -28,7 +28,6 @@ export class BannerProfilComponent {
     ) {}
 
     private getImageValue(event: Event): File {
-        console.log(event);
         const file = (event.target as HTMLInputElement).files as FileList;
         this.banner = this.sanitizer.sanitize(
             SecurityContext.RESOURCE_URL,
@@ -59,7 +58,7 @@ export class BannerProfilComponent {
                 const user: User = JSON.parse(localStorage.getItem('user') as string);
                 user.banner = { url: value.pic };
                 localStorage.setItem('user', JSON.stringify(user));
-                this.authServices.user = user;
+                this.authServices.setUser(user);
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Bannière modifiée',

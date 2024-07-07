@@ -30,6 +30,10 @@
         <p class="text-center mb-2 text-3xl font-bold text-['Urbanist']">{{ nbrMonuments ?? 0 }}</p>
         <p class="text-center text-md text-['Urbanist']">Monuments visités</p>
     </div>
+    <div class="relative flex mr-16 flex-col justify-center">
+        <p class="text-center mb-2 text-3xl font-bold text-['Urbanist']">{{ nbrPoints ?? 0 }}</p>
+        <p class="text-center text-md text-['Urbanist']">Points</p>
+    </div>
     <ng-container *ngIf="modifyAccount">
         <p-dialog header="Modifier vos informations" [(visible)]="modifyAccount" [modal]="true">
             <form class="flex flex-col gap-6">

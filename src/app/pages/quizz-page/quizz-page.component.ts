@@ -41,6 +41,7 @@ export class QuizzPageComponent implements OnInit {
     nbrQuestions = 10;
     questions: QuestionModel[] = [];
     question: QuestionModel = this.questions[this.indexQuestion];
+    poiName: string = '';
     score = 0;
 
     startQuiz() {
@@ -61,7 +62,7 @@ export class QuizzPageComponent implements OnInit {
                             this.nbrQuestions = 10;
                             break;
                         case 'hard':
-                            this.nbrQuestions = 15;
+                            this.nbrQuestions = 20;
                             break;
                         default:
                             this.nbrQuestions = 10;
@@ -82,6 +83,9 @@ export class QuizzPageComponent implements OnInit {
             .subscribe((questions) => {
                 this.questions = questions.data;
                 this.nbrQuestions = questions.data.length;
+                if (questions.data.length > 0) {
+                    this.poiName = questions.data[0].poi.name as string;
+                }
             });
     }
 

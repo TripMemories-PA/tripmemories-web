@@ -81,6 +81,13 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
                 routerLink: ['/'],
             },
             {
+                label: 'Classement',
+                style: {
+                    color: 'white',
+                },
+                routerLink: ['/ranking'],
+            },
+            {
                 label: 'Profil',
                 style: {
                     color: 'white',

@@ -1,0 +1,39 @@
+.dialog-header {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.question-field, .answer-field {
+  margin-bottom: 1rem;
+}
+
+.answer-group {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.answer-input {
+  flex: 1;
+  margin-right: 0.5rem;
+}
+
+.answer-checkbox {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-label {
+  margin-left: 0.5rem;
+}
+
+.remove-button {
+  margin-left: 0.5rem;
+}
+
+.footer-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+}

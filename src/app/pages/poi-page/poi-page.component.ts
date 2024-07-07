@@ -45,6 +45,7 @@ export class PoiPageComponent implements OnInit {
     heightImage: number = 1;
     showDialog: boolean = false;
     showDialogQuiz: boolean = false;
+    nbrQuestions: number = 0;
 
     tickets: TicketModel[] = [];
 
@@ -83,6 +84,11 @@ export class PoiPageComponent implements OnInit {
             },
             error: (error) => {
                 console.error(error);
+            },
+        });
+        this.poisService.getPoiQuestions(id).subscribe({
+            next: (response) => {
+                this.nbrQuestions = response.meta.total;
             },
         });
     }

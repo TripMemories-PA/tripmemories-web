@@ -35,13 +35,13 @@ export class PostsService {
 
     getPostComments(
         id: string,
-        perPage?: string,
+        perPage: string = '10',
         page: string = '1',
         isConnected: boolean = false,
     ) {
         const params = new URLSearchParams();
         params.append('page', page);
-        params.append('perPage', perPage ?? '10');
+        params.append('perPage', perPage);
         return this.http.get<CommentsResponse>(
             `${URL}/${id}/comments?${params.toString()}`,
             isConnected ? undefined : httpOptions,

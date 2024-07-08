@@ -39,7 +39,11 @@ export class CommentsSectionComponent implements OnInit {
     ngOnInit(): void {
         this.openDialog();
         if (this.postId) {
-            this.getComments();
+            if (this.authService.user?.access_token) {
+                this.getComments(true);
+            } else {
+                this.getComments();
+            }
         }
     }
 
@@ -47,11 +51,11 @@ export class CommentsSectionComponent implements OnInit {
         this.show = true;
     }
 
-    getComments(): void {
+    getComments(isConnected: boolean = false): void {
         if (!this.postId) {
             return;
         }
-        this.postService.getPostComments(this.postId.toString()).subscribe({
+        this.postService.getPostComments(this.postId.toString(), '10', '1', isConnected).subscribe({
             next: (response) => {
                 this.comments = response.data;
             },

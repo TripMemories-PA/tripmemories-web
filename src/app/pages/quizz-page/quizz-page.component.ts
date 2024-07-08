@@ -36,7 +36,9 @@ export class QuizzPageComponent implements OnInit {
     endQuiz = false;
     quizStarted = false;
     indexQuestion = 0;
-    name = this.authService.user?.firstname + ' ' + this.authService.user?.lastname;
+    name? = this.authService.user
+        ? this.authService.user?.firstname + ' ' + this.authService.user?.lastname
+        : undefined;
     idQuizz = '';
     nbrQuestions = 10;
     questions: QuestionModel[] = [];

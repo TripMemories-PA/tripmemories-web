@@ -10,12 +10,15 @@ import { ButtonModule } from 'primeng/button';
     styleUrl: './welcome-quizz.component.css',
 })
 export class WelcomeQuizzComponent {
-    @Input() name = '';
+    @Input() name? = '';
     @Input() poiName = '';
     @Input() nbrQuestions = 0;
     @Output() startQuiz: EventEmitter<any> = new EventEmitter();
 
     start() {
+        if (!this.name) {
+            return;
+        }
         this.startQuiz.emit();
     }
 }

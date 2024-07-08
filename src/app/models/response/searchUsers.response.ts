@@ -3,5 +3,5 @@ import { MetaModel } from '../meta.model';
 
 export class SearchUsersResponse {
     data: User[] = [];
-    meta?: MetaModel;
+    meta: MetaModel = new MetaModel();
 }

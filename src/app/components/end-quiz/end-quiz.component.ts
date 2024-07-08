@@ -14,7 +14,7 @@ import { SummaryQuizModel } from '../../models/summaryQuiz.model';
 })
 export class EndQuizComponent {
     @Input() score: number = 0;
-    @Input() name: string = '';
+    @Input() name?: string = '';
     @Input() nbrQuestions: number = 0;
     @Input() poiName: string = '';
     @Input() answers: SummaryQuizModel[] = [];

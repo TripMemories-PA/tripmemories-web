@@ -37,7 +37,18 @@
             <td colspan="3" style="text-align: right">Total:</td>
             <td>{{ getTotal() }}€</td>
             <td>
-                <button *ngIf="cartItems.length > 0" pButton label="Payer" (click)="pay()"></button>
+                <button
+                    *ngIf="cartItems.length > 0"
+                    pButton
+                    [disabled]="showPaymentDialog || loading"
+                    label="Payer"
+                    (click)="pay()"
+                ></button>
+                <p-progressBar
+                    mode="indeterminate"
+                    [style]="{ height: '6px' }"
+                    *ngIf="loading"
+                ></p-progressBar>
             </td>
         </tr>
     </ng-template>
@@ -71,8 +82,20 @@
                 <ngx-stripe-elements [stripe]="stripeService" [elementsOptions]="elementsOptions">
                     <ngx-stripe-card [options]="cardOptions" />
                 </ngx-stripe-elements>
-                <button pButton class="mt-6 mb-6" type="submit">Payer</button>
+                <button
+                    pButton
+                    [disabled]="loading || isPaymentConfirmed"
+                    class="mt-6 mb-6"
+                    type="submit"
+                >
+                    Payer
+                </button>
             </form>
+            <p-progressBar
+                mode="indeterminate"
+                [style]="{ height: '6px' }"
+                *ngIf="loading"
+            ></p-progressBar>
             <p-message
                 *ngIf="successMessage"
                 severity="success"

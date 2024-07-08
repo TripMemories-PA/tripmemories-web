@@ -17,7 +17,7 @@
             <li>Rafraîchir la page réinitialisera le quiz</li>
         </ol>
         <h1 class="text-center font-semibold text-4xl mt-10 mb-10">
-            Bonne chance à toi {{ name.split(' ')[0] }} !
+            Bonne chance à toi {{ name && name.split(' ')[0] }} !
         </h1>
 
         <div class="flex justify-center">
@@ -25,7 +25,7 @@
                 <input
                     [placeholder]="name"
                     pInputText
-                    [disabled]="name"
+                    [disabled]="name || name === undefined"
                     class="text-black placeholder-gray-600 w-full px-4 py-2.5 mt-2 text-base transition duration-500 ease-in-out transform border-transparent rounded-lg bg-gray-200 focus:border-blueGray-500 focus:bg-white dark:focus:bg-gray-100 focus:outline-none focus:shadow-lg focus:ring-0 ring-offset-current ring-offset-1 ring-gray-400"
                 />
                 <button

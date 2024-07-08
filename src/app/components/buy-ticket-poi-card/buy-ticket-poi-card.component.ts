@@ -7,6 +7,7 @@ import { BasketService } from '../../services/basket/basket.service';
 import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
     selector: 'app-buy-ticket-poi-card',
@@ -23,6 +24,7 @@ export class BuyTicketPoiCardComponent {
     constructor(
         private basketService: BasketService,
         private messageService: MessageService,
+        protected authServices: AuthService,
     ) {}
 
     addTicketToBasket(): void {

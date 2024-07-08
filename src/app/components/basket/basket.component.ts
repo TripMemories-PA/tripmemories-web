@@ -18,6 +18,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { Router } from '@angular/router';
 import { MessageModule } from 'primeng/message';
 import { BuyTicketsResponse } from '../../models/response/buyTickets.response';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'app-basket',
@@ -37,6 +38,7 @@ import { BuyTicketsResponse } from '../../models/response/buyTickets.response';
         StripeElementsDirective,
         MessageModule,
         NgIf,
+        ProgressBarModule,
     ],
     providers: [MessageService, StripeService],
     templateUrl: './basket.component.html',
@@ -48,6 +50,8 @@ export class BasketComponent {
     paymentIntent = '';
     successMessage = '';
     errorMessage? = '';
+    loading = false;
+    isPaymentConfirmed = false;
 
     @ViewChild(StripeCardComponent) cardElement!: StripeCardComponent;
     cardOptions: StripeCardElementOptions = {
@@ -141,6 +145,7 @@ export class BasketComponent {
     }
 
     payWithStripe(): void {
+        this.loading = true;
         const name = this.checkoutForm.get('name')?.value;
         const email = this.checkoutForm.get('email')?.value;
 
@@ -153,9 +158,11 @@ export class BasketComponent {
             })
             .subscribe((result) => {
                 if (result.error) {
+                    this.loading = false;
                     this.errorMessage = result.error.message;
                     console.error('Payment failed', result.error.message);
                 } else if (result.paymentIntent.status === 'succeeded') {
+                    this.loading = false;
                     this.basketService.clearBasket();
                     this.successMessage = 'Payment succeeded!';
                     this.cartItems = [];

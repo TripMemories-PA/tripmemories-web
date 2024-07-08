@@ -6,15 +6,27 @@
         </h3>
     </div>
     <div class="flex flex-row gap-6 flex-wrap justify-center">
-        <p-table [value]="users" [tableStyle]="{ 'min-width': '60rem' }">
-            <ng-template pTemplate="caption">
+        <p-table
+            [value]="users"
+            [paginator]="true"
+            [rows]="itemsPerPage"
+            [totalRecords]="totalPages"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            [lazy]="true"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Affichage de {first} à {last} entrées sur un total de {totalRecords} entrées"
+            [tableStyle]="{ 'min-width': '60rem' }"
+            (onPage)="onPageChange($event)"
+        >
+            <!--            <ng-template pTemplate="caption">
                 <div class="flex align-items-center justify-content-between">
                     Les meilleurs
-                    <!--                    <p-button icon="pi pi-refresh"></p-button>-->
+                    &lt;!&ndash;                    <p-button icon="pi pi-refresh"></p-button>&ndash;&gt;
                 </div>
-            </ng-template>
+            </ng-template>-->
             <ng-template pTemplate="header">
                 <tr>
+                    <th>Position</th>
                     <th>Nom</th>
                     <th>Monument visité</th>
                     <th>Score</th>
@@ -24,23 +36,28 @@
             <ng-template pTemplate="body" let-user>
                 <tr>
                     <td>
+                        {{
+                            users.indexOf(user) + 1 + (currentPage > 1 ? (currentPage - 1) * 10 : 0)
+                        }}
+                    </td>
+                    <td>
                         <div class="flex flex-row gap-2 items-center">
                             <img
-                                *ngIf="users.indexOf(user) === 0"
+                                *ngIf="users.indexOf(user) === 0 && currentPage === 1"
                                 ngSrc="assets/ranking/trophy_gold.png"
                                 alt="trophée or"
                                 width="30"
                                 height="30"
                             />
                             <img
-                                *ngIf="users.indexOf(user) === 1"
+                                *ngIf="users.indexOf(user) === 1 && currentPage === 1"
                                 ngSrc="assets/ranking/trophy_silver.png"
                                 alt="trophée argent"
                                 width="30"
                                 height="30"
                             />
                             <img
-                                *ngIf="users.indexOf(user) === 2"
+                                *ngIf="users.indexOf(user) === 2 && currentPage === 1"
                                 ngSrc="assets/ranking/trophy_bronze.png"
                                 alt="trophée bronze"
                                 width="30"

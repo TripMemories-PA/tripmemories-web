@@ -1,36 +1,49 @@
 <p-toast></p-toast>
-<div class="relative w-60 h-40 cursor-pointer">
-    <div class="text-white z-10 relative mt-14 ml-2 h-full">
-        <p class="text-sm shadow-black font-['Urbanist'] font-bold text-[var(--primary)]">
-            {{ ticket?.title }}
-        </p>
-        <p class="text-xs shadow-black font-['Urbanist'] text-[var(--primary)] mb-4">
-            {{ ticket?.description?.slice(0, 70) }}...
-        </p>
-        <p class="text-sm shadow-black font-['Urbanist'] font-bold text-[var(--primary)] mb-3">
-            Prix: {{ ticket?.price }}€
-        </p>
-        <p class="text-sm shadow-black font-['Urbanist'] font-bold text-[var(--primary)]">
-            {{ ticket?.quantity }} billets restants
-        </p>
+<div class="p-card mt-8">
+    <div class="p-card-body">
+        <div class="image-container">
+            <img
+                [ngSrc]="
+                    ticket?.image?.url ??
+                    'https://www.timographie360.fr/photos/realisations/principal/vignettes/visite-virtuelle-arc-triomphe_80.jpg'
+                "
+                alt="Ticket avatar"
+                class="eiffel-image"
+                [loading]="'auto'"
+                (load)="isLoadingImage = false"
+                (error)="isLoadingImage = false"
+                fill
+            />
+            <img
+                ngSrc="assets/poi/ticket_asset.png"
+                alt="Ticket"
+                class="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2"
+                width="60"
+                height="60"
+            />
+        </div>
+        <div class="ticket-content">
+            <h2>{{ ticket?.title }}</h2>
+            <p>{{ ticket?.description }}</p>
+            <div class="ticket-info">
+                <img
+                    ngSrc="assets/poi/lightning_asset.png"
+                    alt="lightning bolt"
+                    width="15"
+                    height="15"
+                />
+                <span class="ml-2">{{ ticket?.quantity }} Billets restants</span>
+            </div>
+            <div class="price-button">
+                <span class="price">{{ ticket?.price }} €</span>
+                <button
+                    *ngIf="authServices.user?.access_token"
+                    pButton
+                    type="button"
+                    (click)="addTicketToBasket()"
+                    label="Commander"
+                ></button>
+            </div>
+        </div>
     </div>
-    <div
-        class="absolute flex justify-center items-center cursor-pointer z-20 top-1/3 left-1/2"
-        (click)="addTicketToBasket()"
-    >
-        <button pButton class="w-full h-2/6" label="Acheter un billet"></button>
-    </div>
-    <img
-        [ngSrc]="
-            ticket?.image?.url ??
-            'https://www.timographie360.fr/photos/realisations/principal/vignettes/visite-virtuelle-arc-triomphe_80.jpg'
-        "
-        alt="avatar"
-        class="object-cover rounded-xl z-0 opacity-30"
-        fill
-        [loading]="'auto'"
-        (load)="isLoadingImage = false"
-        (error)="isLoadingImage = false"
-    />
-    <div class="spinner" *ngIf="isLoadingImage">Loading...</div>
 </div>

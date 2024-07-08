@@ -18,4 +18,12 @@ export class CommentsService {
     deletePostComment(id: number | string) {
         return this.http.delete(`${URL}/${id}`);
     }
+
+    likeComment(id: number | string) {
+        return this.http.post(`${URL}/${id}/like`, {});
+    }
+
+    dislikeComment(id: number | string) {
+        return this.http.delete(`${URL}/${id}/like`);
+    }
 }

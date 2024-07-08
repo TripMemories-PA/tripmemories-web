@@ -21,6 +21,103 @@
   animation: spin 2s linear infinite;
 }
 
+
+.p-card {
+  max-width: 500px;
+  height: 300px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.p-card-body {
+  padding: 16px;
+  display: flex;
+  height: 100%;
+  flex-direction: row;
+  gap: 25px;
+}
+
+.image-container {
+  text-align: center;
+  width: 250px;
+  position: relative;
+  flex: 40;
+}
+
+.eiffel-image {
+  position: absolute;
+  object-fit: cover;
+  opacity: 30%;
+  border-radius: 10px;
+}
+
+.ticket-content {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  flex: 60;
+}
+
+.ticket-content h2 {
+  margin: 0 0 8px;
+  font-size: 1.2em;
+  font-weight: bold;
+  color: #000000;
+  font-family: "Urbanist", sans-serif;
+}
+
+.ticket-content p {
+  margin: 0 0 16px;
+  color: #000000;
+  font-family: "Urbanist", sans-serif;
+  font-size: 0.9em;
+}
+
+.ticket-info {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  margin-top: auto;
+  color: var(--primary);
+  font-weight: bold;
+  font-family: "Urbanist", sans-serif;
+}
+
+.ticket-info .pi {
+  font-size: 1.5em;
+  margin-right: 8px;
+}
+
+.price-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+}
+
+.price {
+  font-size: 1.6em;
+  font-weight: bold;
+  color: var(--primary);
+}
+
+button {
+  background-color: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 9999px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005bb5;
+}
+
+
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }

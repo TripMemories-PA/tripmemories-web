@@ -15,9 +15,21 @@
             </div>
             <span>{{ authService.user?.firstname }}</span>
             <span class="score"
-                >Score de la partie: {{ score }} pts, Votre score total:
-                {{ authService.user?.score }} pts</span
+                >Score de la partie: {{ score }} pts, Votre score total: {{ totalScore }} pts</span
             >
+        </div>
+        <div class="category">
+            <span>Timer</span>
+            <p-progressBar
+                mode="determinate"
+                [class]="timer >= 7 ? 'customProgress' : ''"
+                [style]="{ height: '20px', width: '500px' }"
+                [value]="(timer / 10) * 100"
+            >
+                <ng-template pTemplate="content">
+                    <span>{{ timer }} sec</span>
+                </ng-template>
+            </p-progressBar>
         </div>
         <div class="category">
             <span>{{ questionModel?.poi?.type?.name }}</span>

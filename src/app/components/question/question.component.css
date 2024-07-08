@@ -85,3 +85,7 @@
   border-radius: 8px;
   cursor: pointer;
 }
+
+.customProgress .ui-progressbar .ui-progressbar-value {
+  background: red;
+}

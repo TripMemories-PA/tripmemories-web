@@ -2,7 +2,7 @@ import { TicketModel } from './ticket.model';
 
 export class MyTicketsModel {
     id: number;
-    usedAt: any;
+    usedAt: Date | null;
     paid: boolean;
     qrCode: string;
     ticketId: number;
@@ -13,7 +13,7 @@ export class MyTicketsModel {
 
     constructor(
         id: number,
-        usedAt: any,
+        usedAt: Date | null,
         paid: boolean,
         qrCode: string,
         ticketId: number,

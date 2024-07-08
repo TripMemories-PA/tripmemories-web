@@ -34,7 +34,9 @@
                 Nombre de personne pour le billet: {{ ticket?.ticket?.groupSize }}
             </h4>
             <h2 class="p-mt-2 text-xl font-bold">{{ ticket?.ticket?.title }}</h2>
-            <h3 class="text-sm">Monument: {{ ticket?.ticket?.poi?.name }}</h3>
+            <h3 class="text-sm">
+                <span class="font-semibold">Monument:</span> {{ ticket?.ticket?.poi?.name }}
+            </h3>
             <h3 class="text-sm">{{ ticket?.ticket?.description }}</h3>
             <div class="flex flex-row justify-between">
                 <span

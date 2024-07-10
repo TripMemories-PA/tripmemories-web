@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthService } from '../../services/auth/auth.service';
 import { PoisService } from '../../services/pois/pois.service';
@@ -91,11 +91,17 @@ export class QuizzPageComponent implements OnInit {
             });
     }
 
-    nextQuestion(isCorrect: boolean) {
+    nextQuestion(isCorrect?: boolean) {
+        let correct = false;
         if (isCorrect) {
             this.score += 10;
-        } else {
+            correct = true;
+        } else if (isCorrect !== undefined && !isCorrect) {
             this.score -= 5;
+            correct = false;
+        } else {
+            this.score -= 0;
+            correct = false;
         }
         this.indexQuestion += 1;
         if (this.indexQuestion >= this.nbrQuestions) {
@@ -103,13 +109,13 @@ export class QuizzPageComponent implements OnInit {
             this.quizStarted = false;
             this.summary.push({
                 question: this.question,
-                isCorrect: isCorrect,
+                isCorrect: correct,
             });
             return;
         }
         this.summary.push({
             question: this.question,
-            isCorrect: isCorrect,
+            isCorrect: correct,
         });
         this.question = this.questions[this.indexQuestion];
     }

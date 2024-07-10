@@ -78,7 +78,7 @@ export class QuestionComponent implements OnInit, OnChanges {
                         summary: "Mince tu n'as pas répondu à temps !",
                         detail: "Ne t'inquiète pas tu peux te rattraper !",
                     });
-                    this.nextQuestion.emit(false);
+                    this.nextQuestion.emit(undefined);
                 } else {
                     this.goNextQuestion();
                 }

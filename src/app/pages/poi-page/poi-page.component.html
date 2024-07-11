@@ -28,15 +28,15 @@
         <div class="mt-10">
             <div class="flex flex-row justify-between mb-10">
                 <h3 class="text-4xl font-bold font-['Urbanist']">
-                    Derniers posts du point d'intérêt "{{ poi.name }}"
+                    Les derniers posts du point d'intérêt "{{ poi.name }}"
                 </h3>
                 <div class="flex flex-row gap-2">
-                    <a
-                        class="flex items-center p-2 rounded-full border-[1px] border-[var(--primary)] border-solid text-[var(--primary)] font-['Urbanist']"
+                    <!--                    <a
+                        class="flex items-center p-2 rounded-full border-[1px] border-[var(&#45;&#45;primary)] border-solid text-[var(&#45;&#45;primary)] font-['Urbanist']"
                         [routerLink]="['/feed']"
                     >
                         Voir tous les posts
-                    </a>
+                    </a>-->
                     <button
                         pButton
                         class="p-button-rounded p-button-primary p-button-outlined"
@@ -54,7 +54,7 @@
             </div>
             <div
                 *ngIf="poiPosts.length > 0"
-                class="flex flex-row flex-nowrap gap-10 overflow-hidden"
+                class="flex flex-row flex-nowrap gap-10 overflow-x-auto post-scrollbar"
             >
                 <app-post-card
                     *ngFor="let poiPost of poiPosts"
@@ -75,6 +75,8 @@
                     <div
                         class="rounded-full w-10 h-10 bg-[var(--primary)] flex justify-center items-center cursor-pointer select-none"
                         (click)="scrollLeftTicket()"
+                        #leftButtonTicket
+                        [ngClass]="{ 'bg-gray-500': isAtLeftEndTicket }"
                     >
                         <img
                             ngSrc="assets/poi/arrow_scroll.png"
@@ -87,6 +89,8 @@
                     <div
                         class="rounded-full w-10 h-10 bg-[var(--primary)] flex justify-center items-center cursor-pointer select-none"
                         (click)="scrollRightTicket()"
+                        #rightButtonTicket
+                        [ngClass]="{ 'bg-gray-500': isAtRightEndTicket }"
                     >
                         <img
                             ngSrc="assets/poi/arrow_scroll.png"
@@ -97,7 +101,7 @@
                     </div>
                 </div>
             </div>
-            <div #scrollContainerTicket class="flex flex-row ml-auto gap-10 overflow-hidden">
+            <div #containerTicket class="flex flex-row ml-auto gap-10 overflow-hidden">
                 <app-buy-ticket-poi-card
                     *ngFor="let ticket of tickets"
                     [ticket]="ticket"
@@ -106,11 +110,16 @@
         </div>
         <div class="mt-16">
             <div class="flex flex-row justify-between">
-                <h3 class="text-4xl font-bold font-['Urbanist']">Autour de {{ poi.name }}</h3>
+                <h3 class="text-4xl font-bold font-['Urbanist']">Autour de "{{ poi.name }}"</h3>
                 <div class="flex flex-row ml-auto gap-2">
                     <div
-                        class="rounded-full w-10 h-10 bg-[var(--primary)] flex justify-center items-center cursor-pointer select-none"
+                        class="rounded-full w-10 h-10 flex justify-center items-center cursor-pointer select-none"
                         (click)="scrollLeft()"
+                        #leftButton
+                        [ngClass]="{
+                            'bg-gray-500': isAtLeftEnd,
+                            'bg-[var(--primary)]': !isAtLeftEnd
+                        }"
                     >
                         <img
                             ngSrc="assets/poi/arrow_scroll.png"
@@ -121,8 +130,13 @@
                         />
                     </div>
                     <div
-                        class="rounded-full w-10 h-10 bg-[var(--primary)] flex justify-center items-center cursor-pointer select-none"
+                        class="rounded-full w-10 h-10 flex justify-center items-center cursor-pointer select-none"
                         (click)="scrollRight()"
+                        #rightButton
+                        [ngClass]="{
+                            'bg-gray-500': isAtRightEnd,
+                            'bg-[var(--primary)]': !isAtRightEnd
+                        }"
                     >
                         <img
                             ngSrc="assets/poi/arrow_scroll.png"

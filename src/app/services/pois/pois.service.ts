@@ -48,20 +48,25 @@ export class PoisService {
         return this.http.get<PoiModel>(`${URL}/${id}`, httpOptions);
     }
 
-    getPoiQuestions(id: string, page: string = '1', perPage: string = '10') {
+    getPoiQuestions(
+        id: string,
+        page: string = '1',
+        perPage: string = '10',
+        isConnected: boolean = false,
+    ) {
         const params = new URLSearchParams();
         params.append('page', page);
         params.append('perPage', perPage);
         return this.http.get<QuestionResponse>(
             `${URL}/${id}/questions?${params.toString()}`,
-            httpOptions,
+            isConnected ? undefined : httpOptions,
         );
     }
 
-    getPoiPosts(id: string, perPage?: string) {
+    getPoiPosts(id: string, perPage: string = '10', page = '1') {
         const params = new URLSearchParams();
-        params.append('page', '1');
-        params.append('perPage', perPage ?? '10');
+        params.append('page', page);
+        params.append('perPage', perPage);
         return this.http.get<PoisPostResponse>(
             `${URL}/${id}/posts?${params.toString()}`,
             httpOptions,

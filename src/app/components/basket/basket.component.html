@@ -1,107 +1,129 @@
 <p-toast></p-toast>
-<p-table [value]="cartItems" responsiveLayout="scroll">
-    <ng-template pTemplate="header">
-        <tr>
-            <th>Nom</th>
-            <th>Prix</th>
-            <th>Quantité</th>
-            <th>Total</th>
-            <th>Action</th>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-item>
-        <tr>
-            <td class="font-bold text-xl">Ticket "{{ item.title }}"</td>
-            <td>{{ item.price }}€</td>
-            <td>
-                <p-inputNumber
-                    [(ngModel)]="item.quantity"
-                    [min]="1"
-                    (change)="addItem(item)"
-                ></p-inputNumber>
-            </td>
-            <td>{{ item.price * item.quantity }}€</td>
-            <td>
-                <button
-                    pButton
-                    type="button"
-                    icon="pi pi-trash"
-                    class="p-button-danger"
-                    (click)="removeItem(item)"
-                ></button>
-            </td>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="footer">
-        <tr>
-            <td colspan="3" style="text-align: right">Total:</td>
-            <td>{{ getTotal() }}€</td>
-            <td>
-                <button
-                    *ngIf="cartItems.length > 0"
-                    pButton
-                    [disabled]="showPaymentDialog || loading"
-                    label="Payer"
-                    (click)="pay()"
-                ></button>
-                <p-progressBar
-                    mode="indeterminate"
-                    [style]="{ height: '6px' }"
-                    *ngIf="loading"
-                ></p-progressBar>
-            </td>
-        </tr>
-    </ng-template>
-</p-table>
-<div>
-    <p-dialog
-        header="Confirmer votre paiement"
-        class="flex flex-col"
-        [modal]="true"
-        [draggable]="false"
-        [(visible)]="showPaymentDialog"
-        [style]="{ width: '50rem' }"
-        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
-    >
-        <ng-template
-            pTemplate="content"
-            class="w-full border-gray-400 border-solid border-2 rounded shadow p-4"
+<div class="cart-container">
+    <div class="flex flex-row gap-4">
+        <div class="flex flex-col gap-4 max-h-[550px] overflow-auto">
+            <div *ngFor="let item of cartItems" class="cart-item">
+                <p-card>
+                    <ng-template pTemplate="header">
+                        <div class="item-header">
+                            <div class="flex flex-row gap-2 text-[var(--primary)]">
+                                <div class="relative w-10">
+                                    <img
+                                        ngSrc="assets/poi/ticket_asset.png"
+                                        alt="Ticket"
+                                        class="absolute object-fill"
+                                        fill
+                                    />
+                                </div>
+                                <span class="item-category">Billets</span>
+                            </div>
+                            <button
+                                pButton
+                                icon="pi pi-trash"
+                                class="p-button-rounded p-button-text"
+                                (click)="removeItem(item)"
+                            ></button>
+                        </div>
+                    </ng-template>
+                    <div class="flex flex-row gap-3">
+                        <div class="item-content">
+                            <button
+                                pButton
+                                icon="pi pi-check"
+                                class="p-button-rounded p-button-text close-button"
+                            ></button>
+                            <div class="item-details">
+                                <h3>{{ item.title }}</h3>
+                                <h4>{{ item.poi.name }}</h4>
+                                <p>{{ item.description }}</p>
+                            </div>
+                        </div>
+                        <div class="h-44 w-[2px] bg-gray-200"></div>
+                        <div class="text-center ml-auto">
+                            <div class="item-price">
+                                <span>{{ item.price }} €</span>
+                            </div>
+                            <div class="item-footer">
+                                <button
+                                    pButton
+                                    icon="pi pi-minus"
+                                    class="p-button-rounded p-button-text hover-button"
+                                    (click)="updateQuantity(item, item.quantity - 1)"
+                                ></button>
+                                <p-inputNumber
+                                    [(ngModel)]="item.quantity"
+                                    [min]="1"
+                                    (onInput)="updateQuantity(item, item.quantity)"
+                                ></p-inputNumber>
+                                <button
+                                    pButton
+                                    icon="pi pi-plus"
+                                    class="p-button-rounded p-button-text close-button"
+                                    (click)="updateQuantity(item, item.quantity + 1)"
+                                ></button>
+                            </div>
+                        </div>
+                    </div>
+                </p-card>
+            </div>
+        </div>
+        <div
+            class="bg-[var(--primary)] p-4 flex flex-col justify-center rounded-xl text-white ml-auto"
         >
-            <form [formGroup]="checkoutForm" (ngSubmit)="payWithStripe()">
-                <div class="p-field mb-6">
-                    <input pInputText placeholder="Nom sur la carte" formControlName="name" />
-                </div>
-                <div class="p-field mb-6">
-                    <input
-                        pInputText
-                        placeholder="Votre email"
-                        type="email"
-                        formControlName="email"
-                    />
-                </div>
-                <ngx-stripe-elements [stripe]="stripeService" [elementsOptions]="elementsOptions">
-                    <ngx-stripe-card [options]="cardOptions" />
-                </ngx-stripe-elements>
-                <button
-                    pButton
-                    [disabled]="loading || isPaymentConfirmed"
-                    class="mt-6 mb-6"
-                    type="submit"
-                >
-                    Payer
-                </button>
-            </form>
-            <p-progressBar
-                mode="indeterminate"
-                [style]="{ height: '6px' }"
-                *ngIf="loading"
-            ></p-progressBar>
-            <p-message
-                *ngIf="successMessage"
-                severity="success"
-                text="Paiement effectué avec succès"
-            ></p-message>
-            <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage"></p-message>
-        </ng-template>
-    </p-dialog>
+            <div class="cart-total">
+                <h3 class="text-2xl">Total</h3>
+                <span class="text-2xl">{{ getTotal() }} €</span>
+            </div>
+            <div class="mt-6 h-[2px] w-full bg-white"></div>
+            <button
+                pButton
+                label="Passer au paiement"
+                class="payment-button"
+                [disabled]="cartItems.length === 0"
+                (click)="pay()"
+            ></button>
+        </div>
+    </div>
 </div>
+
+<p-dialog
+    header="Confirmer votre paiement"
+    [(visible)]="showPaymentDialog"
+    [modal]="true"
+    [draggable]="false"
+    [style]="{ width: '50rem' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+>
+    <ng-template pTemplate="content">
+        <form [formGroup]="checkoutForm" (ngSubmit)="payWithStripe()">
+            <div class="p-field mb-6">
+                <input pInputText placeholder="Nom sur la carte" formControlName="name" />
+            </div>
+            <div class="p-field mb-6">
+                <input pInputText placeholder="Votre email" type="email" formControlName="email" />
+            </div>
+            <ngx-stripe-elements [stripe]="stripeService" [elementsOptions]="elementsOptions">
+                <ngx-stripe-card [options]="cardOptions"></ngx-stripe-card>
+            </ngx-stripe-elements>
+            <button
+                pButton
+                [disabled]="loading || isPaymentConfirmed"
+                class="mt-6 mb-6"
+                type="submit"
+            >
+                Payer
+            </button>
+        </form>
+        <p-progressBar
+            mode="indeterminate"
+            [style]="{ height: '6px' }"
+            *ngIf="loading"
+        ></p-progressBar>
+        <p-message
+            *ngIf="successMessage"
+            severity="success"
+            text="Paiement effectué avec succès"
+        ></p-message>
+        <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage"></p-message>
+    </ng-template>
+</p-dialog>

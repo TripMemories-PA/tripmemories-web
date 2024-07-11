@@ -69,6 +69,21 @@
                                 width="30"
                                 height="30"
                             />
+                            <div
+                                *ngIf="user"
+                                [routerLink]="['/profil']"
+                                class="relative w-10 h-10 rounded-full border-4 border-white cursor-pointer"
+                            >
+                                <img
+                                    [ngSrc]="
+                                        user?.avatar?.url ??
+                                        'https://oasys.ch/wp-content/uploads/2019/03/photo-avatar-profil.png'
+                                    "
+                                    alt="avatar"
+                                    class="object-cover rounded-full"
+                                    fill
+                                />
+                            </div>
                             <span class="font-bold">{{ user.firstname }} {{ user.lastname }}</span>
                         </div>
                     </td>

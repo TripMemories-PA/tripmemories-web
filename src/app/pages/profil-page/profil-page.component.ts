@@ -41,6 +41,7 @@ export class ProfilPageComponent implements OnInit {
     isHoveredBanner: boolean = false;
     user: User = JSON.parse(localStorage.getItem('user') as string);
     userType: number = -1;
+    poiId: number = -1;
 
     setActiveTab(tab: string) {
         this.activeTab = tab;
@@ -73,6 +74,9 @@ export class ProfilPageComponent implements OnInit {
                 this.nbrMonuments = user.poisCount;
                 this.nbrPoints = user.score ?? 0;
                 this.banner = user.banner?.url;
+                if (user.poiId) {
+                    this.poiId = user.poiId as number;
+                }
                 localStorage.setItem('user', JSON.stringify(user));
                 if (this.authServices.user?.avatar) {
                     this.profilPic = user.avatar?.url;

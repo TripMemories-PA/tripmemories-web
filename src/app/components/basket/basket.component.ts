@@ -12,13 +12,14 @@ import { TicketBuyRequest } from '../../models/request/ticketBuy.request';
 import { StripeCardComponent, StripeElementsDirective, StripeService } from 'ngx-stripe';
 import { DialogModule } from 'primeng/dialog';
 import { FriendRequestCardComponent } from '../friend-request-card/friend-request-card.component';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { StripeCardElementOptions, StripeElementsOptions } from '@stripe/stripe-js';
 import { InputTextModule } from 'primeng/inputtext';
 import { Router } from '@angular/router';
 import { MessageModule } from 'primeng/message';
 import { BuyTicketsResponse } from '../../models/response/buyTickets.response';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { CardModule } from 'primeng/card';
 
 @Component({
     selector: 'app-basket',
@@ -39,6 +40,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
         MessageModule,
         NgIf,
         ProgressBarModule,
+        CardModule,
+        NgOptimizedImage,
     ],
     providers: [MessageService, StripeService],
     templateUrl: './basket.component.html',
@@ -88,8 +91,8 @@ export class BasketComponent {
         this.cartItems = this.basketService.getBasket();
     }
 
-    getTotal(): number {
-        return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    getTotal(): string {
+        return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
     }
 
     updateQuantity(item: TicketModel, quantity: number): void {
@@ -97,15 +100,19 @@ export class BasketComponent {
         this.basketService.updateTicket(item);
         this.messageService.add({
             severity: 'success',
-            summary: 'Updated',
-            detail: 'Quantity updated',
+            summary: 'Mise à jour de la quantité',
+            detail: 'La quantité a bien été mise à jour',
         });
     }
 
     removeItem(item: TicketModel): void {
         this.basketService.removeTicket(item.id);
         this.cartItems = this.basketService.getBasket();
-        this.messageService.add({ severity: 'info', summary: 'Removed', detail: 'Item removed' });
+        this.messageService.add({
+            severity: 'info',
+            summary: 'Retiré',
+            detail: `Le billet ${item.title} a été retiré du panier`,
+        });
     }
 
     addItem(item: TicketModel): void {
@@ -113,8 +120,8 @@ export class BasketComponent {
         this.cartItems = this.basketService.getBasket();
         this.messageService.add({
             severity: 'success',
-            summary: 'Added',
-            detail: 'Item added to basket',
+            summary: 'Ajouté',
+            detail: 'Le billet a été ajouté au panier',
         });
     }
 
@@ -137,8 +144,8 @@ export class BasketComponent {
                 console.log(error);
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Error',
-                    detail: 'An error occurred',
+                    summary: 'Erreur',
+                    detail: 'Une erreur est survenue',
                 });
             },
         });

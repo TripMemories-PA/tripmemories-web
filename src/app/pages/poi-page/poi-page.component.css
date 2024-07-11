@@ -17,3 +17,17 @@
 .scroll-button {
   cursor: pointer;
 }
+
+.post-scrollbar::-webkit-scrollbar{
+  width: 2px;
+}
+
+.post-scrollbar::-webkit-scrollbar-track{
+  background-color: var(--border-grey);
+  border-radius: 10px;
+}
+
+.post-scrollbar::-webkit-scrollbar-thumb{
+  background-color: var(--primary);
+  border-radius: 10px;
+}

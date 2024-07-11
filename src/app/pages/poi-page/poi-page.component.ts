@@ -1,8 +1,15 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+    AfterViewInit,
+    ChangeDetectorRef,
+    Component,
+    ElementRef,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { PoisService } from '../../services/pois/pois.service';
 import { PoiModel } from '../../models/Poi.model';
-import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
+import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { PostModel } from '../../models/post.model';
 import { PostCardComponent } from '../../components/post-card/post-card.component';
 import { ImageServiceService } from '../../services/image-service.service';
@@ -29,13 +36,20 @@ import { TicketModel } from '../../models/ticket.model';
         SharedModule,
         ButtonModule,
         BuyTicketPoiCardComponent,
+        NgClass,
     ],
     templateUrl: './poi-page.component.html',
     styleUrl: './poi-page.component.css',
 })
-export class PoiPageComponent implements OnInit {
-    @ViewChild('scrollContainer', { static: true }) scrollContainer!: ElementRef;
-    @ViewChild('scrollContainerTicket', { static: true }) scrollContainerTicket!: ElementRef;
+export class PoiPageComponent implements OnInit, AfterViewInit {
+    @ViewChild('scrollContainer') scrollContainer!: ElementRef;
+    @ViewChild('containerTicket') scrollContainerTicket!: ElementRef;
+
+    @ViewChild('leftButton', { static: true }) leftButton!: ElementRef;
+    @ViewChild('rightButton', { static: true }) rightButton!: ElementRef;
+
+    @ViewChild('leftButtonTicket', { static: true }) leftButtonTicket!: ElementRef;
+    @ViewChild('rightButtonTicket', { static: true }) rightButtonTicket!: ElementRef;
 
     poi: PoiModel = new PoiModel();
     poiPosts: PostModel[] = [];
@@ -49,19 +63,48 @@ export class PoiPageComponent implements OnInit {
 
     tickets: TicketModel[] = [];
 
+    isAtLeftEnd: boolean = true;
+    isAtRightEnd: boolean = false;
+
+    isAtLeftEndTicket: boolean = true;
+    isAtRightEndTicket: boolean = false;
+
     constructor(
         private _activatedRoute: ActivatedRoute,
         private router: Router,
         private poisService: PoisService,
         private imageService: ImageServiceService,
+        private cdr: ChangeDetectorRef,
     ) {}
     ngOnInit(): void {
         this._activatedRoute.paramMap.subscribe((params) => {
             const param = params.get('id');
             this.getPoiDetails(param);
-            this.getPoiPosts(param);
             this.getPoiTickets(param);
+            this.getPoiPosts(param);
         });
+    }
+
+    ngAfterViewInit() {
+        if (this.scrollContainer) {
+            this.checkScrollPosition();
+            this.scrollContainer.nativeElement.addEventListener('scroll', () =>
+                this.checkScrollPosition(),
+            );
+        } else {
+            this.isAtLeftEnd = true;
+            this.isAtRightEnd = true;
+        }
+        if (this.scrollContainerTicket) {
+            this.checkScrollPositionTicket();
+            this.scrollContainerTicket.nativeElement.addEventListener('scroll', () =>
+                this.checkScrollPositionTicket(),
+            );
+        } else {
+            this.isAtRightEndTicket = true;
+            this.isAtLeftEndTicket = true;
+        }
+        this.cdr.detectChanges();
     }
 
     getPoiDetails(id: string | null): void {
@@ -97,7 +140,7 @@ export class PoiPageComponent implements OnInit {
         if (!id) {
             return;
         }
-        this.poisService.getPoiPosts(id, '5').subscribe({
+        this.poisService.getPoiPosts(id, '10').subscribe({
             next: (response) => {
                 this.poiPosts = response.data;
             },
@@ -147,30 +190,66 @@ export class PoiPageComponent implements OnInit {
     }
 
     scrollLeft(): void {
+        if (!this.scrollContainer) {
+            return;
+        }
         this.scrollContainer.nativeElement.scrollBy({
-            left: -200, // Défilement à gauche par 200 pixels
+            left: -200,
             behavior: 'smooth',
         });
+        setTimeout(() => this.checkScrollPosition(), 300);
     }
 
     scrollRight(): void {
+        if (!this.scrollContainer) {
+            return;
+        }
         this.scrollContainer.nativeElement.scrollBy({
-            left: 200, // Défilement à droite par 200 pixels
+            left: 200,
             behavior: 'smooth',
         });
+        setTimeout(() => this.checkScrollPosition(), 300);
     }
 
     scrollLeftTicket(): void {
+        if (!this.scrollContainerTicket) {
+            return;
+        }
         this.scrollContainerTicket.nativeElement.scrollBy({
-            left: -200, // Défilement à gauche par 200 pixels
+            left: -200,
             behavior: 'smooth',
         });
+        setTimeout(() => this.checkScrollPositionTicket(), 300);
     }
 
     scrollRightTicket(): void {
+        if (!this.scrollContainerTicket) {
+            return;
+        }
         this.scrollContainerTicket.nativeElement.scrollBy({
-            left: 200, // Défilement à droite par 200 pixels
+            left: 200,
             behavior: 'smooth',
         });
+        setTimeout(() => this.checkScrollPositionTicket(), 300);
+    }
+
+    private checkScrollPosition(): void {
+        const scrollLeft = this.scrollContainer.nativeElement.scrollLeft;
+        const scrollWidth = this.scrollContainer.nativeElement.scrollWidth;
+        const clientWidth = this.scrollContainer.nativeElement.clientWidth;
+
+        this.isAtLeftEnd = scrollLeft === 0;
+        this.isAtRightEnd = scrollLeft + clientWidth >= scrollWidth - 1;
+        this.cdr.detectChanges();
+    }
+
+    private checkScrollPositionTicket(): void {
+        const scrollLeft = this.scrollContainerTicket.nativeElement.scrollLeft;
+        const scrollWidth = this.scrollContainerTicket.nativeElement.scrollWidth;
+        const clientWidth = this.scrollContainerTicket.nativeElement.clientWidth;
+
+        this.isAtLeftEndTicket = scrollLeft === 0;
+        this.isAtRightEndTicket = scrollLeft + clientWidth >= scrollWidth - 1;
+        this.cdr.detectChanges();
     }
 }

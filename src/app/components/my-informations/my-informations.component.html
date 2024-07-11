@@ -22,15 +22,18 @@
         <p class="text-xl mt-3 text-['Urbanist']">&#64;{{ user?.username }}</p>
         <p class="text-md font-bold text-['Urbanist']">France</p>
     </div>
-    <div class="relative ml-16 mr-16 flex flex-col justify-center">
+    <div
+        *ngIf="user && user.userTypeId !== 3"
+        class="relative ml-16 mr-16 flex flex-col justify-center"
+    >
         <p class="text-center mb-2 text-3xl font-bold text-['Urbanist']">{{ nbrFriends ?? 0 }}</p>
         <p class="text-center text-md text-['Urbanist']">Amis ajoutés</p>
     </div>
-    <div class="relative flex mr-16 flex-col justify-center">
+    <div *ngIf="user && user.userTypeId !== 3" class="relative flex mr-16 flex-col justify-center">
         <p class="text-center mb-2 text-3xl font-bold text-['Urbanist']">{{ nbrMonuments ?? 0 }}</p>
         <p class="text-center text-md text-['Urbanist']">Monuments visités</p>
     </div>
-    <div class="relative flex mr-16 flex-col justify-center">
+    <div *ngIf="user && user.userTypeId !== 3" class="relative flex mr-16 flex-col justify-center">
         <p class="text-center mb-2 text-3xl font-bold text-['Urbanist']">{{ nbrPoints ?? 0 }}</p>
         <p class="text-center text-md text-['Urbanist']">Points</p>
     </div>
@@ -105,6 +108,7 @@
     </ng-container>
     <button
         pButton
+        *ngIf="user && user.userTypeId !== 3"
         type="button"
         class="text-white bg-[color:var(--error)] m-auto"
         label="Supprimer mon compte"

@@ -52,21 +52,23 @@ export class MyQuizComponent implements OnInit {
 
     ngOnInit() {
         if (!this.authService.user?.poiId) return;
-        this.poisService.getPoiQuestions(this.authService.user?.poiId.toString()).subscribe({
-            next: (response) => {
-                this.questions = response.data;
-                this.meta = response.meta;
-                this.currentPage = response.meta.currentPage;
-                this.firstPage = response.meta.firstPage;
-                this.totalPages = response.meta.total;
-                this.lastPage = response.meta.lastPage;
-                this.firstPageUrl = response.meta.firstPageUrl;
-                this.lastPageUrl = response.meta.lastPageUrl;
-                this.nextPageUrl = response.meta.nextPageUrl;
-                this.previousPageUrl = response.meta.previousPageUrl;
-                this.itemsPerPage = response.meta.perPage;
-            },
-        });
+        this.poisService
+            .getPoiQuestions(this.authService.user?.poiId.toString(), '1', '10', true)
+            .subscribe({
+                next: (response) => {
+                    this.questions = response.data;
+                    this.meta = response.meta;
+                    this.currentPage = response.meta.currentPage;
+                    this.firstPage = response.meta.firstPage;
+                    this.totalPages = response.meta.total;
+                    this.lastPage = response.meta.lastPage;
+                    this.firstPageUrl = response.meta.firstPageUrl;
+                    this.lastPageUrl = response.meta.lastPageUrl;
+                    this.nextPageUrl = response.meta.nextPageUrl;
+                    this.previousPageUrl = response.meta.previousPageUrl;
+                    this.itemsPerPage = response.meta.perPage;
+                },
+            });
     }
 
     onPageChange(event: any) {
@@ -78,7 +80,12 @@ export class MyQuizComponent implements OnInit {
             return;
         }
         this.poisService
-            .getPoiQuestions(this.authService.user?.poiId.toString(), event.page + 1, event.rows)
+            .getPoiQuestions(
+                this.authService.user?.poiId.toString(),
+                event.page + 1,
+                event.rows,
+                true,
+            )
             .subscribe({
                 next: (response) => {
                     this.questions = response.data;
@@ -101,21 +108,23 @@ export class MyQuizComponent implements OnInit {
 
     reloadQuestions() {
         if (!this.authService.user?.poiId) return;
-        this.poisService.getPoiQuestions(this.authService.user?.poiId.toString()).subscribe({
-            next: (response) => {
-                this.questions = response.data;
-                this.meta = response.meta;
-                this.currentPage = response.meta.currentPage;
-                this.firstPage = response.meta.firstPage;
-                this.totalPages = response.meta.total;
-                this.lastPage = response.meta.lastPage;
-                this.firstPageUrl = response.meta.firstPageUrl;
-                this.lastPageUrl = response.meta.lastPageUrl;
-                this.nextPageUrl = response.meta.nextPageUrl;
-                this.previousPageUrl = response.meta.previousPageUrl;
-                this.itemsPerPage = response.meta.perPage;
-            },
-        });
+        this.poisService
+            .getPoiQuestions(this.authService.user?.poiId.toString(), '1', '10', true)
+            .subscribe({
+                next: (response) => {
+                    this.questions = response.data;
+                    this.meta = response.meta;
+                    this.currentPage = response.meta.currentPage;
+                    this.firstPage = response.meta.firstPage;
+                    this.totalPages = response.meta.total;
+                    this.lastPage = response.meta.lastPage;
+                    this.firstPageUrl = response.meta.firstPageUrl;
+                    this.lastPageUrl = response.meta.lastPageUrl;
+                    this.nextPageUrl = response.meta.nextPageUrl;
+                    this.previousPageUrl = response.meta.previousPageUrl;
+                    this.itemsPerPage = response.meta.perPage;
+                },
+            });
     }
 
     openDialog() {

@@ -13,9 +13,6 @@
         </span>
     </div>
     <div class="flex flex-col justify-center items-center">
-        <div class="mb-8">
-            <h1 class="text-5xl font-['Urbanist'] font-bold">Proche de vous</h1>
-        </div>
         <div *ngFor="let post of posts" class="flex flex-row mb-10">
             <div class="w-[2px] rounded-full mr-4 bg-[var(--primary)]"></div>
             <div class="relative flex flex-row gap-8">
@@ -33,7 +30,7 @@
             </div>
         </div>
         <p-message
-            *ngIf="isEnd"
+            *ngIf="isEnd || posts.length === 0"
             class="self-center mt-6 grid"
             severity="info"
             text="Vous êtes à la fin du trip ! 🎉"

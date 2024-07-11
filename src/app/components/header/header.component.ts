@@ -74,7 +74,7 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
     updateMenuItems() {
         this.items = [
             {
-                label: 'Feed',
+                label: "Fil d'actualité",
                 style: {
                     color: 'white',
                 },

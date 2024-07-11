@@ -11,7 +11,7 @@
 .answer-group {
   display: flex;
   align-items: center;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.9rem;
 }
 
 .answer-input {
@@ -36,4 +36,11 @@
   display: flex;
   justify-content: space-between;
   margin-top: 1rem;
+}
+
+.photo-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 10px;
 }

@@ -9,6 +9,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { AuthService } from '../../services/auth/auth.service';
 import { MessageModule } from 'primeng/message';
 import { Router } from '@angular/router';
+import { FriendsService } from '../../services/friends/friends.service';
 
 @Component({
     selector: 'app-feed-page',
@@ -29,6 +30,7 @@ export class FeedPageComponent implements OnInit {
     constructor(
         private postsService: PostsService,
         private authServices: AuthService,
+        private friendsService: FriendsService,
         private router: Router,
     ) {}
 
@@ -41,10 +43,9 @@ export class FeedPageComponent implements OnInit {
         this.getPosts();
     }
 
-    getPosts() {
-        this.postsService
-            .getPosts('10', this.authServices.user?.access_token !== undefined)
-            .subscribe({
+    getPosts(page: number = 1, perPage: number = 10) {
+        if (this.authServices.user?.access_token !== undefined) {
+            this.friendsService.getFriendsPost(page, perPage).subscribe({
                 next: (posts) => {
                     this.posts = posts.data;
                 },
@@ -52,16 +53,8 @@ export class FeedPageComponent implements OnInit {
                     console.error(error);
                 },
             });
-    }
-
-    getNextPosts() {
-        this.postsService
-            .getPosts(
-                '10',
-                this.authServices.user?.access_token !== undefined,
-                this.number.toString(),
-            )
-            .subscribe({
+        } else {
+            this.postsService.getPosts(perPage.toString()).subscribe({
                 next: (posts) => {
                     if (posts.data.length === 0) {
                         this.isEnd = true;
@@ -74,6 +67,34 @@ export class FeedPageComponent implements OnInit {
                     console.error(error);
                 },
             });
+        }
+    }
+
+    getNextPosts() {
+        if (this.authServices.user?.access_token !== undefined) {
+            this.friendsService.getFriendsPost(this.number, 10).subscribe({
+                next: (posts) => {
+                    this.posts = posts.data;
+                },
+                error: (error) => {
+                    console.error(error);
+                },
+            });
+        } else {
+            this.postsService.getPosts('10', false, this.number.toString()).subscribe({
+                next: (posts) => {
+                    if (posts.data.length === 0) {
+                        this.isEnd = true;
+                        return;
+                    }
+                    this.posts = this.posts.concat(posts.data);
+                    this.number += 1;
+                },
+                error: (error) => {
+                    console.error(error);
+                },
+            });
+        }
     }
 
     search() {

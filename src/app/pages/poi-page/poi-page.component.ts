@@ -21,6 +21,7 @@ import { ButtonModule } from 'primeng/button';
 import { BuyTicketPoiCardComponent } from '../../components/buy-ticket-poi-card/buy-ticket-poi-card.component';
 import { TicketModel } from '../../models/ticket.model';
 import { CreateMeetCardComponent } from '../../components/create-meet-card/create-meet-card.component';
+import { MeetModel } from '../../meet.model';
 
 @Component({
     selector: 'app-poi-page',
@@ -65,6 +66,7 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     nbrQuestions: number = 0;
 
     tickets: TicketModel[] = [];
+    meets: MeetModel[] = [];
 
     isAtLeftEnd: boolean = true;
     isAtRightEnd: boolean = false;
@@ -167,6 +169,20 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         });
     }
 
+    getPoiMeet(id: string | null): void {
+        if (!id) {
+            return;
+        }
+        this.poisService.getPoiMeets(id).subscribe({
+            next: (response) => {
+                this.meets = response.data;
+            },
+            error: (error) => {
+                console.error(error);
+            },
+        });
+    }
+
     openDialog() {
         this.showDialog = true;
     }
@@ -183,6 +199,14 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         this.router.navigate(['/quiz', this.poi.id], {
             queryParams: { difficulty: difficulty },
         });
+    }
+
+    reloadMeets() {
+        if (!this.poi.id) {
+            return;
+        }
+        this.showDialogMeet = false;
+        this.getPoiMeet(this.poi.id.toString());
     }
 
     getPoiNear() {

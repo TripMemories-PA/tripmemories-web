@@ -9,11 +9,11 @@ export class MeetModel {
     size: number;
     date: Date;
     price: number;
-    createdBy: number;
+    createdById: number;
     poiId: number;
     createdAt: Date;
     updatedAt: Date;
-    createdByUser: User;
+    createdBy: User;
     poi: PoiModel;
     ticket: TicketModel;
     isJoined: boolean;
@@ -28,11 +28,11 @@ export class MeetModel {
         size: number,
         date: Date,
         price: number,
-        createdBy: number,
+        createdById: number,
         poiId: number,
         createdAt: Date,
         updatedAt: Date,
-        createdByUser: User,
+        createdBy: User,
         poi: PoiModel,
         ticket: TicketModel,
         isJoined: boolean,
@@ -46,11 +46,11 @@ export class MeetModel {
         this.size = size;
         this.date = date;
         this.price = price;
-        this.createdBy = createdBy;
+        this.createdById = createdById;
         this.poiId = poiId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.createdByUser = createdByUser;
+        this.createdBy = createdBy;
         this.poi = poi;
         this.ticket = ticket;
         this.isJoined = isJoined;

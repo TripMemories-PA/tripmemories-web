@@ -249,6 +249,7 @@
             [inputPoiName]="poi.name"
             [inputPoiId]="poi.id"
             [ticketsInput]="tickets"
+            (meetCreated)="reloadMeets()"
         ></app-create-meet-card>
     </ng-template>
 </p-dialog>

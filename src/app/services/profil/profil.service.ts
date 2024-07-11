@@ -51,7 +51,7 @@ export class ProfilService {
         const params = new URLSearchParams();
         params.append('page', page.toString());
         params.append('perPage', perPage.toString());
-        return this.http.get<MeetsResponse>(`${URL}/meets?${params.toString}`);
+        return this.http.get<MeetsResponse>(`${URL}/meets?${params.toString()}`);
     }
 
     deleteMe() {

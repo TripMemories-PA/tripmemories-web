@@ -42,6 +42,13 @@
                         Mes tickets
                     </li>
                     <li
+                        *ngIf="userType > -1 && userType < 3"
+                        [class.active]="activeTab === 'meets'"
+                        (click)="setActiveTab('meets')"
+                    >
+                        Mes meets
+                    </li>
+                    <li
                         *ngIf="userType === 1 || userType === 3"
                         [class.active]="activeTab === 'quiz'"
                         (click)="setActiveTab('quiz')"
@@ -66,6 +73,9 @@
             </ng-container>
             <ng-container *ngSwitchCase="'tickets'">
                 <app-my-tickets></app-my-tickets>
+            </ng-container>
+            <ng-container *ngSwitchCase="'meets'">
+                <app-my-meets></app-my-meets>
             </ng-container>
             <ng-container *ngSwitchCase="'quiz'">
                 <app-my-quiz></app-my-quiz>

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { ChipsModule } from 'primeng/chips';
 import { DropdownModule } from 'primeng/dropdown';
@@ -42,6 +42,8 @@ export class CreateMeetCardComponent implements OnInit {
     @Input() inputPoiId?: number;
     @Input() inputPoiName?: string;
     @Input() ticketsInput: TicketModel[] = [];
+
+    @Output() meetCreated: EventEmitter<any> = new EventEmitter();
 
     date?: Date;
 
@@ -135,6 +137,9 @@ export class CreateMeetCardComponent implements OnInit {
             next: (_) => {
                 this.success = 'Meet créé avec succès';
                 this.loading = false;
+                setTimeout(() => {
+                    this.meetCreated.emit();
+                });
             },
             error: (error) => {
                 this.error = 'Erreur lors de la création du meet';

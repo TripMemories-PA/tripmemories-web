@@ -1,4 +1,15 @@
 <form [formGroup]="questionForm" (ngSubmit)="update ? updateQuestion() : save()">
+    <div class="photo-upload">
+        <p-fileUpload
+            name="photo"
+            mode="basic"
+            accept="image/*"
+            maxFileSize="1000000"
+            chooseIcon="pi pi-upload"
+            chooseLabel="Ajouter une image"
+            (onSelect)="onUpload($event)"
+        ></p-fileUpload>
+    </div>
     <div class="p-field question-field">
         <label for="question" class="mr-6 text-xl font-semibold text-['Urbanist']"
             >Question :</label
@@ -70,7 +81,13 @@
             [disabled]="answers.length >= 4"
             (click)="addAnswer()"
         ></button>
-        <button type="submit" pButton icon="pi pi-check" label="Valider"></button>
+        <button
+            type="submit"
+            [disabled]="questionForm.invalid"
+            pButton
+            icon="pi pi-check"
+            label="Valider"
+        ></button>
     </div>
 </form>
 <p-progressBar

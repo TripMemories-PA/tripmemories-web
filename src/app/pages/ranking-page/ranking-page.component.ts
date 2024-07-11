@@ -85,4 +85,8 @@ export class RankingPageComponent implements OnInit {
     goToUser(id: string) {
         this.router.navigate(['user', id]);
     }
+
+    goToQuiz() {
+        this.router.navigate(['quiz'], { queryParams: { general: 'true' } });
+    }
 }

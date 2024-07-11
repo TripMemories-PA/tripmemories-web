@@ -58,10 +58,10 @@ export class PoisService {
         );
     }
 
-    getPoiPosts(id: string, perPage?: string) {
+    getPoiPosts(id: string, perPage: string = '10', page = '1') {
         const params = new URLSearchParams();
-        params.append('page', '1');
-        params.append('perPage', perPage ?? '10');
+        params.append('page', page);
+        params.append('perPage', perPage);
         return this.http.get<PoisPostResponse>(
             `${URL}/${id}/posts?${params.toString()}`,
             httpOptions,

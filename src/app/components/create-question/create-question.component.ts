@@ -46,7 +46,7 @@ export class CreateQuestionComponent implements OnInit {
     ) {
         this.questionForm = this.fb.group({
             question: ['', Validators.required],
-            answers: this.fb.array([], [this.minAnswers(1), this.maxAnswers(4)]),
+            answers: this.fb.array([], [this.minAnswers(2), this.maxAnswers(4)]),
             imageId: null,
         });
     }
@@ -66,6 +66,14 @@ export class CreateQuestionComponent implements OnInit {
 
     removeAnswer(index: number) {
         this.answers.removeAt(index);
+    }
+
+    onCheckboxChange(index: number) {
+        this.answers.controls.forEach((control, i) => {
+            if (i !== index) {
+                control.get('isCorrect')?.setValue(false);
+            }
+        });
     }
 
     save() {

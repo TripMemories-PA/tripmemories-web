@@ -3,7 +3,7 @@
         <label for="question" class="mr-6 text-xl font-semibold text-['Urbanist']"
             >Question :</label
         >
-        <input id="question" type="text" pInputText formControlName="question" />
+        <input id="question" class="w-4/5" type="text" pInputText formControlName="question" />
         <div
             *ngIf="questionForm.get('question')?.invalid && questionForm.get('question')?.touched"
             class="p-error"
@@ -25,7 +25,11 @@
                 class="answer-input"
             />
             <div class="answer-checkbox">
-                <p-checkbox binary="true" formControlName="isCorrect"></p-checkbox>
+                <p-checkbox
+                    binary="true"
+                    (onChange)="onCheckboxChange(i)"
+                    formControlName="isCorrect"
+                ></p-checkbox>
                 <label class="checkbox-label">Bonne réponse ?</label>
             </div>
             <button
@@ -51,7 +55,7 @@
             </div>
         </div>
         <div *ngIf="answers.errors?.['minAnswers'] && questionForm.touched" class="p-error">
-            Vous devez ajouter au moins une réponse.
+            Vous devez ajouter au moins 2 réponses.
         </div>
         <div *ngIf="answers.errors?.['maxAnswers'] && questionForm.touched" class="p-error">
             Vous ne pouvez pas ajouter plus de 4 réponses.
@@ -63,6 +67,7 @@
             pButton
             icon="pi pi-plus"
             label="Ajouter une réponse"
+            [disabled]="answers.length >= 4"
             (click)="addAnswer()"
         ></button>
         <button type="submit" pButton icon="pi pi-check" label="Valider"></button>

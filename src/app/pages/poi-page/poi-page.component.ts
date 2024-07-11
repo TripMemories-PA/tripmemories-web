@@ -22,6 +22,7 @@ import { BuyTicketPoiCardComponent } from '../../components/buy-ticket-poi-card/
 import { TicketModel } from '../../models/ticket.model';
 import { CreateMeetCardComponent } from '../../components/create-meet-card/create-meet-card.component';
 import { MeetModel } from '../../meet.model';
+import { MeetCardPoiComponent } from '../../components/meet-card-poi/meet-card-poi.component';
 
 @Component({
     selector: 'app-poi-page',
@@ -40,6 +41,7 @@ import { MeetModel } from '../../meet.model';
         BuyTicketPoiCardComponent,
         NgClass,
         CreateMeetCardComponent,
+        MeetCardPoiComponent,
     ],
     templateUrl: './poi-page.component.html',
     styleUrl: './poi-page.component.css',
@@ -47,12 +49,16 @@ import { MeetModel } from '../../meet.model';
 export class PoiPageComponent implements OnInit, AfterViewInit {
     @ViewChild('scrollContainer') scrollContainer!: ElementRef;
     @ViewChild('containerTicket') scrollContainerTicket!: ElementRef;
+    @ViewChild('scrollContainerMeet') scrollContainerMeet!: ElementRef;
 
     @ViewChild('leftButton', { static: true }) leftButton!: ElementRef;
     @ViewChild('rightButton', { static: true }) rightButton!: ElementRef;
 
     @ViewChild('leftButtonTicket', { static: true }) leftButtonTicket!: ElementRef;
     @ViewChild('rightButtonTicket', { static: true }) rightButtonTicket!: ElementRef;
+
+    @ViewChild('leftButtonMeet', { static: true }) leftButtonMeet!: ElementRef;
+    @ViewChild('rightButtonMeet', { static: true }) rightButtonMeet!: ElementRef;
 
     poi: PoiModel = new PoiModel();
     poiPosts: PostModel[] = [];
@@ -74,6 +80,9 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     isAtLeftEndTicket: boolean = true;
     isAtRightEndTicket: boolean = false;
 
+    isAtLeftEndMeet: boolean = true;
+    isAtRightEndMeet: boolean = false;
+
     constructor(
         private _activatedRoute: ActivatedRoute,
         private router: Router,
@@ -87,6 +96,7 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
             this.getPoiDetails(param);
             this.getPoiTickets(param);
             this.getPoiPosts(param);
+            this.getPoiMeet(param);
         });
     }
 
@@ -109,6 +119,17 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
             this.isAtRightEndTicket = true;
             this.isAtLeftEndTicket = true;
         }
+
+        if (this.scrollContainerMeet) {
+            this.checkScrollPositionMeet();
+            this.scrollContainerMeet.nativeElement.addEventListener('scroll', () =>
+                this.checkScrollPositionMeet(),
+            );
+        } else {
+            this.isAtRightEndMeet = true;
+            this.isAtLeftEndMeet = true;
+        }
+
         this.cdr.detectChanges();
     }
 
@@ -264,6 +285,28 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         setTimeout(() => this.checkScrollPositionTicket(), 300);
     }
 
+    scrollLeftMeet(): void {
+        if (!this.scrollContainerMeet) {
+            return;
+        }
+        this.scrollContainerMeet.nativeElement.scrollBy({
+            left: -200,
+            behavior: 'smooth',
+        });
+        setTimeout(() => this.checkScrollPositionMeet(), 300);
+    }
+
+    scrollRightMeet(): void {
+        if (!this.scrollContainerMeet) {
+            return;
+        }
+        this.scrollContainerMeet.nativeElement.scrollBy({
+            left: 200,
+            behavior: 'smooth',
+        });
+        setTimeout(() => this.checkScrollPositionMeet(), 300);
+    }
+
     private checkScrollPosition(): void {
         const scrollLeft = this.scrollContainer.nativeElement.scrollLeft;
         const scrollWidth = this.scrollContainer.nativeElement.scrollWidth;
@@ -281,6 +324,16 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
 
         this.isAtLeftEndTicket = scrollLeft === 0;
         this.isAtRightEndTicket = scrollLeft + clientWidth >= scrollWidth - 1;
+        this.cdr.detectChanges();
+    }
+
+    private checkScrollPositionMeet(): void {
+        const scrollLeft = this.scrollContainerMeet.nativeElement.scrollLeft;
+        const scrollWidth = this.scrollContainerMeet.nativeElement.scrollWidth;
+        const clientWidth = this.scrollContainerMeet.nativeElement.clientWidth;
+
+        this.isAtLeftEndMeet = scrollLeft === 0;
+        this.isAtRightEndMeet = scrollLeft + clientWidth >= scrollWidth - 1;
         this.cdr.detectChanges();
     }
 }

@@ -116,11 +116,11 @@
                 <div class="flex flex-row ml-auto gap-2">
                     <div
                         class="rounded-full w-10 h-10 flex justify-center items-center cursor-pointer select-none"
-                        (click)="scrollLeft()"
-                        #leftButton
+                        (click)="scrollLeftMeet()"
+                        #leftButtonMeet
                         [ngClass]="{
-                            'bg-gray-500': isAtLeftEnd,
-                            'bg-[var(--primary)]': !isAtLeftEnd
+                            'bg-gray-500': isAtLeftEndMeet,
+                            'bg-[var(--primary)]': !isAtLeftEndMeet
                         }"
                     >
                         <img
@@ -133,11 +133,11 @@
                     </div>
                     <div
                         class="rounded-full w-10 h-10 flex justify-center items-center cursor-pointer select-none"
-                        (click)="scrollRight()"
-                        #rightButton
+                        (click)="scrollRightMeet()"
+                        #rightButtonMeet
                         [ngClass]="{
-                            'bg-gray-500': isAtRightEnd,
-                            'bg-[var(--primary)]': !isAtRightEnd
+                            'bg-gray-500': isAtRightEndMeet,
+                            'bg-[var(--primary)]': !isAtRightEndMeet
                         }"
                     >
                         <img
@@ -149,18 +149,20 @@
                     </div>
                 </div>
             </div>
-            <div #scrollContainer class="flex flex-row flex-nowrap gap-10 overflow-hidden">
-                <app-currently-at-card
-                    *ngFor="let currentlyAt of poiNear"
-                    [image]="currentlyAt.cover?.url"
-                    [title]="currentlyAt.name"
-                    [description]="currentlyAt.description"
-                    [infoPlus]="currentlyAt.type?.name"
-                    [link]="currentlyAt.id?.toString()"
-                ></app-currently-at-card>
+            <div #scrollContainerMeet class="flex flex-row flex-nowrap gap-10 overflow-hidden">
+                <app-meet-card-poi
+                    *ngFor="let meetModel of meets"
+                    [image]="meetModel.poi.cover?.url"
+                    [title]="meetModel.title"
+                    [description]="meetModel.description"
+                    [infoPlus]="
+                        'Nbr place: ' + meetModel.size + ' - prix billet: ' + meetModel.price
+                    "
+                    [link]="meetModel.id.toString()"
+                ></app-meet-card-poi>
             </div>
-            <span *ngIf="poiNear.length === 0" class="text-2xl text-red-500 font-['Urbanist']">
-                Aucun lieu proche dans ce coin</span
+            <span *ngIf="meets.length === 0" class="text-2xl text-red-500 font-['Urbanist']">
+                Aucun Meet actuellement, soyez le premier à en créer un</span
             >
         </div>
 

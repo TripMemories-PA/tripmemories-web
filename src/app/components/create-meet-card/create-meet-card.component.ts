@@ -139,7 +139,7 @@ export class CreateMeetCardComponent implements OnInit {
                 this.loading = false;
                 setTimeout(() => {
                     this.meetCreated.emit();
-                });
+                }, 5000);
             },
             error: (error) => {
                 this.error = 'Erreur lors de la création du meet';

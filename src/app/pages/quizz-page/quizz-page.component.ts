@@ -9,6 +9,7 @@ import { NgIf } from '@angular/common';
 import { WelcomeQuizzComponent } from '../../components/welcome-quizz/welcome-quizz.component';
 import { EndQuizComponent } from '../../components/end-quiz/end-quiz.component';
 import { SummaryQuizModel } from '../../models/summaryQuiz.model';
+import { QuizzService } from '../../services/quizz/quizz.service';
 
 @Component({
     selector: 'app-quizz-page',
@@ -29,6 +30,7 @@ export class QuizzPageComponent implements OnInit {
         private authService: AuthService,
         private _activatedRoute: ActivatedRoute,
         private poiService: PoisService,
+        private quizService: QuizzService,
     ) {}
 
     summary: SummaryQuizModel[] = [];
@@ -71,7 +73,11 @@ export class QuizzPageComponent implements OnInit {
                             break;
                     }
                 }
-                this.getPoiQuestions();
+                if (query.has('general') || !params.has('id')) {
+                    this.getGeneralQuestions();
+                } else {
+                    this.getPoiQuestions();
+                }
             });
         });
     }
@@ -91,6 +97,15 @@ export class QuizzPageComponent implements OnInit {
             });
     }
 
+    getGeneralQuestions() {
+        this.quizService.getQuestions('1', this.nbrQuestions.toString()).subscribe({
+            next: (questions) => {
+                this.questions = questions.data;
+                this.nbrQuestions = questions.data.length;
+            },
+        });
+    }
+
     nextQuestion(isCorrect?: boolean) {
         let correct = false;
         if (isCorrect) {
@@ -98,10 +113,8 @@ export class QuizzPageComponent implements OnInit {
             correct = true;
         } else if (isCorrect !== undefined && !isCorrect) {
             this.score -= 5;
-            correct = false;
         } else {
             this.score -= 0;
-            correct = false;
         }
         this.indexQuestion += 1;
         if (this.indexQuestion >= this.nbrQuestions) {

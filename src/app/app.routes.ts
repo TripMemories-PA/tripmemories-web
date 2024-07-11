@@ -50,6 +50,10 @@ export const routes: Routes = [
         component: PoiPageComponent,
     },
     {
+        path: 'quiz',
+        component: QuizzPageComponent,
+    },
+    {
         path: 'quiz/:id',
         component: QuizzPageComponent,
     },

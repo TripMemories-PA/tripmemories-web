@@ -40,6 +40,11 @@
 }
 
 .category {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 2px;
   text-align: center;
 }
 
@@ -74,6 +79,12 @@
 .incorrect {
   background-color: red !important;
   color: white !important;
+}
+
+.selected {
+  background-color: #007bff !important;
+  color: white !important;
+  border: 2px solid #00326c;
 }
 
 .next-button {

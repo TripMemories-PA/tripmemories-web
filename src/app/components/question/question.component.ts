@@ -44,7 +44,9 @@ export class QuestionComponent implements OnInit, OnChanges {
     hasValidate = false;
     isCorrect = false;
     totalScore = 0;
-    timer = 0;
+    timer = 10;
+    interval: any;
+    loadingImage = true;
 
     @Input() nbrQuestion = 1;
     @Input() totalQuestions = 10;
@@ -62,16 +64,19 @@ export class QuestionComponent implements OnInit, OnChanges {
     }
 
     ngOnChanges(_: SimpleChanges): void {
+        this.timer = 10;
+        this.loadingImage = true;
+        clearInterval(this.interval);
         setTimeout(() => {
             this.updateTimer();
         }, 1500);
     }
 
     private updateTimer() {
-        const interval = setInterval(() => {
-            if (this.timer === 10) {
-                clearInterval(interval);
-                this.timer = 0;
+        this.interval = setInterval(() => {
+            if (this.timer === 0) {
+                clearInterval(this.interval);
+                this.timer = 10;
                 if (this.selectedAnswer === -1) {
                     this.messageService.add({
                         severity: 'error',
@@ -83,7 +88,7 @@ export class QuestionComponent implements OnInit, OnChanges {
                     this.goNextQuestion();
                 }
             } else {
-                this.timer += 1;
+                this.timer -= 1;
             }
         }, 1000);
     }

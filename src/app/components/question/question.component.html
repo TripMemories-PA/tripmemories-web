@@ -19,7 +19,7 @@
             >
         </div>
         <div class="category">
-            <span>Timer</span>
+            <span class="font-bold text-2xl">Timer</span>
             <p-progressBar
                 mode="determinate"
                 [class]="timer >= 7 ? 'customProgress' : ''"
@@ -32,7 +32,24 @@
             </p-progressBar>
         </div>
         <div class="category">
-            <span>{{ questionModel?.poi?.type?.name }}</span>
+            <div class="w-28 h-24 relative">
+                <img
+                    ngSrc="{{
+                        questionModel?.poi?.cover?.url ??
+                            'https://decizia.com/blog/wp-content/uploads/2017/06/default-placeholder.png'
+                    }}"
+                    alt="{{ questionModel?.poi?.name }}"
+                    [loading]="'auto'"
+                    (load)="loadingImage = false"
+                    (error)="loadingImage = false"
+                    class="absolute object-cover rounded-md"
+                    fill
+                />
+            </div>
+            <span
+                >{{ questionModel?.poi?.type?.name }}:
+                <span class="font-semibold underline">{{ questionModel?.poi?.name }}</span></span
+            >
             <p-progressBar
                 mode="determinate"
                 [style]="{ height: '20px', width: '250px' }"
@@ -44,7 +61,7 @@
             </p-progressBar>
         </div>
     </div>
-    <div class="relative w-full h-72">
+    <div *ngIf="questionModel?.image?.url" class="relative w-full h-72">
         <img
             [ngSrc]="
                 questionModel?.image?.url ??
@@ -66,7 +83,8 @@
             pButton
             [label]="answer.answer"
             [ngClass]="{
-                correct: answer.id === selectedAnswer,
+                correct: answer.id === selectedAnswer && hasValidate && isCorrect,
+                selected: answer.id === selectedAnswer && !hasValidate,
                 incorrect: answer.id === selectedAnswer && hasValidate && !isCorrect
             }"
             (click)="chooseAnswer(answer.id)"

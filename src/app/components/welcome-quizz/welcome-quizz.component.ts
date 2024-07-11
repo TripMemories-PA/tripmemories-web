@@ -1,11 +1,12 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { NgIf } from '@angular/common';
 
 @Component({
     selector: 'app-welcome-quizz',
     standalone: true,
-    imports: [InputTextModule, ButtonModule],
+    imports: [InputTextModule, ButtonModule, NgIf],
     templateUrl: './welcome-quizz.component.html',
     styleUrl: './welcome-quizz.component.css',
 })
@@ -16,9 +17,6 @@ export class WelcomeQuizzComponent {
     @Output() startQuiz: EventEmitter<any> = new EventEmitter();
 
     start() {
-        if (!this.name) {
-            return;
-        }
         this.startQuiz.emit();
     }
 }

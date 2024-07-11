@@ -4,6 +4,7 @@ import { HttpClient, HttpContext } from '@angular/common/http';
 import { NO_AUTH } from '../request.interceptor';
 import { IFileImage } from '../../models/interface/FileImage';
 import { IValidateAnswer } from '../../models/interface/IValidateAnswer';
+import { QuestionResponse } from '../../models/response/question.response';
 
 const URL = environment.apiUrl + '/questions';
 const httpOptions = {
@@ -19,7 +20,7 @@ export class QuizzService {
         const params = new URLSearchParams();
         params.append('page', page);
         params.append('perPage', perPage);
-        return this.http.get(`${URL}?${params.toString()}`, httpOptions);
+        return this.http.get<QuestionResponse>(`${URL}?${params.toString()}`, httpOptions);
     }
 
     storeQuestion(question: any) {

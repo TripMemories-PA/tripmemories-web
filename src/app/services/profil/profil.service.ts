@@ -6,6 +6,7 @@ import { PostsResponse } from '../../models/response/posts.response';
 import { TicketBuyRequest } from '../../models/request/ticketBuy.request';
 import { BuyTicketsResponse } from '../../models/response/buyTickets.response';
 import { MyTicketsModel } from '../../models/myTickets.model';
+import { MeetsResponse } from '../../models/response/meets.response';
 
 const URL = environment.apiUrl + '/me';
 
@@ -44,6 +45,13 @@ export class ProfilService {
 
     getMyTickets() {
         return this.http.get<MyTicketsModel[]>(`${URL}/tickets`);
+    }
+
+    getMyMeets(page: number = 1, perPage: number = 10) {
+        const params = new URLSearchParams();
+        params.append('page', page.toString());
+        params.append('perPage', perPage.toString());
+        return this.http.get<MeetsResponse>(`${URL}/meets?${params.toString}`);
     }
 
     deleteMe() {

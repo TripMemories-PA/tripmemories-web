@@ -20,6 +20,7 @@ import { SharedModule } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { BuyTicketPoiCardComponent } from '../../components/buy-ticket-poi-card/buy-ticket-poi-card.component';
 import { TicketModel } from '../../models/ticket.model';
+import { CreateMeetCardComponent } from '../../components/create-meet-card/create-meet-card.component';
 
 @Component({
     selector: 'app-poi-page',
@@ -37,6 +38,7 @@ import { TicketModel } from '../../models/ticket.model';
         ButtonModule,
         BuyTicketPoiCardComponent,
         NgClass,
+        CreateMeetCardComponent,
     ],
     templateUrl: './poi-page.component.html',
     styleUrl: './poi-page.component.css',
@@ -59,6 +61,7 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     heightImage: number = 1;
     showDialog: boolean = false;
     showDialogQuiz: boolean = false;
+    showDialogMeet: boolean = false;
     nbrQuestions: number = 0;
 
     tickets: TicketModel[] = [];
@@ -170,6 +173,10 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
 
     openDialogQuiz() {
         this.showDialogQuiz = true;
+    }
+
+    openDialogMeet() {
+        this.showDialogMeet = true;
     }
 
     goToQuiz(difficulty: string = 'medium') {

@@ -2,7 +2,7 @@ export class MeetRequest {
     title?: string;
     description?: string;
     size?: number;
-    date?: string;
+    date?: Date | string;
     poiId?: number;
-    price?: number;
+    ticketId?: number;
 }

@@ -1,8 +1,14 @@
-<div class="p-8 mt-16">
+<div class="p-8 mt-16 relative">
+    <button
+        pButton
+        class="absolute top-6 left-7"
+        label="Commencer un quiz"
+        (click)="goToQuiz()"
+    ></button>
     <div class="mb-8">
         <h1 class="text-5xl font-['Urbanist'] font-bold text-center mb-8">Classement</h1>
         <h3 class="text-2xl font-['Urbanist'] font-semibold text-center">
-            Les meilleurs tripper sont ici
+            Les meilleurs trippers sont ici
         </h3>
     </div>
     <div class="flex flex-row gap-6 flex-wrap justify-center">
@@ -26,11 +32,11 @@
             </ng-template>-->
             <ng-template pTemplate="header">
                 <tr>
-                    <th>Position</th>
-                    <th>Nom</th>
-                    <th>Monument visité</th>
-                    <th>Score</th>
-                    <th>Profil</th>
+                    <th id="position">Position</th>
+                    <th id="name">Nom</th>
+                    <th id="monument">Monuments visités</th>
+                    <th id="score">Score</th>
+                    <th id="profil">Profil</th>
                 </tr>
             </ng-template>
             <ng-template pTemplate="body" let-user>

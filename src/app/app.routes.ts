@@ -14,7 +14,6 @@ import { SearchPageComponent } from './pages/search-page/search-page.component';
 import { ShopPageComponent } from './pages/shop-page/shop-page.component';
 import { BasketPageComponent } from './pages/basket-page/basket-page.component';
 import { QuizzPageComponent } from './pages/quizz-page/quizz-page.component';
-import { QuestionComponent } from './components/question/question.component';
 import { RankingPageComponent } from './pages/ranking-page/ranking-page.component';
 
 export const routes: Routes = [
@@ -49,6 +48,10 @@ export const routes: Routes = [
     {
         path: 'poi/:id',
         component: PoiPageComponent,
+    },
+    {
+        path: 'quiz',
+        component: QuizzPageComponent,
     },
     {
         path: 'quiz/:id',

@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { InputTextModule } from 'primeng/inputtext';
 import { AuthService } from '../../services/auth/auth.service';
 import { PoisService } from '../../services/pois/pois.service';
@@ -9,6 +9,7 @@ import { NgIf } from '@angular/common';
 import { WelcomeQuizzComponent } from '../../components/welcome-quizz/welcome-quizz.component';
 import { EndQuizComponent } from '../../components/end-quiz/end-quiz.component';
 import { SummaryQuizModel } from '../../models/summaryQuiz.model';
+import { QuizzService } from '../../services/quizz/quizz.service';
 
 @Component({
     selector: 'app-quizz-page',
@@ -29,6 +30,7 @@ export class QuizzPageComponent implements OnInit {
         private authService: AuthService,
         private _activatedRoute: ActivatedRoute,
         private poiService: PoisService,
+        private quizService: QuizzService,
     ) {}
 
     summary: SummaryQuizModel[] = [];
@@ -71,7 +73,11 @@ export class QuizzPageComponent implements OnInit {
                             break;
                     }
                 }
-                this.getPoiQuestions();
+                if (query.has('general') || !params.has('id')) {
+                    this.getGeneralQuestions();
+                } else {
+                    this.getPoiQuestions();
+                }
             });
         });
     }
@@ -91,11 +97,24 @@ export class QuizzPageComponent implements OnInit {
             });
     }
 
-    nextQuestion(isCorrect: boolean) {
+    getGeneralQuestions() {
+        this.quizService.getQuestions('1', this.nbrQuestions.toString()).subscribe({
+            next: (questions) => {
+                this.questions = questions.data;
+                this.nbrQuestions = questions.data.length;
+            },
+        });
+    }
+
+    nextQuestion(isCorrect?: boolean) {
+        let correct = false;
         if (isCorrect) {
             this.score += 10;
-        } else {
+            correct = true;
+        } else if (isCorrect !== undefined && !isCorrect) {
             this.score -= 5;
+        } else {
+            this.score -= 0;
         }
         this.indexQuestion += 1;
         if (this.indexQuestion >= this.nbrQuestions) {
@@ -103,13 +122,13 @@ export class QuizzPageComponent implements OnInit {
             this.quizStarted = false;
             this.summary.push({
                 question: this.question,
-                isCorrect: isCorrect,
+                isCorrect: correct,
             });
             return;
         }
         this.summary.push({
             question: this.question,
-            isCorrect: isCorrect,
+            isCorrect: correct,
         });
         this.question = this.questions[this.indexQuestion];
     }

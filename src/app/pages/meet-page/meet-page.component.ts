@@ -31,9 +31,12 @@ export class MeetPageComponent implements OnInit {
     users: User[] = [];
     idMeet: string = '';
     isLocked: boolean = false;
+    canJoin: boolean = false;
     usersCount: number = 0;
     date: string = '';
     nbrPaid: number = 0;
+    hasJoined: boolean = false;
+    hasPaid: boolean = false;
 
     constructor(
         private _activatedRoutes: ActivatedRoute,
@@ -64,6 +67,10 @@ export class MeetPageComponent implements OnInit {
             next: (users) => {
                 this.users = users.data;
                 this.nbrPaid = users.data.filter((user) => user.hasPaid).length;
+                this.hasJoined = users.data.some((user) => user.id === this.authService.user?.id);
+                this.hasPaid = users.data.some(
+                    (user) => user.id === this.authService.user?.id && user.hasPaid,
+                );
             },
             error: (error) => {
                 console.error(error);
@@ -78,6 +85,8 @@ export class MeetPageComponent implements OnInit {
                 this.isLocked = meet.isLocked;
                 this.date = format(meet.date, 'dd MMMM yyyy', { locale: fr });
                 this.usersCount = meet.usersCount;
+                this.canJoin = meet.canJoin as boolean;
+                this.isLocked = meet.isLocked;
                 this.getUsers(meetId, 1, meet.size);
             },
             error: (error) => {

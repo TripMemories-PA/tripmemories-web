@@ -22,10 +22,22 @@
                 />
             </p-avatarGroup>
             <button
-                *ngIf="!isOwner"
+                *ngIf="!isOwner && !hasJoined"
                 pButton
+                (click)="joinMeet()"
+                [disabled]="isLocked || !canJoin"
                 type="button"
                 label="Je rejoins"
+                icon="pi pi-user-plus"
+                class="p-button-rounded p-button-text"
+            ></button>
+            <button
+                *ngIf="!isOwner && hasJoined"
+                (click)="leaveMeet()"
+                [disabled]="isLocked"
+                pButton
+                type="button"
+                label="Je quitte le meet"
                 icon="pi pi-user-plus"
                 class="p-button-rounded p-button-text"
             ></button>
@@ -36,13 +48,14 @@
             label="Inviter des amis"
             icon="pi pi-users"
             class="w-full"
+            [disabled]="isLocked"
             [rounded]="true"
         ></button>
         <button
             pButton
             (click)="payMeet()"
             type="button"
-            [disabled]="hasPaid"
+            [disabled]="hasPaid || isLocked"
             label="Je paye mon billet"
             class="w-full mt-6"
             [rounded]="true"

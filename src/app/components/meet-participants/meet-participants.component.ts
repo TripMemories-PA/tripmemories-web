@@ -35,6 +35,8 @@ export class MeetParticipantsComponent {
     @Input() nbrParticipants?: number = 0;
     @Input() userCount: number = 0;
     @Input() idMeet?: string;
+    @Input() isLockedMeet: boolean = false;
+    @Input() canJoin: boolean = false;
 
     paymentIntent = '';
     showPaymentDialog = false;
@@ -47,6 +49,34 @@ export class MeetParticipantsComponent {
             next: (res) => {
                 this.paymentIntent = res.paymentIntent;
                 this.showPaymentDialog = true;
+            },
+            error: (err) => {
+                console.error(err);
+            },
+        });
+    }
+
+    joinMeet() {
+        if (!this.idMeet) {
+            return;
+        }
+        this.meetService.joinMeet(this.idMeet).subscribe({
+            next: (_) => {
+                this.hasJoined = true;
+            },
+            error: (err) => {
+                console.error(err);
+            },
+        });
+    }
+
+    leaveMeet() {
+        if (!this.idMeet) {
+            return;
+        }
+        this.meetService.leaveMeet(this.idMeet).subscribe({
+            next: (_) => {
+                this.hasJoined = false;
             },
             error: (err) => {
                 console.error(err);

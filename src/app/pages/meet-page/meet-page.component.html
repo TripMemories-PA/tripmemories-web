@@ -24,10 +24,15 @@
             <h4 class="font-['Urbanist'] text-[#5B5B5B] text-xl">
                 Meet<span class="text-xs">&nbsp;&nbsp;{{ date }}</span>
             </h4>
-            <p class="font-['Urbanist'] font-semibold leading-10">{{ meet?.description }}</p>
+            <p class="font-['Urbanist'] font-semibold leading-10 text-2xl">
+                {{ meet?.description }}
+            </p>
         </div>
-        <div class="flex flex-row gap-6">
-            <app-buy-ticket-poi-card [ticket]="meet?.ticket"></app-buy-ticket-poi-card>
+        <div class="flex flex-row gap-6 mt-16">
+            <div>
+                <h3 class="text-center">Billet du meets</h3>
+                <app-buy-ticket-poi-card [ticket]="meet?.ticket"></app-buy-ticket-poi-card>
+            </div>
             <app-meet-participants
                 [users]="users"
                 [isLocked]="isLocked"

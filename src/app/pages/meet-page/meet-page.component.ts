@@ -10,6 +10,8 @@ import { NgOptimizedImage } from '@angular/common';
 import { MeetParticipantsComponent } from '../../components/meet-participants/meet-participants.component';
 import { MeetSellingComponent } from '../../components/meet-selling/meet-selling.component';
 import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { PaymentCardComponent } from '../../components/payment-card/payment-card.component';
 
 @Component({
     selector: 'app-meet-page',
@@ -19,6 +21,7 @@ import { format } from 'date-fns';
         NgOptimizedImage,
         MeetParticipantsComponent,
         MeetSellingComponent,
+        PaymentCardComponent,
     ],
     templateUrl: './meet-page.component.html',
     styleUrl: './meet-page.component.css',
@@ -73,7 +76,7 @@ export class MeetPageComponent implements OnInit {
             next: (meet) => {
                 this.meet = meet;
                 this.isLocked = meet.isLocked;
-                this.date = format(meet.date, 'dd MMMM yyyy');
+                this.date = format(meet.date, 'dd MMMM yyyy', { locale: fr });
                 this.usersCount = meet.usersCount;
                 this.getUsers(meetId, 1, meet.size);
             },

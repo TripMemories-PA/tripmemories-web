@@ -20,6 +20,7 @@ import { MessageModule } from 'primeng/message';
 import { BuyTicketsResponse } from '../../models/response/buyTickets.response';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { CardModule } from 'primeng/card';
+import { PaymentCardComponent } from '../payment-card/payment-card.component';
 
 @Component({
     selector: 'app-basket',
@@ -42,6 +43,7 @@ import { CardModule } from 'primeng/card';
         ProgressBarModule,
         CardModule,
         NgOptimizedImage,
+        PaymentCardComponent,
     ],
     providers: [MessageService, StripeService],
     templateUrl: './basket.component.html',
@@ -125,6 +127,14 @@ export class BasketComponent {
         });
     }
 
+    closeDialog(): void {
+        this.showPaymentDialog = false;
+    }
+
+    updateCartItems(): void {
+        this.cartItems = [];
+    }
+
     pay(): void {
         const ticketBuy: TicketBuyRequest = {
             tickets: this.cartItems.map((item) => ({ id: item.id, quantity: item.quantity })),
@@ -149,36 +159,5 @@ export class BasketComponent {
                 });
             },
         });
-    }
-
-    payWithStripe(): void {
-        this.loading = true;
-        const name = this.checkoutForm.get('name')?.value;
-        const email = this.checkoutForm.get('email')?.value;
-
-        this.stripeService
-            .confirmCardPayment(this.paymentIntent, {
-                payment_method: {
-                    card: this.cardElement.element,
-                    billing_details: { name, email },
-                },
-            })
-            .subscribe((result) => {
-                if (result.error) {
-                    this.loading = false;
-                    this.errorMessage = result.error.message;
-                    console.error('Payment failed', result.error.message);
-                } else if (result.paymentIntent.status === 'succeeded') {
-                    this.loading = false;
-                    this.basketService.clearBasket();
-                    this.successMessage = 'Payment succeeded!';
-                    this.cartItems = [];
-                    setTimeout(() => {
-                        this.showPaymentDialog = false;
-                        this.router.navigate(['/profil']);
-                    }, 6000);
-                    console.log('Payment succeeded!');
-                }
-            });
     }
 }

@@ -6,11 +6,21 @@ import { ButtonModule } from 'primeng/button';
 import { User } from '../../models/user';
 import { NgForOf, NgIf, SlicePipe } from '@angular/common';
 import { MeetService } from '../../services/meet/meet.service';
+import { PaymentCardComponent } from '../payment-card/payment-card.component';
 
 @Component({
     selector: 'app-meet-participants',
     standalone: true,
-    imports: [CardModule, AvatarGroupModule, AvatarModule, ButtonModule, SlicePipe, NgForOf, NgIf],
+    imports: [
+        CardModule,
+        AvatarGroupModule,
+        AvatarModule,
+        ButtonModule,
+        SlicePipe,
+        NgForOf,
+        NgIf,
+        PaymentCardComponent,
+    ],
     templateUrl: './meet-participants.component.html',
     styleUrl: './meet-participants.component.css',
 })
@@ -26,10 +36,25 @@ export class MeetParticipantsComponent {
     @Input() userCount: number = 0;
     @Input() idMeet?: string;
 
+    paymentIntent = '';
+    showPaymentDialog = false;
+
     payMeet() {
         if (!this.idMeet) {
             return;
         }
-        this.meetService.payMeet(this.idMeet).subscribe();
+        this.meetService.payMeet(this.idMeet).subscribe({
+            next: (res) => {
+                this.paymentIntent = res.paymentIntent;
+                this.showPaymentDialog = true;
+            },
+            error: (err) => {
+                console.error(err);
+            },
+        });
+    }
+
+    closePaymentDialog() {
+        this.showPaymentDialog = false;
     }
 }

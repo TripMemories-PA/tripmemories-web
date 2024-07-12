@@ -49,3 +49,8 @@
         ></button>
     </ng-template>
 </p-card>
+<app-payment-card
+    [showPaymentDialog]="showPaymentDialog"
+    [paymentIntent]="paymentIntent"
+    (closeDialog)="closePaymentDialog()"
+></app-payment-card>

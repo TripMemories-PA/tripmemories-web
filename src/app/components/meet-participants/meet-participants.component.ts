@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { AvatarModule } from 'primeng/avatar';
@@ -42,6 +42,8 @@ export class MeetParticipantsComponent {
     @Input() isLockedMeet: boolean = false;
     @Input() canJoin: boolean = false;
 
+    @Output() reloadMeet: EventEmitter<any> = new EventEmitter();
+
     loading = false;
 
     paymentIntent = '';
@@ -74,6 +76,7 @@ export class MeetParticipantsComponent {
             next: (_) => {
                 this.loading = false;
                 this.hasJoined = true;
+                this.reloadMeet.emit();
             },
             error: (err) => {
                 this.loading = false;
@@ -90,6 +93,7 @@ export class MeetParticipantsComponent {
             next: (_) => {
                 this.loading = false;
                 this.hasJoined = false;
+                this.reloadMeet.emit();
             },
             error: (err) => {
                 this.loading = false;
@@ -100,5 +104,6 @@ export class MeetParticipantsComponent {
 
     closePaymentDialog() {
         this.showPaymentDialog = false;
+        this.reloadMeet.emit();
     }
 }

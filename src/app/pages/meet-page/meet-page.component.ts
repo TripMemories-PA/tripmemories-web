@@ -101,6 +101,10 @@ export class MeetPageComponent implements OnInit {
         });
     }
 
+    reload() {
+        this.getMeet(this.idMeet);
+    }
+
     onClosedDialog() {
         this.displayDialog = false;
     }

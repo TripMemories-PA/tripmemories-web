@@ -12,6 +12,8 @@ import { MeetSellingComponent } from '../../components/meet-selling/meet-selling
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { PaymentCardComponent } from '../../components/payment-card/payment-card.component';
+import { ListMembersMeetComponent } from '../../components/list-members-meet/list-members-meet.component';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-meet-page',
@@ -22,6 +24,8 @@ import { PaymentCardComponent } from '../../components/payment-card/payment-card
         MeetParticipantsComponent,
         MeetSellingComponent,
         PaymentCardComponent,
+        ListMembersMeetComponent,
+        ButtonModule,
     ],
     templateUrl: './meet-page.component.html',
     styleUrl: './meet-page.component.css',
@@ -37,6 +41,8 @@ export class MeetPageComponent implements OnInit {
     nbrPaid: number = 0;
     hasJoined: boolean = false;
     hasPaid: boolean = false;
+
+    displayDialog: boolean = false;
 
     constructor(
         private _activatedRoutes: ActivatedRoute,
@@ -93,5 +99,9 @@ export class MeetPageComponent implements OnInit {
                 console.error(error);
             },
         });
+    }
+
+    onClosedDialog() {
+        this.displayDialog = false;
     }
 }

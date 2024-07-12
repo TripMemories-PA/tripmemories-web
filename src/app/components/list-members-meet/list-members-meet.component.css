@@ -1,0 +1,56 @@
+.dialog-content {
+  text-align: left;
+}
+
+.summary {
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+.user-card {
+  margin-bottom: 1rem;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+}
+
+.user-details {
+  margin-left: 1rem;
+  flex-grow: 1;
+}
+
+.user-name {
+  font-weight: bold;
+}
+
+.user-username {
+  color: gray;
+}
+
+.user-status {
+  text-align: right;
+}
+
+.status-label {
+  display: block;
+  font-size: 0.8rem;
+  color: gray;
+}
+
+.status-purchased {
+  background-color: lightgreen;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.3rem;
+  color: green;
+  font-weight: bold;
+}
+
+.status-pending {
+  background-color: lightgray;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.3rem;
+  color: gray;
+  font-weight: bold;
+}

@@ -28,9 +28,9 @@
                 {{ meet?.description }}
             </p>
         </div>
-        <div class="flex flex-row gap-6 mt-16">
+        <div class="flex flex-row gap-6 mt-16 justify-center">
             <div>
-                <h3 class="text-center">Billet du meets</h3>
+                <h3 class="text-center text-xl font-semibold">Billet du meets</h3>
                 <app-buy-ticket-poi-card [ticket]="meet?.ticket"></app-buy-ticket-poi-card>
             </div>
             <app-meet-participants
@@ -46,6 +46,17 @@
                 [idMeet]="idMeet"
             ></app-meet-participants>
         </div>
+        <button
+            pButton
+            (click)="displayDialog = true"
+            label="Voir les participants"
+            class="w-full mt-6"
+        ></button>
         <app-meet-selling [users]="users" [nbrPaid]="nbrPaid"></app-meet-selling>
+        <app-list-members-meet
+            [displayDialog]="displayDialog"
+            [members]="users"
+            (closeDialog)="onClosedDialog()"
+        ></app-list-members-meet>
     </div>
 </div>

@@ -24,7 +24,7 @@
             <button
                 *ngIf="!isOwner && !hasJoined"
                 pButton
-                (click)="joinMeet()"
+                (click)="visibleJoinMeet = true"
                 [disabled]="isLocked || !canJoin"
                 type="button"
                 label="Je rejoins"
@@ -33,7 +33,7 @@
             ></button>
             <button
                 *ngIf="!isOwner && hasJoined"
-                (click)="leaveMeet()"
+                (click)="visibleLeaveMeet = true"
                 [disabled]="isLocked"
                 pButton
                 type="button"
@@ -62,6 +62,45 @@
         ></button>
     </ng-template>
 </p-card>
+<p-dialog
+    header="Rekoindre le meet"
+    [modal]="true"
+    [(visible)]="visibleJoinMeet"
+    [style]="{ width: '25rem' }"
+>
+    <span class="p-text-secondary block mb-5">Êtes vous sur de vouloir rejoindre ce meet ?</span>
+    <div class="flex justify-content-end gap-2">
+        <p-button label="Non" severity="secondary" (click)="visibleJoinMeet = false" />
+        <p-button label="Oui" (click)="joinMeet()" />
+    </div>
+    <p-progressBar
+        mode="indeterminate"
+        *ngIf="loading"
+        [style]="{ height: '6px', width: '100%' }"
+    ></p-progressBar>
+</p-dialog>
+
+<p-dialog
+    header="Quitter le meet ?"
+    [modal]="true"
+    [(visible)]="visibleLeaveMeet"
+    [style]="{ width: '25rem' }"
+>
+    <span class="p-text-secondary block mb-5"
+        >Êtes vous sur de vouloir quitter ce meet ? Si vous avez payé votre billet, celui-ci vous
+        sera remboursé en intégralité</span
+    >
+    <div class="flex justify-content-end gap-2">
+        <p-button label="Non" severity="secondary" (click)="visibleLeaveMeet = false" />
+        <p-button label="Oui" (click)="leaveMeet()" />
+    </div>
+    <p-progressBar
+        mode="indeterminate"
+        *ngIf="loading"
+        [style]="{ height: '6px', width: '100%' }"
+    ></p-progressBar>
+</p-dialog>
+
 <app-payment-card
     [showPaymentDialog]="showPaymentDialog"
     [paymentIntent]="paymentIntent"

@@ -7,6 +7,7 @@ import { NgForOf, NgOptimizedImage } from '@angular/common';
 import { CommentComponent } from '../../../components/comment/comment.component';
 import { CommentFormComponent } from '../../../components/comment-form/comment-form.component';
 import { AuthService } from '../../../services/auth/auth.service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
     selector: 'app-comments-section',
@@ -18,6 +19,7 @@ import { AuthService } from '../../../services/auth/auth.service';
         CommentComponent,
         NgForOf,
         CommentFormComponent,
+        ButtonModule,
     ],
     templateUrl: './comments-section.component.html',
     styleUrl: './comments-section.component.css',

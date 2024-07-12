@@ -7,6 +7,8 @@ import { User } from '../../models/user';
 import { NgForOf, NgIf, SlicePipe } from '@angular/common';
 import { MeetService } from '../../services/meet/meet.service';
 import { PaymentCardComponent } from '../payment-card/payment-card.component';
+import { DialogModule } from 'primeng/dialog';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'app-meet-participants',
@@ -20,6 +22,8 @@ import { PaymentCardComponent } from '../payment-card/payment-card.component';
         NgForOf,
         NgIf,
         PaymentCardComponent,
+        DialogModule,
+        ProgressBarModule,
     ],
     templateUrl: './meet-participants.component.html',
     styleUrl: './meet-participants.component.css',
@@ -38,8 +42,13 @@ export class MeetParticipantsComponent {
     @Input() isLockedMeet: boolean = false;
     @Input() canJoin: boolean = false;
 
+    loading = false;
+
     paymentIntent = '';
     showPaymentDialog = false;
+
+    visibleJoinMeet = false;
+    visibleLeaveMeet = false;
 
     payMeet() {
         if (!this.idMeet) {
@@ -60,11 +69,14 @@ export class MeetParticipantsComponent {
         if (!this.idMeet) {
             return;
         }
+        this.loading = true;
         this.meetService.joinMeet(this.idMeet).subscribe({
             next: (_) => {
+                this.loading = false;
                 this.hasJoined = true;
             },
             error: (err) => {
+                this.loading = false;
                 console.error(err);
             },
         });
@@ -76,9 +88,11 @@ export class MeetParticipantsComponent {
         }
         this.meetService.leaveMeet(this.idMeet).subscribe({
             next: (_) => {
+                this.loading = false;
                 this.hasJoined = false;
             },
             error: (err) => {
+                this.loading = false;
                 console.error(err);
             },
         });

@@ -1,7 +1,7 @@
 <div>
     <div class="relative flex justify-center items-center">
         <p class="title-poi text-center z-10 absolute">
-            {{ meet?.title }}
+            {{ meet && meet.title && meet.title.slice(0, 20) }}...
         </p>
         <div class="relative h-72 w-full">
             <img

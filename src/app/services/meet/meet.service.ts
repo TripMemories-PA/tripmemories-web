@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { BuyTicketsResponse } from '../../models/response/buyTickets.response';
 import { MeetRequest } from '../../models/request/meet.request';
 import { MeetModel } from '../../meet.model';
+import { SearchUsersResponse } from '../../models/response/searchUsers.response';
 
 const URL = environment.apiUrl + '/meets';
 
@@ -39,5 +40,16 @@ export class MeetService {
 
     payMeet(id: string) {
         return this.http.post<BuyTicketsResponse>(`${URL}/${id}/pay`, {});
+    }
+
+    getUsersMeet(id: string, page: string | number = 1, perPage: number | string = 10) {
+        const params = new URLSearchParams();
+        params.append('page', page.toString());
+        params.append('perPage', perPage.toString());
+        return this.http.get<SearchUsersResponse>(`${URL}/${id}/users?${params.toString()}`);
+    }
+
+    deleteUserMeet(id: string, userId: string) {
+        return this.http.delete(`${URL}/${id}/users/${userId}`);
     }
 }

@@ -1,1 +1,42 @@
-<p>meet-page works!</p>
+<div>
+    <div class="relative flex justify-center items-center">
+        <p class="title-poi text-center z-10 absolute">
+            {{ meet?.title }}
+        </p>
+        <div class="relative h-72 w-full">
+            <img
+                class="z-0 absolute object-cover"
+                [ngSrc]="
+                    meet?.poi?.cover?.url ??
+                    'https://decizia.com/blog/wp-content/uploads/2017/06/default-placeholder.png'
+                "
+                alt="{{ meet?.poi?.name }}"
+                priority
+                fill
+            />
+        </div>
+    </div>
+    <div class="p-9 flex flex-col">
+        <div class="flex flex-col justify-center items-center gap-6">
+            <h2 class="text-6xl text-[var(--primary)] font-bold font-['Urbanist']">
+                {{ meet?.title }}
+            </h2>
+            <h4 class="font-['Urbanist'] text-[#5B5B5B] text-xl">
+                Meet<span class="text-xs">&nbsp;&nbsp;{{ date }}</span>
+            </h4>
+            <p class="font-['Urbanist'] font-semibold leading-10">{{ meet?.description }}</p>
+        </div>
+        <div class="flex flex-row gap-6">
+            <app-buy-ticket-poi-card [ticket]="meet?.ticket"></app-buy-ticket-poi-card>
+            <app-meet-participants
+                [users]="users"
+                [isLocked]="isLocked"
+                [userCount]="usersCount"
+                [nbrParticipants]="meet?.size"
+                [isOwner]="isOwner"
+                [idMeet]="idMeet"
+            ></app-meet-participants>
+        </div>
+        <app-meet-selling [users]="users" [nbrPaid]="nbrPaid"></app-meet-selling>
+    </div>
+</div>

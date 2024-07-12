@@ -1,19 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MeetPageComponent } from './meet-page.component';
-import { RouterModule } from '@angular/router';
+import { MeetParticipantsComponent } from './meet-participants.component';
 import { HttpClientModule } from '@angular/common/http';
 
-describe('MeetPageComponent', () => {
-    let component: MeetPageComponent;
-    let fixture: ComponentFixture<MeetPageComponent>;
+describe('MeetParticipantsComponent', () => {
+    let component: MeetParticipantsComponent;
+    let fixture: ComponentFixture<MeetParticipantsComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [MeetPageComponent, RouterModule.forRoot([]), HttpClientModule],
+            imports: [MeetParticipantsComponent, HttpClientModule],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(MeetPageComponent);
+        fixture = TestBed.createComponent(MeetParticipantsComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

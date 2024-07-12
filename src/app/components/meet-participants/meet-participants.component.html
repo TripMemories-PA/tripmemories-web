@@ -1,0 +1,51 @@
+<p-card>
+    <ng-template pTemplate="header">
+        <div class="font-bold text-[var(--primary)] text-xl">
+            {{ nbrParticipants }} participants, {{ userCount }} actuellement
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="flex flex-row gap-4">
+            <p-avatarGroup styleClass="mb-3">
+                <p-avatar
+                    *ngFor="let user of users | slice: 0 : 7"
+                    [image]="user.avatar?.url"
+                    size="large"
+                    shape="circle"
+                />
+                <p-avatar
+                    *ngIf="users.length > 7"
+                    [label]="(users.length - 7).toString()"
+                    shape="circle"
+                    size="large"
+                    [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"
+                />
+            </p-avatarGroup>
+            <button
+                *ngIf="!isOwner"
+                pButton
+                type="button"
+                label="Je rejoins"
+                icon="pi pi-user-plus"
+                class="p-button-rounded p-button-text"
+            ></button>
+        </div>
+        <button
+            pButton
+            type="button"
+            label="Inviter des amis"
+            icon="pi pi-users"
+            class="w-full"
+            [rounded]="true"
+        ></button>
+        <button
+            pButton
+            (click)="payMeet()"
+            type="button"
+            [disabled]="hasPaid"
+            label="Je paye mon billet"
+            class="w-full mt-6"
+            [rounded]="true"
+        ></button>
+    </ng-template>
+</p-card>

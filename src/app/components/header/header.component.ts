@@ -65,7 +65,8 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
                     url.includes('/search') ||
                     url.includes('/profil') ||
                     url.includes('/user') ||
-                    url.includes('/poi')
+                    url.includes('/poi') ||
+                    url.includes('/meets')
                 );
             }
         });

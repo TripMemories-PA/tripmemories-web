@@ -18,7 +18,7 @@
             </div>
         </ng-template>
         <div class="flex flex-col gap-2">
-            <h2 class="p-mt-2 text-xl font-bold">{{ quest?.title }}</h2>
+            <h2 class="p-mt-2 text-xl font-bold ml-2">{{ quest?.title }}</h2>
         </div>
         <ng-template pTemplate="footer">
             <div class="flex flex-row justify-end">
@@ -40,6 +40,15 @@
                     [rounded]="true"
                     (click)="visibleDelete = true"
                 ></button>
+                <span
+                    *ngIf="!isPoi"
+                    class="mb-2 mr-2"
+                    [ngClass]="{
+                        'status-finished': done,
+                        'status-waiting': !done
+                    }"
+                    >{{ done ? 'Mission validé' : 'Mission à effectuer' }}</span
+                >
             </div>
         </ng-template>
     </p-card>

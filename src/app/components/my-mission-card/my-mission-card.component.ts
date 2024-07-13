@@ -6,7 +6,7 @@ import { DialogModule } from 'primeng/dialog';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputTextareaModule } from 'primeng/inputtextarea';
-import { NgIf, NgOptimizedImage } from '@angular/common';
+import { NgClass, NgIf, NgOptimizedImage } from '@angular/common';
 import { QuestService } from '../../services/quest/quest.service';
 import { QuestRequest } from '../../models/request/quest.request';
 import { ProgressBarModule } from 'primeng/progressbar';
@@ -26,6 +26,7 @@ import { MessageModule } from 'primeng/message';
         NgOptimizedImage,
         ProgressBarModule,
         MessageModule,
+        NgClass,
     ],
     templateUrl: './my-mission-card.component.html',
     styleUrl: './my-mission-card.component.css',
@@ -33,6 +34,7 @@ import { MessageModule } from 'primeng/message';
 export class MyMissionCardComponent implements OnInit {
     @Input() quest?: QuestModel;
     @Input() isPoi: boolean = false;
+    @Input() done: boolean = false;
     @Output() reloadQuest: EventEmitter<any> = new EventEmitter();
 
     visible: boolean = false;

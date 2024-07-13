@@ -1,0 +1,15 @@
+.status-finished {
+  background-color: lightgreen;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.3rem;
+  color: green;
+  font-weight: bold;
+}
+
+.status-waiting {
+  background-color: lightgray;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.3rem;
+  color: gray;
+  font-weight: bold;
+}

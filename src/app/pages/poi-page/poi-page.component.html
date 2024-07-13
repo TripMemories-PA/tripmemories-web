@@ -155,9 +155,9 @@
                     [image]="meetModel.poi.cover?.url"
                     [title]="meetModel.title"
                     [description]="meetModel.description"
-                    [infoPlus]="
-                        'Nbr place: ' + meetModel.size + ' - prix billet: ' + meetModel.price
-                    "
+                    [priceTickets]="meetModel.price"
+                    [totalParticipants]="meetModel.size.toString()"
+                    [date]="meetModel.date"
                     [link]="meetModel.id.toString()"
                 ></app-meet-card-poi>
             </div>

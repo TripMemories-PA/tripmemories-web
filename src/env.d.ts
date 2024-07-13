@@ -2,6 +2,10 @@
 declare interface Env {
     readonly NODE_ENV: string;
     readonly NG_APP_STRIPE_PUBLIC_KEY: string;
+    readonly NG_APP_PUSHER_APP_KEY: string;
+    readonly NG_APP_PUSHER_APP_CLUSTER: string;
+    readonly NG_APP_PUSHER_APP_SECRET: string;
+    readonly NG_APP_PUSHER_APP_ID: string;
     // Replace the following with your own environment variables.
     // Example: NGX_VERSION: string;
     [key: string]: any;

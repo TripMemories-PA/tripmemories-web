@@ -11,6 +11,7 @@ import { User } from '../../models/user';
 import { BannerProfilComponent } from '../../components/banner-profil/banner-profil.component';
 import { MyTicketsComponent } from '../../container/profil/my-tickets/my-tickets.component';
 import { MyQuizComponent } from '../../container/profil/my-quiz/my-quiz.component';
+import { MyMeetsComponent } from '../../container/profil/my-meets/my-meets.component';
 
 @Component({
     selector: 'app-profil-page',
@@ -27,6 +28,7 @@ import { MyQuizComponent } from '../../container/profil/my-quiz/my-quiz.componen
         BannerProfilComponent,
         MyTicketsComponent,
         MyQuizComponent,
+        MyMeetsComponent,
     ],
     templateUrl: './profil-page.component.html',
     styleUrl: './profil-page.component.css',

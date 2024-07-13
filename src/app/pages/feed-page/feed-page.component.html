@@ -1,5 +1,5 @@
 <div class="p-8">
-    <div class="p-toolbar-group-center text-center mt-20 mb-9">
+    <!--    <div class="p-toolbar-group-center text-center mt-20 mb-9">
         <span class="p-input-icon-right w-3/4">
             <input
                 type="text"
@@ -11,30 +11,67 @@
             />
             <i (click)="search()" class="pi pi-search cursor-pointer mr-4"></i>
         </span>
+    </div>-->
+    <div class="mt-20 mb-8">
+        <p-tabMenu
+            [model]="items"
+            [activeItem]="activeItem"
+            (activeItemChange)="onActiveItemChange($event)"
+            styleClass="p-tabmenu-custom"
+        />
     </div>
-    <div class="flex flex-col justify-center items-center">
-        <div *ngFor="let post of posts" class="flex flex-row mb-10">
-            <div class="w-[2px] rounded-full mr-4 bg-[var(--primary)]"></div>
-            <div class="relative flex flex-row gap-8">
-                <app-post-card-feed
-                    class="z-20"
-                    [post]="post"
-                    [city]="post.poi?.city?.name"
-                ></app-post-card-feed>
-                <div class="w-52 absolute left-72 top-24 z-0 h-[2px] bg-[var(--primary)]"></div>
-                <app-monument-card-feed
-                    class="z-10"
-                    [monument]="post.poi"
-                    [city]="post.poi?.city?.name"
-                ></app-monument-card-feed>
+    <ng-container *ngIf="items && activeItem === items[0]">
+        <div class="flex flex-col justify-center items-center">
+            <div *ngFor="let post of posts" class="flex flex-row mb-10">
+                <div class="w-[2px] rounded-full mr-4 bg-[var(--primary)]"></div>
+                <div class="relative flex flex-row gap-8">
+                    <app-post-card-feed
+                        class="z-20"
+                        [post]="post"
+                        [city]="post.poi?.city?.name"
+                    ></app-post-card-feed>
+                    <div class="w-52 absolute left-72 top-24 z-0 h-[2px] bg-[var(--primary)]"></div>
+                    <app-monument-card-feed
+                        class="z-10"
+                        [monument]="post.poi"
+                        [city]="post.poi?.city?.name"
+                    ></app-monument-card-feed>
+                </div>
             </div>
+            <p-message
+                *ngIf="isEnd || posts.length === 0"
+                class="self-center mt-6 grid"
+                severity="info"
+                text="Vous êtes à la fin du trip ! 🎉"
+            >
+            </p-message>
         </div>
-        <p-message
-            *ngIf="isEnd || posts.length === 0"
-            class="self-center mt-6 grid"
-            severity="info"
-            text="Vous êtes à la fin du trip ! 🎉"
-        >
-        </p-message>
-    </div>
+    </ng-container>
+    <ng-container *ngIf="items && isAuth && activeItem === items[1]">
+        <div class="flex flex-col justify-center items-center">
+            <div *ngFor="let post of posts" class="flex flex-row mb-10">
+                <div class="w-[2px] rounded-full mr-4 bg-[var(--primary)]"></div>
+                <div class="relative flex flex-row gap-8">
+                    <app-post-card-feed
+                        class="z-20"
+                        [post]="post"
+                        [city]="post.poi?.city?.name"
+                    ></app-post-card-feed>
+                    <div class="w-52 absolute left-72 top-24 z-0 h-[2px] bg-[var(--primary)]"></div>
+                    <app-monument-card-feed
+                        class="z-10"
+                        [monument]="post.poi"
+                        [city]="post.poi?.city?.name"
+                    ></app-monument-card-feed>
+                </div>
+            </div>
+            <p-message
+                *ngIf="isEnd || posts.length === 0"
+                class="self-center mt-6 grid"
+                severity="info"
+                text="Vous êtes à la fin du trip ! 🎉"
+            >
+            </p-message>
+        </div>
+    </ng-container>
 </div>

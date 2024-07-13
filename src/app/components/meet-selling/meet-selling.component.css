@@ -1,0 +1,4 @@
+:host ::ng-deep .avatar-group {
+  z-index: 10;
+  position: relative;
+}

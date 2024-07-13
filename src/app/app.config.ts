@@ -17,6 +17,6 @@ export const appConfig: ApplicationConfig = {
             multi: true,
         },
         provideAnimations(),
-        provideNgxStripe(_NGX_ENV_.NG_APP_STRIPE_PUBLIC_KEY),
+        provideNgxStripe(import.meta.env.NG_APP_STRIPE_PUBLIC_KEY),
     ],
 };

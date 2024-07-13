@@ -1,0 +1,39 @@
+<p-dialog
+    header="Places vendues"
+    [(visible)]="displayDialog"
+    [modal]="true"
+    [closable]="true"
+    [style]="{ width: '500px' }"
+    (onHide)="closeDialog.emit()"
+>
+    <div class="dialog-content">
+        <div class="summary">
+            <span
+                >{{ total }} acheté{{ total > 1 ? 's' : '' }} - {{ waitingTotal }} en attente{{
+                    waitingTotal > 1 ? 's' : ''
+                }}</span
+            >
+        </div>
+        <div *ngFor="let user of members" class="user-card">
+            <p-card>
+                <div class="user-info">
+                    <p-avatar [image]="user.avatar?.url" size="large"></p-avatar>
+                    <div class="user-details">
+                        <div class="user-name">{{ user.firstname }}</div>
+                        <div class="user-username">&#64;{{ user.username }}</div>
+                    </div>
+                    <div class="user-status">
+                        <span class="status-label">Statut</span>
+                        <span
+                            [ngClass]="{
+                                'status-purchased': user.hasPaid,
+                                'status-pending': !user.hasPaid
+                            }"
+                            >{{ user.hasPaid ? 'Billet acheté' : 'En attente' }}</span
+                        >
+                    </div>
+                </div>
+            </p-card>
+        </div>
+    </div>
+</p-dialog>

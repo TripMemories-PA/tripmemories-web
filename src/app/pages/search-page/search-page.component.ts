@@ -66,7 +66,7 @@ export class SearchPageComponent implements OnInit {
         });
     }
 
-    private getPOIs(param: string | null, page: number = 1, perPage: number = 12) {
+    private getPOIs(param: string | null = null, page: number = 1, perPage: number = 12) {
         if (!param) {
             this.poisService.getPOIs(page.toString(), perPage.toString()).subscribe({
                 next: (response) => {
@@ -131,8 +131,19 @@ export class SearchPageComponent implements OnInit {
             return;
         }
         if (this.searchMonument.monument === '') {
-            this.sortedPois = [...this.pois];
+            this.getPOIs();
         } else {
+            if (
+                this.sortedPois.some(
+                    (poi) =>
+                        !poi.name
+                            ?.toLowerCase()
+                            .includes(this.searchMonument.monument.toLowerCase()),
+                )
+            ) {
+                this.getPOIs(this.searchMonument.monument, this.currentPage, this.itemsPerPage);
+                return;
+            }
             this.sortedPois = this.pois.filter((poi) =>
                 poi.name?.toLowerCase().includes(this.searchMonument.monument.toLowerCase()),
             );

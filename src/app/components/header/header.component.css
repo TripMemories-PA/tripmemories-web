@@ -38,3 +38,7 @@
 ::ng-deep .p-menuitem-text {
   color: white !important;
 }
+
+.custom-shadow .pi-search:before {
+  text-shadow: 2px 3px 4px rgba(0, 0, 0, 0.1);
+}

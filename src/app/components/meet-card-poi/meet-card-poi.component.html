@@ -1,0 +1,46 @@
+<div class="p-card mt-8">
+    <div class="p-card-body">
+        <div class="image-container">
+            <img
+                [ngSrc]="
+                    image ??
+                    'https://www.timographie360.fr/photos/realisations/principal/vignettes/visite-virtuelle-arc-triomphe_80.jpg'
+                "
+                alt="Ticket avatar"
+                class="eiffel-image"
+                [loading]="'auto'"
+                (load)="isLoadingImage = false"
+                (error)="isLoadingImage = false"
+                fill
+            />
+        </div>
+        <div class="ticket-content">
+            <h2>{{ title }}</h2>
+            <p>{{ description }}</p>
+            <div class="ticket-info">
+                <img
+                    ngSrc="assets/poi/lightning_asset.png"
+                    alt="lightning bolt"
+                    width="20"
+                    height="20"
+                />
+                <span class="ml-2 text-xl">{{ totalParticipants }} Participants</span>
+            </div>
+            <div class="price-button">
+                <span *ngIf="priceTicketsParsed" class="price">{{
+                    priceTicketsParsed ? priceTickets + '€' : 'Pas de billet'
+                }}</span>
+                <button
+                    [disabled]="!isLogged"
+                    pButton
+                    type="button"
+                    (click)="goToMeet()"
+                    label="Voir le meet"
+                ></button>
+            </div>
+            <span class="text-xl font-['Urbanist'] text-[var(--primary)] mt-2 font-semibold"
+                >Date: {{ dateParsed }}</span
+            >
+        </div>
+    </div>
+</div>

@@ -25,7 +25,7 @@
         <div class="ticket-content">
             <h2>{{ ticket?.title }}</h2>
             <p>{{ ticket?.description }}</p>
-            <div class="ticket-info">
+            <div *ngIf="canBuy" class="ticket-info">
                 <img
                     ngSrc="assets/poi/lightning_asset.png"
                     alt="lightning bolt"
@@ -37,7 +37,7 @@
             <div class="price-button">
                 <span class="price">{{ ticket?.price }} €</span>
                 <button
-                    *ngIf="authServices.user?.access_token"
+                    *ngIf="authServices.user?.access_token && canBuy"
                     pButton
                     type="button"
                     (click)="addTicketToBasket()"

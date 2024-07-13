@@ -15,6 +15,7 @@ import { ShopPageComponent } from './pages/shop-page/shop-page.component';
 import { BasketPageComponent } from './pages/basket-page/basket-page.component';
 import { QuizzPageComponent } from './pages/quizz-page/quizz-page.component';
 import { RankingPageComponent } from './pages/ranking-page/ranking-page.component';
+import { MeetPageComponent } from './pages/meet-page/meet-page.component';
 import { BackofficePageComponent } from './pages/backoffice-page/backoffice-page.component';
 
 export const routes: Routes = [
@@ -77,6 +78,10 @@ export const routes: Routes = [
     {
         path: 'basket',
         component: BasketPageComponent,
+    },
+    {
+        path: 'meets/:id',
+        component: MeetPageComponent,
     },
     {
         path: 'user/:id',

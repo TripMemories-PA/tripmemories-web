@@ -1,11 +1,4 @@
 <div class="review-container">
-    <!--    <button
-        pButton
-        type="button"
-        label="Retour"
-        icon="pi pi-arrow-left"
-        class="p-button-rounded p-button-outlined"
-    ></button>-->
     <div class="photo-upload">
         <p-fileUpload
             name="photo"
@@ -53,7 +46,7 @@
                     ? inputPoiName
                     : loadingPoi
                       ? 'Chargement...'
-                      : 'Séléctionne ton monument'
+                      : 'Sélectionne ton monument'
             "
             (ngModelChange)="updatePoiId()"
             [disabled]="inputPoiId !== undefined || loading || loadingPoi"

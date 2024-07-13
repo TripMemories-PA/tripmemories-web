@@ -150,7 +150,7 @@ export class MyPostsComponent implements OnInit, OnChanges {
         }
     }
 
-    ngOnChanges(changes: SimpleChanges): void {
+    ngOnChanges(_: SimpleChanges): void {
         if (this.userId === 3) {
             this.poiService.getPoiPosts(this.poiId.toString()).subscribe({
                 next: (response) => {

@@ -11,6 +11,11 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmPopup, ConfirmPopupModule } from 'primeng/confirmpopup';
 import { CommentsSectionComponent } from '../../container/comments/comments-section/comments-section.component';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ChipsModule } from 'primeng/chips';
 
 @Component({
     selector: 'app-post-page',
@@ -24,6 +29,11 @@ import { CommentsSectionComponent } from '../../container/comments/comments-sect
         ConfirmPopupModule,
         RouterLink,
         CommentsSectionComponent,
+        InputGroupAddonModule,
+        InputTextModule,
+        InputGroupModule,
+        OverlayPanelModule,
+        ChipsModule,
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './post-page.component.html',
@@ -49,8 +59,10 @@ export class PostPageComponent implements OnInit {
     error: string = '';
     alreadyLiked: boolean = false;
     showComments: boolean = false;
+    url: string = '';
 
     ngOnInit() {
+        this.url = window.location.href;
         this._activatedRoute.paramMap.subscribe((params) => {
             const param = params.get('id');
             this.postId = param as string;
@@ -149,5 +161,35 @@ export class PostPageComponent implements OnInit {
 
     closeComments() {
         this.showComments = false;
+    }
+
+    copyLink(inputElement: HTMLInputElement | null) {
+        if (inputElement) {
+            inputElement.select();
+            inputElement.setSelectionRange(0, 99999); // Pour les mobiles
+
+            try {
+                navigator.clipboard.writeText(inputElement.value).then(
+                    () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Lien copié',
+                            detail: 'Le lien a été copié dans votre presse-papier !',
+                            life: 5000,
+                        });
+                    },
+                    (_) => {
+                        this.messageService.add({
+                            severity: 'danger',
+                            summary: 'Erreur dans la copie du lien',
+                            detail: "Le lien n'a pas pu être copié dans votre presse-papier !",
+                            life: 5000,
+                        });
+                    },
+                );
+            } catch (err) {
+                console.error('Erreur lors de la copie!', err);
+            }
+        }
     }
 }

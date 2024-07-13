@@ -1,0 +1,44 @@
+<button
+    pButton
+    [outlined]="true"
+    icon="pi pi-plus"
+    [style]="{
+        border: '2px solid grey',
+        width: '270px',
+        gap: '10px',
+        borderRadius: '9999px',
+        marginBottom: '20px'
+    }"
+    (click)="openDialog()"
+>
+    Créer un meet (rencontre)
+</button>
+<div class="flex flex-row flex-wrap gap-20">
+    <app-meet-card
+        *ngFor="let meet of meets"
+        [meet]="meet"
+        [isOwner]="meet.createdById === idUser"
+        (event)="reloadMeets()"
+    ></app-meet-card>
+</div>
+<p-dialog
+    header="Créer un meet (rencontre)"
+    class="flex flex-col"
+    [modal]="true"
+    [draggable]="false"
+    [(visible)]="showDialog"
+    [style]="{ width: '50rem', borderRadius: '9999px' }"
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+>
+    <ng-template pTemplate="content">
+        <app-create-meet-card (meetCreated)="reloadMeets()"></app-create-meet-card>
+    </ng-template>
+</p-dialog>
+<p-paginator
+    *ngIf="lastPage > 1 || itemsPerPage > 10"
+    (onPageChange)="onPageChange($event)"
+    [first]="firstPage"
+    [rows]="meta.perPage"
+    [totalRecords]="totalPages"
+    [rowsPerPageOptions]="[10, 20, 30]"
+/>

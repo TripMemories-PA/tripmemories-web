@@ -55,7 +55,7 @@
             pButton
             (click)="payMeet()"
             type="button"
-            [disabled]="hasPaid || isLocked || !hasTicketMeet"
+            [disabled]="hasPaid || isLocked || !hasTicketMeet || !hasJoined"
             label="Je paye mon billet"
             class="w-full mt-6"
             [rounded]="true"
@@ -105,4 +105,5 @@
     [showPaymentDialog]="showPaymentDialog"
     [paymentIntent]="paymentIntent"
     (closeDialog)="closePaymentDialog()"
+    [amount]="amount"
 ></app-payment-card>

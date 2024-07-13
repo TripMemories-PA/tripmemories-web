@@ -42,6 +42,7 @@ export class MeetParticipantsComponent {
     @Input() isLockedMeet: boolean = false;
     @Input() canJoin: boolean = false;
     @Input() hasTicketMeet: boolean = true;
+    @Input() priceTicket: string | number = 0;
 
     @Output() reloadMeet: EventEmitter<any> = new EventEmitter();
 
@@ -52,6 +53,13 @@ export class MeetParticipantsComponent {
 
     visibleJoinMeet = false;
     visibleLeaveMeet = false;
+
+    get amount() {
+        if (!this.priceTicket || !this.nbrParticipants) {
+            return 0;
+        }
+        return ((this.priceTicket as unknown as number) / this.nbrParticipants).toFixed(2);
+    }
 
     payMeet() {
         if (!this.idMeet) {

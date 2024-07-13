@@ -48,6 +48,7 @@ export class MeetPageComponent implements OnInit {
     hasJoined: boolean = false;
     hasPaid: boolean = false;
     ticket?: TicketModel;
+    amount: string | number = 0;
 
     tickets: TicketModel[] = [];
 
@@ -115,6 +116,7 @@ export class MeetPageComponent implements OnInit {
                 this.isLocked = meet.isLocked;
                 if (meet.ticket !== null) {
                     this.ticket = meet.ticket;
+                    this.amount = meet.ticket.price;
                 } else {
                     this.getPoiTickets(meet.poiId.toString());
                 }

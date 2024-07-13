@@ -3,30 +3,69 @@
     [(visible)]="showPaymentDialog"
     [modal]="true"
     [draggable]="false"
-    [style]="{ width: '50rem' }"
+    [showHeader]="false"
+    [style]="{ width: '40rem' }"
     (onHide)="closeDialog.emit()"
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
 >
     <ng-template pTemplate="content">
+        <button
+            pButton
+            type="button"
+            icon="pi pi-times"
+            class="p-button-text absolute right-4 top-2 mb-3"
+            (click)="closeDialog.emit()"
+        ></button>
+        <img
+            ngSrc="assets/payment/logo_tripmemories_payment.png"
+            alt="tripmemories"
+            width="200"
+            height="200"
+            class="mt-10 ml-[50%] -translate-x-1/2"
+        />
+        <h2 class="text-2xl font-['Urbanist'] mt-6 mb-6 text-center">
+            Montant à payer:
+            <span class="text-[var(--primary)] font-semibold text-3xl">{{ amount }}€</span>
+        </h2>
         <form [formGroup]="checkoutForm" (ngSubmit)="payWithStripe()">
-            <div class="p-field mb-6">
-                <input pInputText placeholder="Nom sur la carte" formControlName="name" />
-            </div>
-            <div class="p-field mb-6">
-                <input pInputText placeholder="Votre email" type="email" formControlName="email" />
+            <div class="p-field mb-6 text-center">
+                <input
+                    class="rounded-[13px] p-[12px] px-[20px] border border-black text-base w-[80%] h-fit"
+                    pInputText
+                    placeholder="Nom sur la carte"
+                    formControlName="name"
+                />
             </div>
             <ngx-stripe-elements [stripe]="stripeService" [elementsOptions]="elementsOptions">
-                <ngx-stripe-card [options]="cardOptions"></ngx-stripe-card>
+                <div class="flex gap-5 w-full flex-col justify-center items-center">
+                    <div class="w-full flex justify-center">
+                        <ngx-stripe-card-number
+                            class="rounded-[13px] p-[12px] px-[20px] border border-black text-base w-[80%] h-fit"
+                            [options]="{ placeholder: 'Numéro de carte' }"
+                        ></ngx-stripe-card-number>
+                    </div>
+                    <div class="w-full flex flex-row justify-between items-center flex-shrink">
+                        <ngx-stripe-card-expiry
+                            class="rounded-[13px] p-[12px] px-[20px] border border-black text-base w-[50%] self-start h-fit ml-[10%]"
+                            [options]="{ placeholder: 'Date d\'expiration (MM/YY)' }"
+                        ></ngx-stripe-card-expiry>
+                        <ngx-stripe-card-cvc
+                            class="rounded-[13px] p-[12px] px-[20px] border border-black text-base w-[25%] self-end h-fit mr-[10%]"
+                            [options]="{ placeholder: 'CVC' }"
+                        ></ngx-stripe-card-cvc>
+                    </div>
+                </div>
             </ngx-stripe-elements>
             <button
                 pButton
                 [disabled]="loading || isPaymentConfirmed"
-                class="mt-6 mb-6"
+                class="mt-6 mb-6 bg-[var(--primary)] ml-[50%] -translate-x-1/2 w-36 justify-center"
                 type="submit"
             >
-                Payer
+                Valider
             </button>
         </form>
+        <div class="w-full h-4 bg-[var(--primary)] absolute bottom-0 left-0 rounded-b"></div>
         <p-progressBar
             mode="indeterminate"
             [style]="{ height: '6px' }"

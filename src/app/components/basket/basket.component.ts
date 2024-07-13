@@ -93,7 +93,7 @@ export class BasketComponent {
         this.cartItems = this.basketService.getBasket();
     }
 
-    getTotal(): string {
+    get getTotal(): string {
         return this.cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
     }
 
@@ -144,8 +144,8 @@ export class BasketComponent {
                 this.showPaymentDialog = true;
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Success',
-                    detail: 'Tickets bought',
+                    summary: 'Succès',
+                    detail: 'Ticket(s) acheté(s)',
                 });
             },
             error: (error) => {

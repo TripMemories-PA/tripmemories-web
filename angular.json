@@ -92,6 +92,12 @@
         },
         "serve": {
           "builder": "@ngx-env/builder:dev-server",
+          "options": {
+            "port": 4200,
+            "liveReload": true,
+            "hmr": true,
+            "poll": 1000
+          },
           "configurations": {
             "production": {
               "buildTarget": "front:build:production"

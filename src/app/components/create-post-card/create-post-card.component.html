@@ -46,7 +46,7 @@
                     ? inputPoiName
                     : loadingPoi
                       ? 'Chargement...'
-                      : 'Séléctionne ton monument'
+                      : 'Sélectionne ton monument'
             "
             (ngModelChange)="updatePoiId()"
             [disabled]="inputPoiId !== undefined || loading || loadingPoi"

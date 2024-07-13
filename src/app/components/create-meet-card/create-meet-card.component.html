@@ -27,7 +27,7 @@
             optionLabel="label"
             (ngModelChange)="updateSize()"
             [placeholder]="
-                meetModel.size ? meetModel.size.toString() : 'Séléctionne le nombre de personne'
+                meetModel.size ? meetModel.size.toString() : 'Sélectionne le nombre de personne'
             "
         />
     </div>
@@ -62,7 +62,7 @@
                     ? inputPoiName
                     : loadingPoi
                       ? 'Chargement...'
-                      : 'Séléctionne ton monument'
+                      : 'Sélectionne ton monument'
             "
             (ngModelChange)="updatePoiId()"
             [disabled]="inputPoiId !== undefined || loading || loadingPoi"
@@ -79,7 +79,7 @@
             [virtualScroll]="true"
             [virtualScrollItemSize]="38"
             optionLabel="title"
-            [placeholder]="loadingTicket ? 'Chargement...' : 'Séléctionne ton ticket'"
+            [placeholder]="loadingTicket ? 'Chargement...' : 'Sélectionne ton ticket'"
             (ngModelChange)="updateTicketId()"
             [disabled]="loading || loadingTicket || tickets.length === 0"
         />

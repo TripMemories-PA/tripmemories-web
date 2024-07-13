@@ -99,20 +99,10 @@ export class BasketComponent {
 
     updateQuantity(item: TicketModel, quantity: number): void {
         if (quantity < 1) {
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Erreur',
-                detail: 'La quantité doit être supérieure à 0',
-            });
             return;
         }
         item.quantity = quantity;
         this.basketService.updateTicket(item);
-        this.messageService.add({
-            severity: 'success',
-            summary: 'Mise à jour de la quantité',
-            detail: 'La quantité a bien été mise à jour',
-        });
     }
 
     removeItem(item: TicketModel): void {

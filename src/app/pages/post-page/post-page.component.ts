@@ -16,6 +16,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ChipsModule } from 'primeng/chips';
+import { MonumentCardFeedComponent } from '../../components/monument-card-feed/monument-card-feed.component';
 
 @Component({
     selector: 'app-post-page',
@@ -34,6 +35,7 @@ import { ChipsModule } from 'primeng/chips';
         InputGroupModule,
         OverlayPanelModule,
         ChipsModule,
+        MonumentCardFeedComponent,
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './post-page.component.html',

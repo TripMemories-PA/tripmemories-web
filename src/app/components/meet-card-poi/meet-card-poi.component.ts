@@ -54,6 +54,7 @@ export class MeetCardPoiComponent implements OnInit {
             return;
         }
         this.router.navigate(['/meets', this.link]);
+        console.log('Go to meet');
     }
 
     ngOnInit(): void {

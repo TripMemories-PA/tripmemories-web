@@ -7,6 +7,7 @@ import { PoisPostResponse, PoisSearchResponse } from '../../models/response/pois
 import { TicketModel } from '../../models/ticket.model';
 import { QuestionResponse } from '../../models/response/question.response';
 import { MeetsResponse } from '../../models/response/meets.response';
+import { QuestResponse } from '../../models/response/quest.response';
 
 const URL = environment.apiUrl + '/pois';
 const httpOptions = {
@@ -71,6 +72,16 @@ export class PoisService {
         return this.http.get<PoisPostResponse>(
             `${URL}/${id}/posts?${params.toString()}`,
             httpOptions,
+        );
+    }
+
+    getPoiQuests(id: string, page = '1', perPage: string = '10', isConnected = false) {
+        const params = new URLSearchParams();
+        params.append('page', page);
+        params.append('perPage', perPage);
+        return this.http.get<QuestResponse>(
+            `${URL}/${id}/quests?${params.toString()}`,
+            isConnected ? undefined : httpOptions,
         );
     }
 

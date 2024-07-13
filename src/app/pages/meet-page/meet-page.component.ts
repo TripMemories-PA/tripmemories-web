@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { MeetService } from '../../services/meet/meet.service';
 import { AuthService } from '../../services/auth/auth.service';
 import { UsersService } from '../../services/users/users.service';
-import { MeetModel } from '../../meet.model';
+import { MeetModel } from '../../models/meet.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BuyTicketPoiCardComponent } from '../../components/buy-ticket-poi-card/buy-ticket-poi-card.component';
 import { User } from '../../models/user';
-import { NgOptimizedImage } from '@angular/common';
+import { NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
 import { MeetParticipantsComponent } from '../../components/meet-participants/meet-participants.component';
 import { MeetSellingComponent } from '../../components/meet-selling/meet-selling.component';
 import { format } from 'date-fns';
@@ -14,6 +14,8 @@ import { fr } from 'date-fns/locale';
 import { PaymentCardComponent } from '../../components/payment-card/payment-card.component';
 import { ListMembersMeetComponent } from '../../components/list-members-meet/list-members-meet.component';
 import { ButtonModule } from 'primeng/button';
+import { TicketModel } from '../../models/ticket.model';
+import { PoisService } from '../../services/pois/pois.service';
 
 @Component({
     selector: 'app-meet-page',
@@ -26,6 +28,8 @@ import { ButtonModule } from 'primeng/button';
         PaymentCardComponent,
         ListMembersMeetComponent,
         ButtonModule,
+        NgIf,
+        NgForOf,
     ],
     templateUrl: './meet-page.component.html',
     styleUrl: './meet-page.component.css',
@@ -41,6 +45,9 @@ export class MeetPageComponent implements OnInit {
     nbrPaid: number = 0;
     hasJoined: boolean = false;
     hasPaid: boolean = false;
+    ticket?: TicketModel;
+
+    tickets: TicketModel[] = [];
 
     displayDialog: boolean = false;
 
@@ -49,7 +56,7 @@ export class MeetPageComponent implements OnInit {
         private router: Router,
         private meetService: MeetService,
         private authService: AuthService,
-        private userServices: UsersService,
+        private poiServices: PoisService,
     ) {}
 
     ngOnInit() {
@@ -84,6 +91,17 @@ export class MeetPageComponent implements OnInit {
         });
     }
 
+    private getPoiTickets(poiId: string) {
+        this.poiServices.getPoisTickets(poiId).subscribe({
+            next: (tickets) => {
+                this.tickets = tickets;
+            },
+            error: (error) => {
+                console.error(error);
+            },
+        });
+    }
+
     private getMeet(meetId: string) {
         this.meetService.getMeet(meetId).subscribe({
             next: (meet) => {
@@ -93,6 +111,11 @@ export class MeetPageComponent implements OnInit {
                 this.usersCount = meet.usersCount;
                 this.canJoin = meet.canJoin as boolean;
                 this.isLocked = meet.isLocked;
+                if (meet.ticket !== null) {
+                    this.ticket = meet.ticket;
+                } else {
+                    this.getPoiTickets(meet.poiId.toString());
+                }
                 this.getUsers(meetId, 1, meet.size);
             },
             error: (error) => {

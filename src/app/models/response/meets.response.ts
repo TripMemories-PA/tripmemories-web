@@ -1,4 +1,4 @@
-import { MeetModel } from '../../meet.model';
+import { MeetModel } from '../meet.model';
 import { MetaModel } from '../meta.model';
 
 export class MeetsResponse {

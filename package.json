@@ -28,6 +28,7 @@
     "ngx-stripe": "^17.2.0",
     "primeicons": "^7.0.0",
     "primeng": "^17.13.0",
+    "pusher-js": "^8.4.0-rc2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.3"

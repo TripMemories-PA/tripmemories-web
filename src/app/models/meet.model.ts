@@ -1,6 +1,6 @@
-import { User } from './models/user';
-import { PoiModel } from './models/Poi.model';
-import { TicketModel } from './models/ticket.model';
+import { User } from './user';
+import { PoiModel } from './Poi.model';
+import { TicketModel } from './ticket.model';
 
 export class MeetModel {
     id: number;
@@ -15,7 +15,8 @@ export class MeetModel {
     updatedAt: Date;
     createdBy: User;
     poi: PoiModel;
-    ticket: TicketModel;
+    ticket: TicketModel | null;
+    ticketId: number | null;
     isJoined: boolean;
     canJoin: boolean | null;
     usersCount: number;
@@ -34,7 +35,8 @@ export class MeetModel {
         updatedAt: Date,
         createdBy: User,
         poi: PoiModel,
-        ticket: TicketModel,
+        ticket: TicketModel | null,
+        ticketId: number | null,
         isJoined: boolean,
         canJoin: boolean | null,
         usersCount: number,
@@ -53,6 +55,7 @@ export class MeetModel {
         this.createdBy = createdBy;
         this.poi = poi;
         this.ticket = ticket;
+        this.ticketId = ticketId;
         this.isJoined = isJoined;
         this.canJoin = canJoin;
         this.usersCount = usersCount;

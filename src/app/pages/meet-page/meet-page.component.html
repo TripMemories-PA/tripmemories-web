@@ -30,8 +30,21 @@
         </div>
         <div class="flex flex-row gap-6 mt-16 justify-center">
             <div>
-                <h3 class="text-center text-xl font-semibold">Billet du meets</h3>
-                <app-buy-ticket-poi-card [ticket]="meet?.ticket"></app-buy-ticket-poi-card>
+                <h3 class="text-center text-xl font-semibold">Billet du meet</h3>
+                <app-buy-ticket-poi-card
+                    [ticket]="ticket"
+                    [canBuy]="meet?.ticketId === null"
+                    *ngIf="tickets.length === 0"
+                ></app-buy-ticket-poi-card>
+                <div
+                    *ngIf="tickets.length > 0"
+                    class="max-w-[500px] overflow-auto flex flex-row gap-4"
+                >
+                    <app-buy-ticket-poi-card
+                        *ngFor="let ticket of tickets"
+                        [ticket]="ticket"
+                    ></app-buy-ticket-poi-card>
+                </div>
             </div>
             <app-meet-participants
                 [users]="users"

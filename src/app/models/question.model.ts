@@ -1,5 +1,5 @@
 import { IFileImage } from './interface/FileImage';
-import { AnswerModel } from '../answer.model';
+import { AnswerModel } from './answer.model';
 import { PoiModel } from './Poi.model';
 
 export class QuestionModel {

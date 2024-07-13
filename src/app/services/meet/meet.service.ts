@@ -3,7 +3,7 @@ import { environment } from '../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { BuyTicketsResponse } from '../../models/response/buyTickets.response';
 import { MeetRequest } from '../../models/request/meet.request';
-import { MeetModel } from '../../meet.model';
+import { MeetModel } from '../../models/meet.model';
 import { SearchUsersResponse } from '../../models/response/searchUsers.response';
 
 const URL = environment.apiUrl + '/meets';

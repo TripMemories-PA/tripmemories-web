@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import {
+    Component,
+    EventEmitter,
+    Input,
+    OnChanges,
+    OnInit,
+    Output,
+    SimpleChanges,
+} from '@angular/core';
 import { User } from '../../models/user';
 import { DialogModule } from 'primeng/dialog';
 import { CardModule } from 'primeng/card';
@@ -12,7 +20,7 @@ import { AvatarModule } from 'primeng/avatar';
     templateUrl: './list-members-meet.component.html',
     styleUrl: './list-members-meet.component.css',
 })
-export class ListMembersMeetComponent implements OnInit {
+export class ListMembersMeetComponent implements OnChanges {
     @Input() members: User[] = [];
 
     @Input() displayDialog: boolean = false;
@@ -20,10 +28,10 @@ export class ListMembersMeetComponent implements OnInit {
     @Output() closeDialog: EventEmitter<any> = new EventEmitter();
 
     total: number = 0;
-    totalEnAttente: number = 0;
+    waitingTotal: number = 0;
 
-    ngOnInit(): void {
+    ngOnChanges(_: SimpleChanges): void {
         this.total = this.members.filter((member) => member.hasPaid).length;
-        this.totalEnAttente = this.members.filter((member) => !member.hasPaid).length;
+        this.waitingTotal = this.members.filter((member) => !member.hasPaid).length;
     }
 }

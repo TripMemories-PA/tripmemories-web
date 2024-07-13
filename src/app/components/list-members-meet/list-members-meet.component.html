@@ -8,7 +8,11 @@
 >
     <div class="dialog-content">
         <div class="summary">
-            <span>{{ total }} achetés - {{ totalEnAttente }} en attentes</span>
+            <span
+                >{{ total }} acheté{{ total > 1 ? 's' : '' }} - {{ waitingTotal }} en attente{{
+                    waitingTotal > 1 ? 's' : ''
+                }}</span
+            >
         </div>
         <div *ngFor="let user of members" class="user-card">
             <p-card>

@@ -6,7 +6,7 @@ import { DialogModule } from 'primeng/dialog';
 import { NgIf, NgOptimizedImage } from '@angular/common';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { SharedModule } from 'primeng/api';
-import { MeetModel } from '../../meet.model';
+import { MeetModel } from '../../models/meet.model';
 import { MeetService } from '../../services/meet/meet.service';
 import { Router } from '@angular/router';
 import { MeetRequest } from '../../models/request/meet.request';

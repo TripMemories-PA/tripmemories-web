@@ -19,6 +19,7 @@ import { AuthService } from '../../services/auth/auth.service';
 })
 export class BuyTicketPoiCardComponent {
     @Input() ticket?: TicketModel;
+    @Input() canBuy = true;
     isLoadingImage = true;
 
     constructor(

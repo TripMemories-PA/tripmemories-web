@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfilService } from '../../../services/profil/profil.service';
-import { MeetModel } from '../../../meet.model';
+import { MeetModel } from '../../../models/meet.model';
 import { MetaModel } from '../../../models/meta.model';
 import { ButtonModule } from 'primeng/button';
 import { CreatePostCardComponent } from '../../../components/create-post-card/create-post-card.component';

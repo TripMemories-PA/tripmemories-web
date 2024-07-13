@@ -21,7 +21,7 @@ import { ButtonModule } from 'primeng/button';
 import { BuyTicketPoiCardComponent } from '../../components/buy-ticket-poi-card/buy-ticket-poi-card.component';
 import { TicketModel } from '../../models/ticket.model';
 import { CreateMeetCardComponent } from '../../components/create-meet-card/create-meet-card.component';
-import { MeetModel } from '../../meet.model';
+import { MeetModel } from '../../models/meet.model';
 import { MeetCardPoiComponent } from '../../components/meet-card-poi/meet-card-poi.component';
 
 @Component({

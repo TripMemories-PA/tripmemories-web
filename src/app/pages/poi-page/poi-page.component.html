@@ -54,6 +54,7 @@
             </div>
             <div
                 *ngIf="poiPosts.length > 0"
+                (scroll)="scrollPoiPost($event)"
                 class="flex flex-row flex-nowrap gap-10 overflow-x-auto post-scrollbar"
             >
                 <app-post-card
@@ -149,7 +150,11 @@
                     </div>
                 </div>
             </div>
-            <div #scrollContainerMeet class="flex flex-row flex-nowrap gap-10 overflow-hidden">
+            <div
+                #scrollContainerMeet
+                (scroll)="scrollPoiMeet($event)"
+                class="flex flex-row flex-nowrap gap-10 overflow-hidden"
+            >
                 <app-meet-card-poi
                     *ngFor="let meetModel of meets"
                     [image]="meetModel.poi.cover?.url"
@@ -205,7 +210,11 @@
                     </div>
                 </div>
             </div>
-            <div #scrollContainer class="flex flex-row flex-nowrap gap-10 overflow-hidden">
+            <div
+                #scrollContainer
+                (scroll)="scrollPoiNear($event)"
+                class="flex flex-row flex-nowrap gap-10 overflow-hidden"
+            >
                 <app-currently-at-card
                     *ngFor="let currentlyAt of poiNear"
                     [image]="currentlyAt.cover?.url"

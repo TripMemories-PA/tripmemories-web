@@ -63,6 +63,8 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     poi: PoiModel = new PoiModel();
     poiPosts: PostModel[] = [];
     poiNear: PoiModel[] = [];
+    tickets: TicketModel[] = [];
+    meets: MeetModel[] = [];
 
     widthImage: number = 1;
     heightImage: number = 1;
@@ -71,8 +73,9 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     showDialogMeet: boolean = false;
     nbrQuestions: number = 0;
 
-    tickets: TicketModel[] = [];
-    meets: MeetModel[] = [];
+    nbrPagePoiPost: number = 1;
+    nbrPagePoiMeet: number = 1;
+    nbrPagePoiNear: number = 1;
 
     isAtLeftEnd: boolean = true;
     isAtRightEnd: boolean = false;
@@ -82,6 +85,8 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
 
     isAtLeftEndMeet: boolean = true;
     isAtRightEndMeet: boolean = false;
+
+    idPoi: string = '';
 
     constructor(
         private _activatedRoute: ActivatedRoute,
@@ -93,6 +98,10 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     ngOnInit(): void {
         this._activatedRoute.paramMap.subscribe((params) => {
             const param = params.get('id');
+            if (!param) {
+                return;
+            }
+            this.idPoi = param;
             this.getPoiDetails(param);
             this.getPoiTickets(param);
             this.getPoiPosts(param);
@@ -162,13 +171,14 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         });
     }
 
-    getPoiPosts(id: string | null): void {
+    getPoiPosts(id: string | null, page: number = 1): void {
         if (!id) {
             return;
         }
-        this.poisService.getPoiPosts(id, '10').subscribe({
+        this.poisService.getPoiPosts(id, '10', page.toString()).subscribe({
             next: (response) => {
-                this.poiPosts = response.data;
+                this.nbrPagePoiPost += 1;
+                this.poiPosts = this.poiPosts.concat(response.data);
             },
             error: (error) => {
                 console.error(error);
@@ -190,13 +200,14 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         });
     }
 
-    getPoiMeet(id: string | null): void {
+    getPoiMeet(id: string | null, page: number = 1): void {
         if (!id) {
             return;
         }
-        this.poisService.getPoiMeets(id).subscribe({
+        this.poisService.getPoiMeets(id, page.toString(), '10').subscribe({
             next: (response) => {
-                this.meets = response.data;
+                this.nbrPagePoiMeet += 1;
+                this.meets = this.meets.concat(response.data);
             },
             error: (error) => {
                 console.error(error);
@@ -230,15 +241,60 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         this.getPoiMeet(this.poi.id.toString());
     }
 
-    getPoiNear() {
-        this.poisService.getPOIs('1', '10', this.poi.latitude, this.poi.longitude, '10').subscribe({
-            next: (response) => {
-                this.poiNear = response.data.filter((poi) => poi.id !== this.poi.id);
-            },
-            error: (error) => {
-                console.error(error);
-            },
-        });
+    getPoiNear(page: number = 1): void {
+        this.poisService
+            .getPOIs(page.toString(), '10', this.poi.latitude, this.poi.longitude, '10')
+            .subscribe({
+                next: (response) => {
+                    this.nbrPagePoiNear += 1;
+                    this.poiNear = this.poiNear.concat(
+                        response.data.filter(
+                            (poi) =>
+                                poi.id !== this.poi.id &&
+                                poi.name?.toLowerCase() !== this.poi.name?.toLowerCase(),
+                        ),
+                    );
+                    const seenNames = new Set<string>();
+                    this.poiNear = this.poiNear.filter((poi) => {
+                        const lowerCaseName = poi.name?.toLowerCase();
+                        if (lowerCaseName && !seenNames.has(lowerCaseName)) {
+                            seenNames.add(lowerCaseName);
+                            return true;
+                        }
+                        return false;
+                    });
+                },
+                error: (error) => {
+                    console.error(error);
+                },
+            });
+    }
+
+    scrollPoiPost(event: Event) {
+        const element = event.target as HTMLElement;
+        const isScrolledToRight = element.scrollWidth - element.scrollLeft === element.clientWidth;
+
+        if (isScrolledToRight) {
+            this.getPoiPosts(this.idPoi, this.nbrPagePoiPost);
+        }
+    }
+
+    scrollPoiMeet(event: Event) {
+        const element = event.target as HTMLElement;
+        const isScrolledToRight = element.scrollWidth - element.scrollLeft === element.clientWidth;
+
+        if (isScrolledToRight) {
+            this.getPoiMeet(this.idPoi, this.nbrPagePoiMeet);
+        }
+    }
+
+    scrollPoiNear(event: Event) {
+        const element = event.target as HTMLElement;
+        const isScrolledToRight = element.scrollWidth - element.scrollLeft === element.clientWidth;
+
+        if (isScrolledToRight) {
+            this.getPoiNear(this.nbrPagePoiNear);
+        }
     }
 
     scrollLeft(): void {

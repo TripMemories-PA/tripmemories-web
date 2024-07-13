@@ -4,5 +4,5 @@ export class MeetRequest {
     size?: number;
     date?: Date | string;
     poiId?: number;
-    ticketId?: number;
+    ticketId?: number | null = null;
 }

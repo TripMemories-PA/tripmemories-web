@@ -17,6 +17,7 @@ import { TicketModel } from '../../models/ticket.model';
 import { CalendarModule } from 'primeng/calendar';
 import { MeetService } from '../../services/meet/meet.service';
 import { format } from 'date-fns';
+import { InputSwitchModule } from 'primeng/inputswitch';
 
 @Component({
     selector: 'app-create-meet-card',
@@ -34,6 +35,7 @@ import { format } from 'date-fns';
         ProgressBarModule,
         RatingModule,
         CalendarModule,
+        InputSwitchModule,
     ],
     templateUrl: './create-meet-card.component.html',
     styleUrl: './create-meet-card.component.css',
@@ -44,6 +46,9 @@ export class CreateMeetCardComponent implements OnInit {
     @Input() ticketsInput: TicketModel[] = [];
 
     @Output() meetCreated: EventEmitter<any> = new EventEmitter();
+
+    meetCheck: boolean = false;
+    reductionCheck: boolean = false;
 
     date?: Date;
 
@@ -60,23 +65,18 @@ export class CreateMeetCardComponent implements OnInit {
     selectedTicket?: TicketModel;
     selectedSize?: { label: string; value: number };
 
+    disableButtonReductionCheck: boolean = false;
+    disableButtonMeetCheck: boolean = false;
+
     constructor(
         private poiService: PoisService,
         private meetService: MeetService,
     ) {}
 
-    nbrPeopleOptions = [
-        { label: '1', value: 1 },
-        { label: '2', value: 2 },
-        { label: '3', value: 3 },
-        { label: '4', value: 4 },
-        { label: '5', value: 5 },
-        { label: '6', value: 6 },
-        { label: '7', value: 7 },
-        { label: '8', value: 8 },
-        { label: '9', value: 9 },
-        { label: '10', value: 10 },
-    ];
+    nbrPeopleOptions = Array.from({ length: 100 }, (_, i) => i + 1).map((i) => ({
+        label: i.toString(),
+        value: i,
+    }));
 
     meetModel: MeetRequest = {
         title: '',
@@ -84,18 +84,27 @@ export class CreateMeetCardComponent implements OnInit {
         date: undefined,
         size: 0,
         poiId: this.inputPoiId ?? -1,
-        ticketId: -1,
+        ticketId: null,
     };
 
     get valid(): boolean {
-        return (
-            !!this.meetModel.title &&
-            !!this.meetModel.description &&
-            !!this.meetModel.date &&
-            !!this.meetModel.size &&
-            this.meetModel.poiId !== -1 &&
-            this.meetModel.ticketId !== -1
-        );
+        if (this.meetCheck) {
+            return (
+                !!this.meetModel.title &&
+                !!this.meetModel.description &&
+                !!this.meetModel.date &&
+                this.meetModel.poiId !== -1 &&
+                !!this.meetModel.size
+            );
+        } else {
+            return (
+                !!this.meetModel.title &&
+                !!this.meetModel.description &&
+                !!this.meetModel.date &&
+                this.meetModel.poiId !== -1 &&
+                this.meetModel.ticketId !== null
+            );
+        }
     }
 
     getTickets(poiId: number): void {
@@ -129,6 +138,26 @@ export class CreateMeetCardComponent implements OnInit {
 
     updateTicketId() {
         this.meetModel.ticketId = this.selectedTicket?.id ?? 0;
+    }
+
+    onMeetCheckChange() {
+        if (this.meetCheck) {
+            this.reductionCheck = false;
+            this.disableButtonMeetCheck = false;
+            this.disableButtonReductionCheck = true;
+        } else {
+            this.disableButtonMeetCheck = true;
+        }
+    }
+
+    onReductionCheckChange() {
+        if (this.reductionCheck) {
+            this.meetCheck = false;
+            this.disableButtonReductionCheck = false;
+            this.disableButtonMeetCheck = true;
+        } else {
+            this.disableButtonReductionCheck = true;
+        }
     }
 
     submitMeet() {

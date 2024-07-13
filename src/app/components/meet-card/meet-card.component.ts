@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { CreateTicketComponent } from '../create-ticket/create-ticket.component';
@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 import { MeetRequest } from '../../models/request/meet.request';
 import { FormsModule } from '@angular/forms';
 import { InputTextModule } from 'primeng/inputtext';
+import { InputTextareaModule } from 'primeng/inputtextarea';
 
 @Component({
     selector: 'app-meet-card',
@@ -27,11 +28,12 @@ import { InputTextModule } from 'primeng/inputtext';
         SharedModule,
         FormsModule,
         InputTextModule,
+        InputTextareaModule,
     ],
     templateUrl: './meet-card.component.html',
     styleUrl: './meet-card.component.css',
 })
-export class MeetCardComponent {
+export class MeetCardComponent implements OnInit {
     @Input() meet?: MeetModel;
     @Input() isOwner: boolean = false;
     @Output() event: EventEmitter<any> = new EventEmitter();
@@ -43,11 +45,16 @@ export class MeetCardComponent {
 
     meetRequest: MeetRequest = {
         title: '',
+        description: '',
     };
 
     visible: boolean = false;
     visibleDelete: boolean = false;
     loading: boolean = false;
+
+    get valid(): boolean {
+        return !!this.meetRequest.title && !!this.meetRequest.description;
+    }
 
     deleteMeet() {
         if (!this.meet?.id) {
@@ -84,5 +91,12 @@ export class MeetCardComponent {
             return;
         }
         this.router.navigate(['/meets', this.meet.id]);
+    }
+
+    ngOnInit(): void {
+        if (this.meet) {
+            this.meetRequest.title = this.meet.title;
+            this.meetRequest.description = this.meet.description;
+        }
     }
 }

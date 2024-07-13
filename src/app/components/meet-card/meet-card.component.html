@@ -1,9 +1,5 @@
 <div class="card flex justify-content-center cursor-pointer">
-    <p-card
-        styleClass="ui-card-shadow"
-        class="bg-white"
-        [style]="{ width: '450px', height: '590px' }"
-    >
+    <p-card styleClass="ui-card-shadow" class="bg-white" [style]="{ width: '450px' }">
         <ng-template pTemplate="header">
             <div class="w-full h-[16rem] relative">
                 <img
@@ -20,24 +16,17 @@
         </ng-template>
         <div class="flex flex-col gap-2">
             <div class="flex flex-row justify-between text-sm">
-                <p>Nombres personnes max: {{ meet?.size }}</p>
-                <div class="flex flex-row items-center gap-2">
+                <p>
+                    Nombre de participant: <span class="font-semibold">{{ meet?.size }}</span>
+                </p>
+                <div *ngIf="meet?.ticketId" class="flex flex-row items-center gap-2">
                     <p>Prix: {{ meet?.ticket?.price }}€</p>
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="11"
-                        height="11"
-                        viewBox="0 0 11 11"
-                        fill="none"
-                    >
-                        <circle cx="5.5" cy="5.5" r="5.5" fill="#767676" />
-                    </svg>
-                    <p>Ticket: {{ meet?.ticket?.quantity }}</p>
-                    <p>
-                        Monument: <span class="font-semibold">{{ meet?.poi?.name }}</span>
-                    </p>
+                    <p>Ticket: {{ meet?.ticket?.title }}</p>
                 </div>
             </div>
+            <p>
+                Monument: <span class="font-semibold">{{ meet?.poi?.name }}</span>
+            </p>
             <h2 class="p-mt-2 text-xl font-bold">{{ meet?.title }}</h2>
             <h3 class="text-sm">{{ meet?.description }}</h3>
         </div>
@@ -111,13 +100,23 @@
                     placeholder="Modifiez le titre"
                 />
             </div>
+            <div>
+                <textarea
+                    pInputTextarea
+                    class="w-full mt-4"
+                    [(ngModel)]="meetRequest.description"
+                    rows="5"
+                    cols="30"
+                    placeholder="Modifiez la description"
+                ></textarea>
+            </div>
             <button
                 pButton
-                [disabled]="!meetRequest.title"
+                [disabled]="!valid"
                 (click)="updateMeet()"
                 type="button"
                 label="Valider"
-                class="p-button-rounded p-button-raised p-button-primary"
+                class="p-button-rounded p-button-raised p-button-primary w-full mt-4"
             ></button>
         </ng-template>
     </p-dialog>

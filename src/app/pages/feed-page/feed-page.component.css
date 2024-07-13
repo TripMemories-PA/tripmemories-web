@@ -1,0 +1,4 @@
+::ng-deep .p-tabmenu-custom .p-tabmenuitem .p-menuitem-text {
+  font-size: 1.5rem;
+  color: var(--primary) !important;
+}

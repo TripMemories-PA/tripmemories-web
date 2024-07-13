@@ -41,12 +41,12 @@ export class CommentsSectionComponent implements OnInit {
     ngOnInit(): void {
         this.openDialog();
         if (this.postId) {
-            if (this.authService.user?.access_token) {
-                this.getComments(true);
-            } else {
-                this.getComments();
-            }
+            this.getComments(this.isAuth);
         }
+    }
+
+    get isAuth(): boolean {
+        return this.authService.user?.access_token !== undefined;
     }
 
     openDialog(): void {

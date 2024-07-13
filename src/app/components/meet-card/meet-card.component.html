@@ -36,14 +36,16 @@
                     pButton
                     *ngIf="isOwner"
                     type="button"
-                    label="Modifier"
+                    icon="pi pi-pencil"
+                    [rounded]="true"
                     class="p-button-rounded p-button-raised p-button-primary"
                     (click)="visible = true"
                 ></button>
                 <button
                     pButton
                     type="button"
-                    label="accéder au meet"
+                    icon="pi pi-arrow-right"
+                    [rounded]="true"
                     class="p-button-rounded p-button-raised p-button-success"
                     (click)="goToMeet()"
                 ></button>
@@ -51,7 +53,8 @@
                     *ngIf="isOwner"
                     pButton
                     type="button"
-                    label="Supprimer"
+                    icon="pi pi-trash"
+                    [rounded]="true"
                     class="p-button-rounded p-button-raised p-button-danger"
                     (click)="visibleDelete = true"
                 ></button>

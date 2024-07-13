@@ -66,12 +66,12 @@ export class PostPageComponent implements OnInit {
         this._activatedRoute.paramMap.subscribe((params) => {
             const param = params.get('id');
             this.postId = param as string;
-            if (this.authService.user?.access_token) {
-                this.getPost(param as string, true);
-            } else {
-                this.getPost(param as string);
-            }
+            this.getPost(this.postId, this.isAuth);
         });
+    }
+
+    get isAuth(): boolean {
+        return this.authService.user?.access_token !== undefined;
     }
 
     getPost(id: string, isConnected: boolean = false) {
@@ -103,9 +103,7 @@ export class PostPageComponent implements OnInit {
                         detail: 'Vous avez liké ce post !',
                         life: 5000,
                     });
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 5000);
+                    this.alreadyLiked = true;
                 },
                 error: (error) => {
                     this.error = error.message;
@@ -131,9 +129,7 @@ export class PostPageComponent implements OnInit {
                         detail: 'Vous avez dislike ce post !',
                         life: 5000,
                     });
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 5000);
+                    this.alreadyLiked = false;
                 },
                 error: (error) => {
                     this.error = error.message;

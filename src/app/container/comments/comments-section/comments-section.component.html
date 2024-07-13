@@ -24,14 +24,22 @@
                 />
             </div>
             <div class="flex-[40] flex flex-col pt-2.5 pr-2.5">
-                <button
-                    pButton
-                    type="button"
-                    icon="pi pi-times"
-                    class="p-button-text self-end mb-3"
-                    (click)="onCloseDialog()"
-                ></button>
-                <div class="flex-[80] flex flex-col gap-4 overflow-x-auto">
+                <div class="flex flex-row justify-between items-center">
+                    <span class="text-xl font-semibold"
+                        >Nombre de commentaires: {{ nbrComments }}</span
+                    >
+                    <button
+                        pButton
+                        type="button"
+                        icon="pi pi-times"
+                        class="p-button-text self-end mb-3"
+                        (click)="onCloseDialog()"
+                    ></button>
+                </div>
+                <div
+                    (scroll)="scrollComments($event)"
+                    class="flex-[80] flex flex-col gap-4 overflow-x-auto"
+                >
                     <app-comment
                         *ngFor="let comment of comments"
                         [comment]="comment.content"

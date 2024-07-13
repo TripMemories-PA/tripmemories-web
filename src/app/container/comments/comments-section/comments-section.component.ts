@@ -33,15 +33,19 @@ export class CommentsSectionComponent implements OnInit {
     @Input() postId?: string | number = '';
     @Input() postUrl?: string = '';
     @Input() showDialog: boolean = false;
-    show: boolean = false;
     @Output() setShowDialog: EventEmitter<any> = new EventEmitter();
+
+    nbrPageComments: number = 1;
+    show: boolean = false;
     comments: CommentModel[] = [];
     id = this.authService.user?.id;
+
+    nbrComments: number = 0;
 
     ngOnInit(): void {
         this.openDialog();
         if (this.postId) {
-            this.getComments(this.isAuth);
+            this.getComments(1, this.isAuth);
         }
     }
 
@@ -53,18 +57,32 @@ export class CommentsSectionComponent implements OnInit {
         this.show = true;
     }
 
-    getComments(isConnected: boolean = false): void {
+    getComments(page: number = 1, isConnected: boolean = false): void {
         if (!this.postId) {
             return;
         }
-        this.postService.getPostComments(this.postId.toString(), '10', '1', isConnected).subscribe({
-            next: (response) => {
-                this.comments = response.data;
-            },
-            error: (error) => {
-                console.error(error);
-            },
-        });
+        this.postService
+            .getPostComments(this.postId.toString(), '10', page.toString(), isConnected)
+            .subscribe({
+                next: (response) => {
+                    this.nbrPageComments += 1;
+                    this.nbrComments = response.meta.total;
+                    this.comments = this.comments.concat(response.data);
+                },
+                error: (error) => {
+                    console.error(error);
+                },
+            });
+    }
+
+    scrollComments(event: Event) {
+        const element = event.target as HTMLElement;
+        const isScrolledToBottom =
+            element.scrollHeight - element.scrollTop === element.clientHeight;
+
+        if (isScrolledToBottom) {
+            this.getComments(this.nbrPageComments, this.isAuth);
+        }
     }
 
     get IdAuthor(): number {

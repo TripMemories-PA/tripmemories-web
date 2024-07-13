@@ -55,7 +55,7 @@
             pButton
             (click)="payMeet()"
             type="button"
-            [disabled]="hasPaid || isLocked"
+            [disabled]="hasPaid || isLocked || !hasTicketMeet"
             label="Je paye mon billet"
             class="w-full mt-6"
             [rounded]="true"

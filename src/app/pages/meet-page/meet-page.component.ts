@@ -16,6 +16,7 @@ import { ListMembersMeetComponent } from '../../components/list-members-meet/lis
 import { ButtonModule } from 'primeng/button';
 import { TicketModel } from '../../models/ticket.model';
 import { PoisService } from '../../services/pois/pois.service';
+import { MonumentCardFeedComponent } from '../../components/monument-card-feed/monument-card-feed.component';
 
 @Component({
     selector: 'app-meet-page',
@@ -30,6 +31,7 @@ import { PoisService } from '../../services/pois/pois.service';
         ButtonModule,
         NgIf,
         NgForOf,
+        MonumentCardFeedComponent,
     ],
     templateUrl: './meet-page.component.html',
     styleUrl: './meet-page.component.css',

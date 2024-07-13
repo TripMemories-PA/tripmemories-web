@@ -28,7 +28,7 @@
                 {{ meet?.description }}
             </p>
         </div>
-        <div class="flex flex-row gap-6 mt-16 justify-center">
+        <div class="flex flex-row gap-12 mt-16 justify-center items-center">
             <div>
                 <h3 class="text-center text-xl font-semibold">Billet du meet</h3>
                 <app-buy-ticket-poi-card
@@ -57,13 +57,20 @@
                 [canJoin]="canJoin"
                 [isLockedMeet]="isLocked"
                 [idMeet]="idMeet"
+                [hasTicketMeet]="meet?.ticketId !== null"
                 (reloadMeet)="reload()"
             ></app-meet-participants>
+            <div>
+                <h3 class="text-center text-xl font-semibold">
+                    Le monument que vous allez visiter
+                </h3>
+                <app-monument-card-feed [monument]="meet?.poi"></app-monument-card-feed>
+            </div>
         </div>
         <button
             pButton
             (click)="displayDialog = true"
-            label="Voir les participants"
+            label="Voir tous les participants"
             class="w-full mt-6"
         ></button>
         <app-meet-selling [users]="users" [nbrPaid]="nbrPaid"></app-meet-selling>

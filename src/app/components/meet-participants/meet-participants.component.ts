@@ -41,6 +41,7 @@ export class MeetParticipantsComponent {
     @Input() idMeet?: string;
     @Input() isLockedMeet: boolean = false;
     @Input() canJoin: boolean = false;
+    @Input() hasTicketMeet: boolean = true;
 
     @Output() reloadMeet: EventEmitter<any> = new EventEmitter();
 

@@ -1,0 +1,7 @@
+::ng-deep.p-sidebar-content {
+    padding: 0 !important;
+}
+
+::ng-deep.p-listbox {
+    border: none !important;
+}

@@ -15,6 +15,8 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { CheckboxModule } from 'primeng/checkbox';
 import { PasswordModule } from 'primeng/password';
 import { LoginResponse } from '../../models/response/login.response';
+import { UserTypes } from '../../models/enum/UserTypes';
+import { ProfilService } from '../../services/profil/profil.service';
 
 @Component({
     selector: 'app-login-form',
@@ -52,6 +54,7 @@ export class LoginFormComponent {
     constructor(
         private authService: AuthService,
         private router: Router,
+        private profileService: ProfilService,
     ) {}
 
     login(): void {
@@ -79,7 +82,17 @@ export class LoginFormComponent {
                 this.authService.setUser(user);
                 localStorage.setItem('user', JSON.stringify(user));
                 localStorage.setItem('token', <string>res.token);
-                this.router.navigate(['/profil']);
+
+                this.profileService.getMe().subscribe({
+                    next: (user) => {
+                        localStorage.setItem('user', JSON.stringify(user));
+                        if (user.userTypeId === UserTypes.ADMIN) {
+                            this.router.navigate(['/backoffice']);
+                        } else {
+                            this.router.navigate(['/profil']);
+                        }
+                    },
+                });
             },
             error: (err: Error) => {
                 this.isLoading = false;

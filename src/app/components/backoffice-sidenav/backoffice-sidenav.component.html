@@ -1,0 +1,7 @@
+<p-sidebar [(visible)]="sidebarVisible" class="p-0">
+    <ng-template pTemplate="header">
+        <span class="font-semibold text-xl">BackOffice</span>
+    </ng-template>
+    <p-listbox [options]="items" class="border-0" (onChange)="goTo()"> </p-listbox>
+</p-sidebar>
+<p-button (onClick)="sidebarVisible = true" icon="pi pi-arrow-right" />

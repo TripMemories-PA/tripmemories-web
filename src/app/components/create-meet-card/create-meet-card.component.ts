@@ -16,7 +16,7 @@ import { PoiModel } from '../../models/Poi.model';
 import { TicketModel } from '../../models/ticket.model';
 import { CalendarModule } from 'primeng/calendar';
 import { MeetService } from '../../services/meet/meet.service';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { InputSwitchModule } from 'primeng/inputswitch';
 
 @Component({
@@ -73,7 +73,7 @@ export class CreateMeetCardComponent implements OnInit {
         private meetService: MeetService,
     ) {}
 
-    nbrPeopleOptions = Array.from({ length: 100 }, (_, i) => i + 1).map((i) => ({
+    nbrPeopleOptions = Array.from({ length: 49 }, (_, i) => i + 2).map((i) => ({
         label: i.toString(),
         value: i,
     }));
@@ -86,6 +86,8 @@ export class CreateMeetCardComponent implements OnInit {
         poiId: this.inputPoiId ?? -1,
         ticketId: null,
     };
+
+    minDate = addDays(new Date(), 7);
 
     get valid(): boolean {
         if (this.meetCheck) {
@@ -183,7 +185,9 @@ export class CreateMeetCardComponent implements OnInit {
         if (this.inputPoiId && this.inputPoiName) {
             this.loadingPoi = false;
             if (this.ticketsInput.length > 0) {
-                this.tickets = this.ticketsInput;
+                this.tickets = this.ticketsInput.filter(
+                    (ticket) => ticket.groupSize > 1 && ticket.groupSize <= 50,
+                );
             }
             this.meetModel.poiId = this.inputPoiId;
             return;

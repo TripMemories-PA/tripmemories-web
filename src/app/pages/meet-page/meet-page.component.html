@@ -86,7 +86,11 @@
         <app-list-members-meet
             [displayDialog]="displayDialog"
             [members]="users"
+            [userId]="userId"
+            [meetId]="meet?.id"
+            [owner]="isOwner"
             (closeDialog)="onClosedDialog()"
+            (reloadMeet)="reload()"
         ></app-list-members-meet>
     </div>
 </div>

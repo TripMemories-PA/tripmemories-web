@@ -108,6 +108,22 @@
     </ng-container>
     <button
         pButton
+        *ngIf="user && user.userTypeId === 3"
+        type="button"
+        class="text-white bg-[color:var(--info)] m-auto"
+        label="Modifier les informations du lieu"
+        (click)="visiblePoi = true"
+    ></button>
+    <button
+        pButton
+        *ngIf="user && user.userTypeId === 3"
+        type="button"
+        class="text-white bg-[color:var(--info)] m-auto"
+        label="Afficher la page du lieu"
+        (click)="goToPoi()"
+    ></button>
+    <button
+        pButton
         *ngIf="user && user.userTypeId !== 3"
         type="button"
         class="text-white bg-[color:var(--error)] m-auto"
@@ -120,6 +136,17 @@
         [style]="{ height: '6px', width: '100%', marginTop: '10px' }"
     ></p-progressBar>
 </div>
+<p-dialog
+    [(visible)]="visiblePoi"
+    [draggable]="false"
+    [modal]="true"
+    [style]="{ width: '70rem' }"
+    header="Modifier le lieu"
+>
+    <ng-template pTemplate="content">
+        <app-update-poi [poiId]="poiId" [poi]="poi" (closeModal)="closeDialog()"></app-update-poi>
+    </ng-template>
+</p-dialog>
 <div class="card flex justify-content-center">
     <p-dialog
         header="Êtes-vous sûr de vouloir supprimer votre compte ?"

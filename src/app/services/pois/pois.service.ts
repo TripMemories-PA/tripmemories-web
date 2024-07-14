@@ -8,6 +8,7 @@ import { TicketModel } from '../../models/ticket.model';
 import { QuestionResponse } from '../../models/response/question.response';
 import { MeetsResponse } from '../../models/response/meets.response';
 import { QuestResponse } from '../../models/response/quest.response';
+import { ICreatePoi } from '../../models/interface/ICreatePoi';
 
 const URL = environment.apiUrl + '/pois';
 const httpOptions = {
@@ -94,5 +95,9 @@ export class PoisService {
 
     getPoisTickets(id: string) {
         return this.http.get<TicketModel[]>(`${URL}/${id}/tickets`, httpOptions);
+    }
+
+    updatePoi(id: string, data: ICreatePoi) {
+        return this.http.put<PoiModel>(`${URL}/${id}`, data);
     }
 }

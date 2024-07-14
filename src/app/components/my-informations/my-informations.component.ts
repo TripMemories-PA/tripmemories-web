@@ -11,6 +11,10 @@ import { NgIf, NgOptimizedImage } from '@angular/common';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { UpdateMeModel } from '../../models/updateme.model';
 import { DialogModule } from 'primeng/dialog';
+import { CreateTicketComponent } from '../create-ticket/create-ticket.component';
+import { UpdatePoiComponent } from '../update-poi/update-poi.component';
+import { PoisService } from '../../services/pois/pois.service';
+import { PoiModel } from '../../models/Poi.model';
 
 @Component({
     selector: 'app-my-informations',
@@ -24,6 +28,8 @@ import { DialogModule } from 'primeng/dialog';
         ProgressBarModule,
         DialogModule,
         NgOptimizedImage,
+        CreateTicketComponent,
+        UpdatePoiComponent,
     ],
     templateUrl: './my-informations.component.html',
     styleUrl: './my-informations.component.css',
@@ -35,12 +41,16 @@ export class MyInformationsComponent implements OnInit {
     isLoading: boolean = false;
 
     visible: boolean = false;
+    visiblePoi: boolean = false;
     modifyAccount: boolean = false;
 
     @Input() user?: User;
     @Input() nbrFriends?: number;
     @Input() nbrMonuments?: number;
     @Input() nbrPoints?: number;
+
+    poi: PoiModel = new PoiModel();
+    poiId: number = -1;
 
     userValues: User = {
         firstname: '',
@@ -53,11 +63,42 @@ export class MyInformationsComponent implements OnInit {
         private profilServices: ProfilService,
         private router: Router,
         private authService: AuthService,
+        private poiService: PoisService,
     ) {}
+
+    closeDialog() {
+        this.visiblePoi = false;
+        if (this.user?.poiId) {
+            this.poiService.getPOI(this.user.poiId as string).subscribe({
+                next: (res) => {
+                    this.poi = res;
+                    this.poiId = res.id as number;
+                },
+                error: (err) => {
+                    console.error(err);
+                },
+            });
+        }
+    }
+
+    goToPoi() {
+        this.router.navigate(['/poi', this.poiId]);
+    }
 
     ngOnInit(): void {
         if (this.user) {
             this.userValues = this.user;
+            if (this.user.userType?.id === 3) {
+                this.poiService.getPOI(this.user.poiId as string).subscribe({
+                    next: (res) => {
+                        this.poi = res;
+                        this.poiId = res.id as number;
+                    },
+                    error: (err) => {
+                        console.error(err);
+                    },
+                });
+            }
         }
     }
 

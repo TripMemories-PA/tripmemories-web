@@ -55,7 +55,10 @@ export class BannerProfilComponent {
         }
         this.profilService.uploadBanner(fileUpload).subscribe({
             next: (value: any) => {
-                const user: User = JSON.parse(localStorage.getItem('user') as string);
+                const user: User = JSON.parse(
+                    (localStorage.getItem('user') as string) ??
+                        (sessionStorage.getItem('user') as string),
+                );
                 user.banner = { url: value.pic };
                 localStorage.setItem('user', JSON.stringify(user));
                 this.authServices.setUser(user);

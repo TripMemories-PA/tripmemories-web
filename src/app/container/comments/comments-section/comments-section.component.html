@@ -49,14 +49,14 @@
                         [isLiked]="comment.isLiked"
                         [commentId]="comment.id"
                         [isMyComment]="comment.createdById === IdAuthor"
-                        (emitter)="getComments($event)"
+                        (emitter)="loadInitialComments()"
                         class="mb-3"
                     ></app-comment>
                 </div>
                 <div class="flex-[20]">
                     <app-comment-form
                         [postId]="postId"
-                        (emitter)="getComments($event)"
+                        (emitter)="loadInitialComments()"
                     ></app-comment-form>
                 </div>
             </div>

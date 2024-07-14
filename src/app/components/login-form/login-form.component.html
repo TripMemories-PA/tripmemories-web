@@ -52,7 +52,12 @@
                     />
                 </p-iconField>
                 <div class="p-field-checkbox mt-10">
-                    <p-checkbox inputId="remember" binary="true"></p-checkbox>
+                    <p-checkbox
+                        inputId="remember"
+                        binary="true"
+                        [(ngModel)]="rememberMe"
+                        name="remember"
+                    ></p-checkbox>
                     <label>Se souvenir de moi</label>
                     <a [routerLink]="['/forgotPassword']" class="p-ml-2">Mot de passe oublié</a>
                 </div>

@@ -43,7 +43,9 @@ export class ProfilPageComponent implements OnInit {
     banner: string | undefined | null = undefined;
     activeTab: string = 'posts';
     isHoveredBanner: boolean = false;
-    user: User = JSON.parse(localStorage.getItem('user') as string);
+    user: User = JSON.parse(
+        (localStorage.getItem('user') as string) ?? (sessionStorage.getItem('user') as string),
+    );
     userType: number = -1;
     poiId: number = -1;
 
@@ -56,7 +58,9 @@ export class ProfilPageComponent implements OnInit {
         private friendsService: FriendsService,
         private authServices: AuthService,
     ) {
-        const user = JSON.parse(localStorage.getItem('user') as string);
+        const user = JSON.parse(
+            (localStorage.getItem('user') as string) ?? (sessionStorage.getItem('user') as string),
+        );
         if (!this.authServices.user?.access_token) {
             this.authServices.logout();
             return;
@@ -70,7 +74,7 @@ export class ProfilPageComponent implements OnInit {
         this.profilService.getMe().subscribe({
             next: (user) => {
                 user.access_token = this.authServices.user?.access_token;
-                this.authServices.setUser(user);
+                this.authServices.setUser(user, !!localStorage.getItem('user'));
                 if (user.userTypeId) {
                     this.userType = user.userTypeId;
                 }
@@ -81,7 +85,6 @@ export class ProfilPageComponent implements OnInit {
                 if (user.poiId) {
                     this.poiId = user.poiId as number;
                 }
-                localStorage.setItem('user', JSON.stringify(user));
                 if (this.authServices.user?.avatar) {
                     this.profilPic = user.avatar?.url;
                 }

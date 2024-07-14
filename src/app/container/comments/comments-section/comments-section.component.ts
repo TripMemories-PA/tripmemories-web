@@ -75,6 +75,22 @@ export class CommentsSectionComponent implements OnInit {
             });
     }
 
+    loadInitialComments(): void {
+        if (!this.postId) {
+            return;
+        }
+        this.postService.getPostComments(this.postId.toString(), '10', '1', this.isAuth).subscribe({
+            next: (response) => {
+                this.nbrPageComments = 2;
+                this.nbrComments = response.meta.total;
+                this.comments = response.data;
+            },
+            error: (error) => {
+                console.error(error);
+            },
+        });
+    }
+
     scrollComments(event: Event) {
         const element = event.target as HTMLElement;
         const isScrolledToBottom =

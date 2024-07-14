@@ -16,5 +16,7 @@ export class ProfilInfoComponent {
     @Input() nbrFriends: number = 0;
     @Input() nbrMonuments?: number = 0;
     @Input() nbrPoints?: number = 0;
-    @Input() user: User = JSON.parse(localStorage.getItem('user') as string);
+    @Input() user: User = JSON.parse(
+        (localStorage.getItem('user') as string) ?? (sessionStorage.getItem('user') as string),
+    );
 }

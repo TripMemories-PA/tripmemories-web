@@ -54,7 +54,9 @@ export class PersonalDataFormComponent {
     }
 
     private updateLocalStorage(user: UpdateMeModel): void {
-        const userLocalStorage: User = JSON.parse(localStorage.getItem('user') as string);
+        const userLocalStorage: User = JSON.parse(
+            (localStorage.getItem('user') as string) ?? (sessionStorage.getItem('user') as string),
+        );
         userLocalStorage.firstname = user.firstname;
         userLocalStorage.lastname = user.lastname;
         userLocalStorage.email = user.email;

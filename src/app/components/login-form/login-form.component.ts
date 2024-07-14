@@ -48,6 +48,7 @@ export class LoginFormComponent {
     hide: boolean = true;
     resetPassword: boolean = false;
     isLoading: boolean = false;
+    rememberMe: boolean = false;
 
     constructor(
         private authService: AuthService,
@@ -64,21 +65,9 @@ export class LoginFormComponent {
         }
         this.isLoading = true;
 
-        this.authService.login(this.user).subscribe({
-            next: (res: LoginResponse) => {
+        this.authService.login(this.user, this.rememberMe).subscribe({
+            next: (_: LoginResponse) => {
                 this.isLoading = false;
-                let user: User = {
-                    firstname: '',
-                    lastname: '',
-                    username: '',
-                    email: '',
-                    password: '',
-                    access_token: '',
-                };
-                user.access_token = res.token;
-                this.authService.setUser(user);
-                localStorage.setItem('user', JSON.stringify(user));
-                localStorage.setItem('token', <string>res.token);
                 this.router.navigate(['/profil']);
             },
             error: (err: Error) => {

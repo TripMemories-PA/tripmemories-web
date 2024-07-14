@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -34,7 +34,7 @@ import { PoiModel } from '../../models/Poi.model';
     templateUrl: './my-informations.component.html',
     styleUrl: './my-informations.component.css',
 })
-export class MyInformationsComponent implements OnInit {
+export class MyInformationsComponent implements OnInit, OnChanges {
     ok: string | null = null;
     error: string | null = null;
 
@@ -88,17 +88,20 @@ export class MyInformationsComponent implements OnInit {
     ngOnInit(): void {
         if (this.user) {
             this.userValues = this.user;
-            if (this.user.userType?.id === 3) {
-                this.poiService.getPOI(this.user.poiId as string).subscribe({
-                    next: (res) => {
-                        this.poi = res;
-                        this.poiId = res.id as number;
-                    },
-                    error: (err) => {
-                        console.error(err);
-                    },
-                });
-            }
+        }
+    }
+
+    ngOnChanges(changes: SimpleChanges) {
+        if (this.user && this.user.userType?.id === 3) {
+            this.poiService.getPOI(this.user.poiId as string).subscribe({
+                next: (res) => {
+                    this.poi = res;
+                    this.poiId = res.id as number;
+                },
+                error: (err) => {
+                    console.error(err);
+                },
+            });
         }
     }
 

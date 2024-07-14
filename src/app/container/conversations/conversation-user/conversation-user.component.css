@@ -41,7 +41,7 @@
   padding-top: 10px;
 }
 
-.input-container input {
+.input-container .input-emoji {
   flex: 1;
   margin-right: 10px;
 }

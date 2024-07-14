@@ -1,4 +1,11 @@
-import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+    AfterViewChecked,
+    Component,
+    ElementRef,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../../services/auth/auth.service';
 import Pusher, { Channel } from 'pusher-js';
@@ -16,6 +23,8 @@ import { NgClass, NgForOf, NgIf, SlicePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { AvatarModule } from 'primeng/avatar';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Component({
     selector: 'app-conversation-meet',
@@ -31,11 +40,12 @@ import { AvatarModule } from 'primeng/avatar';
         AvatarModule,
         SlicePipe,
         NgIf,
+        PickerComponent,
     ],
     templateUrl: './conversation-meet.component.html',
     styleUrl: './conversation-meet.component.css',
 })
-export class ConversationMeetComponent implements OnInit, AfterViewChecked {
+export class ConversationMeetComponent implements OnInit, AfterViewChecked, OnDestroy {
     constructor(
         private meetService: MeetService,
         private _activatedRoute: ActivatedRoute,
@@ -58,6 +68,7 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked {
     totalMembers: number = 0;
     nbrPage: number = 2;
     shouldScroll = true;
+    showEmojiPicker = false;
 
     message: IMessageRequest = {
         content: '',
@@ -83,6 +94,7 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked {
                 this.meetService.getMessages(params.get('id') as string).subscribe({
                     next: (response) => {
                         this.messages = this.processMessages(response.data);
+                        setTimeout(() => this.scrollToBottom(), 100);
                     },
                     error: (err) => {
                         console.log(err);
@@ -108,6 +120,11 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked {
         }
     }
 
+    ngOnDestroy(): void {
+        this.channel?.unsubscribe();
+        this.pusher.unsubscribe(this.meet?.channel as string);
+    }
+
     scrollToBottom(): void {
         try {
             this.scrollContainer.nativeElement.scrollTop =
@@ -121,10 +138,10 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked {
         this.meetService.getMessages(this.meet?.id.toString() as string, this.nbrPage).subscribe({
             next: (response) => {
                 this.messages = this.processMessages([
-                    ...(this.messages as MessageModel[]),
                     ...response.data,
+                    ...(this.messages as MessageModel[]),
                 ]);
-                this.nbrPage++;
+                this.nbrPage += 1;
             },
             error: (err) => {
                 console.log(err);
@@ -139,10 +156,6 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked {
         if (isScrolledToTop) {
             this.getNextMessages();
         }
-    }
-
-    get isConnect(): boolean {
-        return this.authService.user?.access_token !== undefined;
     }
 
     submitMessage() {
@@ -168,16 +181,15 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked {
         return format(time, 'HH:mm');
     }
 
-    goToProfile(userId: string) {
-        this.router.navigate(['/user', userId]);
-    }
-
     processMessages(messages: MessageModel[]): (MessageModel | { date: string })[] {
         const result: (MessageModel | { date: string })[] = [];
         let lastDate: Date | null = null;
 
         for (const message of messages) {
             const messageDate = new Date(message.createdAt);
+            if (isNaN(messageDate.valueOf())) {
+                continue;
+            }
             if (!lastDate || !isSameDay(lastDate, messageDate)) {
                 result.push({ date: format(messageDate, 'PP', { locale: fr }) });
                 lastDate = messageDate;
@@ -196,6 +208,16 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked {
             }
             return a.createdAt < b.createdAt ? -1 : 1;
         });
+    }
+
+    addEmoji(event: EmojiEvent) {
+        const emoji = event.emoji;
+        this.message.content += emoji.native;
+        this.showEmojiPicker = false; // Optional: close picker after selection
+    }
+
+    toggleEmojiPicker() {
+        this.showEmojiPicker = !this.showEmojiPicker;
     }
 
     addMessage(message: MessageModel) {

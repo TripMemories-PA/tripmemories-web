@@ -1,4 +1,11 @@
-import { AfterViewChecked, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+    AfterViewChecked,
+    Component,
+    ElementRef,
+    OnDestroy,
+    OnInit,
+    ViewChild,
+} from '@angular/core';
 import { UsersService } from '../../../services/users/users.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageModel } from '../../../message.model';
@@ -13,6 +20,8 @@ import { IMessageRequest } from '../../../models/interface/IMessageRequest';
 import { FormsModule } from '@angular/forms';
 import Pusher, { Channel } from 'pusher-js';
 import { fr } from 'date-fns/locale';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 
 @Component({
     selector: 'app-conversation-user',
@@ -26,11 +35,12 @@ import { fr } from 'date-fns/locale';
         NgOptimizedImage,
         FormsModule,
         NgIf,
+        PickerComponent,
     ],
     templateUrl: './conversation-user.component.html',
     styleUrl: './conversation-user.component.css',
 })
-export class ConversationUserComponent implements OnInit, AfterViewChecked {
+export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDestroy {
     constructor(
         private userService: UsersService,
         private _activatedRoute: ActivatedRoute,
@@ -47,6 +57,7 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked {
     channel?: Channel;
 
     shouldScroll = true;
+    showEmojiPicker = false;
 
     messages: (MessageModel | { date: string })[] = [];
     user: User = new User();
@@ -75,6 +86,7 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked {
                 this.userService.getMessages(params.get('id') as string).subscribe({
                     next: (response) => {
                         this.messages = this.processMessages(response.data);
+                        setTimeout(() => this.scrollToBottom(), 100);
                     },
                     error: (err) => {
                         console.log(err);
@@ -127,7 +139,7 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked {
                 this.messages = this.processMessages(
                     response.data.concat(this.messages as MessageModel[]),
                 );
-                this.nbrPage++;
+                this.nbrPage += 1;
             },
             error: (err) => {
                 console.log(err);
@@ -159,9 +171,11 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked {
     processMessages(messages: MessageModel[]): (MessageModel | { date: string })[] {
         const result: (MessageModel | { date: string })[] = [];
         let lastDate: Date | null = null;
-
         for (const message of messages) {
             const messageDate = new Date(message.createdAt);
+            if (isNaN(messageDate.valueOf())) {
+                continue;
+            }
             if (!lastDate || !isSameDay(lastDate, messageDate)) {
                 result.push({ date: format(messageDate, 'PP', { locale: fr }) });
                 lastDate = messageDate;
@@ -187,7 +201,22 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked {
         this.messages = this.processMessages(this.messages as MessageModel[]);
     }
 
+    addEmoji(event: EmojiEvent) {
+        const emoji = event.emoji;
+        this.message.content += emoji.native;
+        this.showEmojiPicker = false; // Optional: close picker after selection
+    }
+
+    toggleEmojiPicker() {
+        this.showEmojiPicker = !this.showEmojiPicker;
+    }
+
     isDateMarker(item: any): item is { date: string } {
         return 'date' in item;
+    }
+
+    ngOnDestroy(): void {
+        this.channel?.unsubscribe();
+        this.pusher.unsubscribe(this.user.channel as string);
     }
 }

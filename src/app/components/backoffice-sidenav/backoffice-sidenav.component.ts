@@ -4,6 +4,7 @@ import { ButtonModule } from 'primeng/button';
 import { ListboxModule } from 'primeng/listbox';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../services/auth/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-backoffice-sidenav',
@@ -13,7 +14,10 @@ import { AuthService } from '../../services/auth/auth.service';
     styleUrl: './backoffice-sidenav.component.css',
 })
 export class BackofficeSidenavComponent {
-    constructor(private authService: AuthService) {}
+    constructor(
+        private authService: AuthService,
+        private router: Router,
+    ) {}
 
     sidebarVisible = false;
     selectedItem: any;
@@ -22,25 +26,31 @@ export class BackofficeSidenavComponent {
         {
             label: 'Comptes utilisateurs',
             command: () => {
-                console.log('new');
+                this.router.navigate(['/backoffice']);
             },
         },
         {
-            label: "Points d'intérêts",
+            label: 'Comptes POI',
             command: () => {
-                console.log('search');
+                this.router.navigate(['/backoffice']);
+            },
+        },
+        {
+            label: "Points d'intérêts (POI)",
+            command: () => {
+                this.router.navigate(['/backoffice/pois']);
             },
         },
         {
             label: 'Posts',
             command: () => {
-                console.log('search');
+                this.router.navigate(['/backoffice/posts']);
             },
         },
         {
             label: 'Commentaires',
             command: () => {
-                console.log('search');
+                this.router.navigate(['/backoffice/comments']);
             },
         },
         {

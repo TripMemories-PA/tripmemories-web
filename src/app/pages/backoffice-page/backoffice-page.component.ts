@@ -4,7 +4,6 @@ import { UsersService } from '../../services/users/users.service';
 import { AvatarModule } from 'primeng/avatar';
 import { AvatarGroupModule } from 'primeng/avatargroup';
 import { CommonModule } from '@angular/common';
-import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule } from '@angular/forms';
 import { debounce } from 'lodash';
@@ -17,7 +16,6 @@ import { debounce } from 'lodash';
         AvatarModule,
         AvatarGroupModule,
         CommonModule,
-        ButtonModule,
         InputTextModule,
         FormsModule,
     ],
@@ -33,7 +31,6 @@ export class BackofficePageComponent implements OnInit {
     totalPages: number = 0;
     search: string = '';
     loading: boolean = false;
-
     ngOnInit(): void {
         this.searchUsers();
     }

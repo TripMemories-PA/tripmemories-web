@@ -17,6 +17,9 @@ import { QuizzPageComponent } from './pages/quizz-page/quizz-page.component';
 import { RankingPageComponent } from './pages/ranking-page/ranking-page.component';
 import { MeetPageComponent } from './pages/meet-page/meet-page.component';
 import { BackofficePageComponent } from './pages/backoffice-page/backoffice-page.component';
+import { PoisBackofficePageComponent } from './pages/pois-backoffice-page/pois-backoffice-page.component';
+import { CommentsBackofficePageComponent } from './pages/comments-backoffice-page/comments-backoffice-page.component';
+import { PostsBackofficePageComponent } from './pages/posts-backoffice-page/posts-backoffice-page.component';
 
 export const routes: Routes = [
     {
@@ -94,6 +97,18 @@ export const routes: Routes = [
     {
         path: 'backoffice',
         component: BackofficePageComponent,
+    },
+    {
+        path: 'backoffice/pois',
+        component: PoisBackofficePageComponent,
+    },
+    {
+        path: 'backoffice/comments',
+        component: CommentsBackofficePageComponent,
+    },
+    {
+        path: 'backoffice/posts',
+        component: PostsBackofficePageComponent,
     },
     {
         path: '',

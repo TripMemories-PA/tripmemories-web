@@ -97,7 +97,7 @@ export class FeedPageComponent implements OnInit {
     getGeneralPosts(page: number = 1, perPage: number = 10) {
         this.posts = [];
         this.isEnd = false;
-        this.postsService.getPosts(perPage.toString()).subscribe({
+        this.postsService.getPosts(perPage.toString(), this.isAuth).subscribe({
             next: (posts) => {
                 if (posts.data.length === 0) {
                     this.isEnd = true;

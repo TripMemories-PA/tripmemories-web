@@ -23,6 +23,7 @@
             [showTime]="true"
             (ngModelChange)="updateDate()"
             [hourFormat]="'24'"
+            [minDate]="minDate"
             class="w-full"
             dateFormat="dd/mm/yy"
             inputId="buttondisplay"
@@ -134,12 +135,14 @@
                     <div class="dropdown-item">
                         <span class="ticket-title">{{ ticket.title }}</span>
                         <span class="ticket-price">{{ ticket.price }}€</span>
+                        <span class="ticket-price">{{ ticket?.groupSize }} pers</span>
                     </div>
                 </ng-template>
                 <ng-template let-ticket pTemplate="selectedItem">
                     <div class="selected-item">
                         <span class="ticket-title">{{ ticket?.title }}</span>
                         <span class="ticket-price">{{ ticket?.price }}€</span>
+                        <span class="ticket-price">{{ ticket?.groupSize }} pers</span>
                     </div>
                 </ng-template>
             </p-dropdown>

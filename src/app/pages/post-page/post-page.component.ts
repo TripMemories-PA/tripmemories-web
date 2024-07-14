@@ -16,6 +16,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ChipsModule } from 'primeng/chips';
+import { MonumentCardFeedComponent } from '../../components/monument-card-feed/monument-card-feed.component';
 
 @Component({
     selector: 'app-post-page',
@@ -34,6 +35,7 @@ import { ChipsModule } from 'primeng/chips';
         InputGroupModule,
         OverlayPanelModule,
         ChipsModule,
+        MonumentCardFeedComponent,
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './post-page.component.html',
@@ -66,12 +68,12 @@ export class PostPageComponent implements OnInit {
         this._activatedRoute.paramMap.subscribe((params) => {
             const param = params.get('id');
             this.postId = param as string;
-            if (this.authService.user?.access_token) {
-                this.getPost(param as string, true);
-            } else {
-                this.getPost(param as string);
-            }
+            this.getPost(this.postId, this.isAuth);
         });
+    }
+
+    get isAuth(): boolean {
+        return this.authService.user?.access_token !== undefined;
     }
 
     getPost(id: string, isConnected: boolean = false) {
@@ -103,9 +105,7 @@ export class PostPageComponent implements OnInit {
                         detail: 'Vous avez liké ce post !',
                         life: 5000,
                     });
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 5000);
+                    this.alreadyLiked = true;
                 },
                 error: (error) => {
                     this.error = error.message;
@@ -131,9 +131,7 @@ export class PostPageComponent implements OnInit {
                         detail: 'Vous avez dislike ce post !',
                         life: 5000,
                     });
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 5000);
+                    this.alreadyLiked = false;
                 },
                 error: (error) => {
                     this.error = error.message;

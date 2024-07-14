@@ -4,6 +4,7 @@
         [(ngModel)]="content"
         placeholder="Entrez votre commentaire"
         rows="5"
+        #comment
         class="comment-textarea"
     ></textarea>
     <button pButton (click)="postComment()" label="Commenter" class="comment-button mb-1"></button>

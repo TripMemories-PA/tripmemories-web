@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CommentPostRequest } from '../../models/request/commentPost.request';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { FormsModule } from '@angular/forms';
@@ -14,8 +14,11 @@ import { CommentsService } from '../../services/comments/comments.service';
 })
 export class CommentFormComponent {
     @Input() postId?: string | number = '';
-    content: string = '';
+
     @Output() emitter: EventEmitter<any> = new EventEmitter();
+    @ViewChild('comment') commentForm!: ElementRef<HTMLTextAreaElement>;
+
+    content: string = '';
 
     constructor(private commentsService: CommentsService) {}
 
@@ -31,6 +34,7 @@ export class CommentFormComponent {
         this.commentsService.storePostComments(comment).subscribe({
             next: (_) => {
                 this.emitter.emit();
+                this.commentForm.nativeElement.value = '';
             },
             error: (error) => {
                 console.error(error);

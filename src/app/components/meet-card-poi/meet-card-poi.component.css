@@ -78,7 +78,7 @@
 .ticket-info {
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: flex-end;
   margin-top: auto;
   color: var(--primary);
   font-weight: bold;

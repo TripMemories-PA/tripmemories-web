@@ -22,6 +22,7 @@ import Pusher, { Channel } from 'pusher-js';
 import { fr } from 'date-fns/locale';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { ConfigService } from '../../../services/config/config.service';
 
 @Component({
     selector: 'app-conversation-user',
@@ -46,11 +47,12 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
         private _activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private router: Router,
+        private configService: ConfigService,
     ) {}
     @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
-    pusher: Pusher = new Pusher(import.meta.env.NG_APP_PUSHER_APP_KEY, {
-        cluster: import.meta.env.NG_APP_PUSHER_APP_CLUSTER,
+    pusher: Pusher = new Pusher(this.configService.pusherAppKey, {
+        cluster: this.configService.pusherAppCluster,
     });
 
     nbrPage: number = 2;
@@ -76,6 +78,7 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
                             this.channel = this.pusher.subscribe(this.user.channel);
                             this.channel.bind('message', (data: MessageModel) => {
                                 this.addMessage(data);
+                                setTimeout(() => this.scrollToBottom(), 100);
                             });
                         }
                     },

@@ -25,6 +25,7 @@ import { AvatarGroupModule } from 'primeng/avatargroup';
 import { AvatarModule } from 'primeng/avatar';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
+import { ConfigService } from '../../../services/config/config.service';
 
 @Component({
     selector: 'app-conversation-meet',
@@ -50,13 +51,13 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked, OnDe
         private meetService: MeetService,
         private _activatedRoute: ActivatedRoute,
         private authService: AuthService,
-        private router: Router,
+        private configService: ConfigService,
     ) {}
 
     @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
-    pusher: Pusher = new Pusher(import.meta.env.NG_APP_PUSHER_APP_KEY, {
-        cluster: import.meta.env.NG_APP_PUSHER_APP_CLUSTER,
+    pusher: Pusher = new Pusher(this.configService.pusherAppKey, {
+        cluster: this.configService.pusherAppCluster,
     });
 
     channel?: Channel;
@@ -84,6 +85,7 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked, OnDe
                             this.channel = this.pusher.subscribe(this.meet.channel);
                             this.channel.bind('message', (data: MessageModel) => {
                                 this.addMessage(data);
+                                setTimeout(() => this.scrollToBottom(), 100);
                             });
                         }
                     },

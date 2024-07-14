@@ -1,0 +1,46 @@
+<div class="p-card p-component border-gray-400 border-2 border-solid relative" style="width: 100%">
+    <img
+        ngSrc="assets/logo/logo_chat.png"
+        alt="chat"
+        width="90"
+        height="90"
+        class="absolute right-4 -top-8"
+    />
+    <div class="p-card-body">
+        <div class="p-grid flex flex-row items-center gap-16">
+            <div class="p-col-3 h-44 w-48 relative">
+                <img
+                    [src]="image"
+                    alt="meet coversation"
+                    class="absolute object-cover rounded w-full h-full"
+                />
+            </div>
+            <div class="p-col-9">
+                <div class="p-d-flex p-jc-between p-ai-center flex flex-row gap-6 justify-between">
+                    <div>
+                        <div class="p-text-bold !text-3xl font-bold mb-2" style="font-size: 1.2em">
+                            {{ title }}
+                        </div>
+                        <div class="p-d-flex p-ai-center">
+                            <i class="pi pi-circle-on" style="color: blue; margin-right: 0.5em"></i>
+                            <span class="text-xl font-normal"
+                                >{{ nbrMembres }} membre{{ nbrMembres > 1 ? 's' : '' }}</span
+                            >
+                        </div>
+                        <div class="text-lg mt-2 font-normal">
+                            + {{ nbrMessages }} message{{ nbrMessages > 1 ? 's' : '' }}
+                        </div>
+                    </div>
+                    <button
+                        pButton
+                        type="button"
+                        [rounded]="true"
+                        (click)="goToChat()"
+                        label="Rejoindre le chat"
+                        class="p-button-primary p-ml-3 h-14"
+                    ></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

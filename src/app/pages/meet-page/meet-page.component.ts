@@ -70,6 +70,7 @@ export class MeetPageComponent implements OnInit {
                 const meetId = params.get('id') as string;
                 this.idMeet = meetId;
                 this.getMeet(meetId);
+                this.getMessageMeet(meetId);
             } else {
                 this.router.navigate(['/']);
             }
@@ -78,6 +79,10 @@ export class MeetPageComponent implements OnInit {
 
     get isOwner(): boolean {
         return this.meet?.createdById === (this.authService.user?.id as unknown as number);
+    }
+
+    get userId(): string {
+        return this.authService.user?.id as unknown as string;
     }
 
     private getUsers(meetId: string, page: string | number = 1, perPage: number | string = 10) {

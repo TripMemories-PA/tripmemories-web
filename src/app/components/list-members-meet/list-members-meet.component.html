@@ -31,8 +31,38 @@
                             }"
                             >{{ user.hasPaid ? 'Billet acheté' : 'En attente' }}</span
                         >
+                        <button
+                            pButton
+                            label="Bannir l'utilisateur"
+                            icon="pi pi-ban"
+                            class="p-button-danger mt-2"
+                            *ngIf="owner"
+                            [disabled]="userId === user.id"
+                            (click)="visibleBan = true"
+                        ></button>
                     </div>
                 </div>
+                <p-dialog
+                    header="Bannir l'utilisateur"
+                    [modal]="true"
+                    [draggable]="false"
+                    [(visible)]="visibleBan"
+                    [style]="{ width: '25rem' }"
+                >
+                    <span class="p-text-secondary block mb-5"
+                        >Êtes vous sur de vouloir bannir {{ user.firstname }} de ce meet ? En le
+                        bannissant celui-ci ne pourra plus revenir dans le meet ensuite</span
+                    >
+                    <div class="flex justify-content-end gap-2">
+                        <p-button label="Non" severity="secondary" (click)="visibleBan = false" />
+                        <p-button label="Oui" (click)="banUser(user)" />
+                    </div>
+                    <p-progressBar
+                        mode="indeterminate"
+                        *ngIf="loading"
+                        [style]="{ height: '6px', width: '100%' }"
+                    ></p-progressBar>
+                </p-dialog>
             </p-card>
         </div>
     </div>

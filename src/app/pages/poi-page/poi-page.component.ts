@@ -69,6 +69,7 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     poiNear: PoiModel[] = [];
     tickets: TicketModel[] = [];
     meets: MeetModel[] = [];
+    quests: QuestModel[] = [];
 
     widthImage: number = 1;
     heightImage: number = 1;
@@ -80,10 +81,6 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     nbrPagePoiPost: number = 1;
     nbrPagePoiMeet: number = 1;
     nbrPagePoiNear: number = 1;
-
-    tickets: TicketModel[] = [];
-    meets: MeetModel[] = [];
-    quests: QuestModel[] = [];
 
     isAtLeftEnd: boolean = true;
     isAtRightEnd: boolean = false;

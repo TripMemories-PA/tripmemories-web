@@ -170,6 +170,23 @@
                 Aucun Meet actuellement, soyez le premier à en créer un</span
             >
         </div>
+        <div class="mt-16">
+            <div class="flex flex-row justify-between">
+                <h3 class="text-4xl font-bold font-['Urbanist']">Les missions disponibles</h3>
+            </div>
+            <div class="flex flex-row flex-nowrap gap-10 overflow-x-auto post-scrollbar p-4">
+                <app-my-mission-card
+                    *ngFor="let quest of quests"
+                    [quest]="quest"
+                    [isPoi]="false"
+                    [done]="quest.done"
+                ></app-my-mission-card>
+            </div>
+            <span *ngIf="meets.length === 0" class="text-2xl text-red-500 font-['Urbanist'] mt-6">
+                Aucune missions n'est disponibles pour le moment, patience cela peut arriver très
+                vite</span
+            >
+        </div>
 
         <div class="mt-16">
             <div class="flex flex-row justify-between">

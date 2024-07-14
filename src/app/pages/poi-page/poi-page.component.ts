@@ -23,6 +23,9 @@ import { TicketModel } from '../../models/ticket.model';
 import { CreateMeetCardComponent } from '../../components/create-meet-card/create-meet-card.component';
 import { MeetModel } from '../../models/meet.model';
 import { MeetCardPoiComponent } from '../../components/meet-card-poi/meet-card-poi.component';
+import { MyMissionCardComponent } from '../../components/my-mission-card/my-mission-card.component';
+import { QuestModel } from '../../models/quest.model';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
     selector: 'app-poi-page',
@@ -42,6 +45,7 @@ import { MeetCardPoiComponent } from '../../components/meet-card-poi/meet-card-p
         NgClass,
         CreateMeetCardComponent,
         MeetCardPoiComponent,
+        MyMissionCardComponent,
     ],
     templateUrl: './poi-page.component.html',
     styleUrl: './poi-page.component.css',
@@ -77,6 +81,10 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     nbrPagePoiMeet: number = 1;
     nbrPagePoiNear: number = 1;
 
+    tickets: TicketModel[] = [];
+    meets: MeetModel[] = [];
+    quests: QuestModel[] = [];
+
     isAtLeftEnd: boolean = true;
     isAtRightEnd: boolean = false;
 
@@ -93,6 +101,7 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         private router: Router,
         private poisService: PoisService,
         private imageService: ImageServiceService,
+        private authService: AuthService,
         private cdr: ChangeDetectorRef,
     ) {}
     ngOnInit(): void {
@@ -106,6 +115,7 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
             this.getPoiTickets(param);
             this.getPoiPosts(param);
             this.getPoiMeet(param);
+            this.getPoiQuests(param);
         });
     }
 
@@ -184,6 +194,19 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
                 console.error(error);
             },
         });
+    }
+
+    getPoiQuests(id: string | null): void {
+        if (!id) {
+            return;
+        }
+        this.poisService
+            .getPoiQuests(id, '1', '12', this.authService.user?.access_token !== undefined)
+            .subscribe({
+                next: (response) => {
+                    this.quests = response.data;
+                },
+            });
     }
 
     getPoiTickets(id: string | null): void {

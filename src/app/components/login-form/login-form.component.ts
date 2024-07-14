@@ -88,7 +88,7 @@ export class LoginFormComponent {
                         user.access_token = res.token;
                         localStorage.setItem('user', JSON.stringify(user));
                         if (user.userTypeId === UserTypes.ADMIN) {
-                            this.router.navigate(['/backoffice']);
+                            this.router.navigate(['/backoffice/users']);
                         } else {
                             this.router.navigate(['/profil']);
                         }

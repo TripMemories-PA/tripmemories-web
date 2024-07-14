@@ -20,6 +20,7 @@ import { BackofficePageComponent } from './pages/backoffice-page/backoffice-page
 import { PoisBackofficePageComponent } from './pages/pois-backoffice-page/pois-backoffice-page.component';
 import { CommentsBackofficePageComponent } from './pages/comments-backoffice-page/comments-backoffice-page.component';
 import { PostsBackofficePageComponent } from './pages/posts-backoffice-page/posts-backoffice-page.component';
+import { PoisAccountsBackofficePageComponent } from './pages/pois-accounts-backoffice-page/pois-accounts-backoffice-page.component';
 
 export const routes: Routes = [
     {
@@ -95,8 +96,12 @@ export const routes: Routes = [
         component: FeedPageComponent,
     },
     {
-        path: 'backoffice',
+        path: 'backoffice/users',
         component: BackofficePageComponent,
+    },
+    {
+        path: 'backoffice/pois-accounts',
+        component: PoisAccountsBackofficePageComponent,
     },
     {
         path: 'backoffice/pois',

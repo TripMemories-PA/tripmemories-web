@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { debounce } from 'lodash';
 import { PoisService } from '../../services/pois/pois.service';
 import { CommonModule } from '@angular/common';
@@ -24,7 +24,7 @@ import { ImageModule } from 'primeng/image';
     templateUrl: './pois-backoffice-page.component.html',
     styleUrl: './pois-backoffice-page.component.css',
 })
-export class PoisBackofficePageComponent {
+export class PoisBackofficePageComponent implements OnInit {
     constructor(private poiService: PoisService) {}
 
     pois: any[] = [];

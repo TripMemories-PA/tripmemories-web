@@ -84,4 +84,8 @@ export class PoisService {
     getPoisTickets(id: string) {
         return this.http.get<TicketModel[]>(`${URL}/${id}/tickets`, httpOptions);
     }
+
+    getPoiSales(id: string) {
+        return this.http.get(`${URL}/${id}/sales`);
+    }
 }

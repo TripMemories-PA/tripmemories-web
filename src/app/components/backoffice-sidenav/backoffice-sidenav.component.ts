@@ -26,13 +26,13 @@ export class BackofficeSidenavComponent {
         {
             label: 'Comptes utilisateurs',
             command: () => {
-                this.router.navigate(['/backoffice']);
+                this.router.navigate(['/backoffice/users']);
             },
         },
         {
             label: 'Comptes POI',
             command: () => {
-                this.router.navigate(['/backoffice']);
+                this.router.navigate(['/backoffice/pois-accounts']);
             },
         },
         {

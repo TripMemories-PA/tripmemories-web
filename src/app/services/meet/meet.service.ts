@@ -5,6 +5,8 @@ import { BuyTicketsResponse } from '../../models/response/buyTickets.response';
 import { MeetRequest } from '../../models/request/meet.request';
 import { MeetModel } from '../../models/meet.model';
 import { SearchUsersResponse } from '../../models/response/searchUsers.response';
+import { IMessageRequest } from '../../models/interface/IMessageRequest';
+import { MessageResponse } from '../../models/request/message.response';
 
 const URL = environment.apiUrl + '/meets';
 
@@ -51,5 +53,16 @@ export class MeetService {
 
     deleteUserMeet(id: string, userId: string) {
         return this.http.delete(`${URL}/${id}/users/${userId}`);
+    }
+
+    storeMessage(id: string, message: IMessageRequest) {
+        return this.http.post(`${URL}/${id}/messages`, message);
+    }
+
+    getMessages(id: string, page: string | number = 1, perPage: number | string = 10) {
+        const params = new URLSearchParams();
+        params.append('page', page.toString());
+        params.append('perPage', perPage.toString());
+        return this.http.get<MessageResponse>(`${URL}/${id}/messages?${params.toString()}`);
     }
 }

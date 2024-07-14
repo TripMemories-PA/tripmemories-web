@@ -21,6 +21,7 @@ export class User {
     userType?: IUserType;
     score?: number;
     hasPaid?: boolean = false;
+    channel?: string;
 }
 
 export class UserRegister {

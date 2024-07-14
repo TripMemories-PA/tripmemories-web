@@ -1,10 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { ConversationMeetComponent } from './conversation-meet.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
-
 import { ConfigService } from '../../../services/config/config.service';
-
-import { ConversationUserComponent } from './conversation-user.component';
 
 jest.mock('../../../services/config/config.service', () => {
     return {
@@ -18,13 +17,13 @@ jest.mock('../../../services/config/config.service', () => {
     };
 });
 
-describe('ConversationUserComponent', () => {
-    let component: ConversationUserComponent;
-    let fixture: ComponentFixture<ConversationUserComponent>;
+describe('ConversationMeetComponent', () => {
+    let component: ConversationMeetComponent;
+    let fixture: ComponentFixture<ConversationMeetComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [HttpClientModule, RouterModule.forRoot([])],
+            imports: [ConversationMeetComponent, HttpClientModule, RouterModule.forRoot([])],
             providers: [
                 {
                     provide: ConfigService,
@@ -35,7 +34,7 @@ describe('ConversationUserComponent', () => {
             ],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(ConversationUserComponent);
+        fixture = TestBed.createComponent(ConversationMeetComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

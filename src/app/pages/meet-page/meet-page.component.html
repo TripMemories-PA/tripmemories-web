@@ -74,6 +74,14 @@
             label="Voir tous les participants"
             class="w-full mt-6"
         ></button>
+        <app-chat-card-meet
+            class="mt-8"
+            [meetId]="idMeet"
+            [nbrMembres]="users.length"
+            [title]="meet?.title"
+            [nbrMessages]="totalMessage"
+            [image]="meet?.poi?.cover?.url"
+        ></app-chat-card-meet>
         <app-meet-selling [users]="users" [nbrPaid]="nbrPaid"></app-meet-selling>
         <app-list-members-meet
             [displayDialog]="displayDialog"

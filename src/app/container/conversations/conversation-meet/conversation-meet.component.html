@@ -1,9 +1,28 @@
 <div class="chat-container">
-    <div class="header cursor-pointer" (click)="goToProfile()">
-        <img [src]="user.avatar?.url" alt="Profile Picture" class="profile-pic" />
-        <div class="user-info">
-            <h2 class="font-semibold">{{ user.firstname }} {{ user.lastname }}</h2>
-            <h3 class="font-semibold">&#64;{{ user.username }}</h3>
+    <div class="header cursor-pointer">
+        <div class="header-background">
+            <img [src]="meet?.poi?.cover?.url" alt="Background Image" class="background-image" />
+            <div class="header-content">
+                <p-avatarGroup>
+                    <p-avatar
+                        *ngFor="let user of users | slice: 0 : 7"
+                        [image]="user.avatar?.url"
+                        size="large"
+                        shape="circle"
+                    />
+                    <p-avatar
+                        *ngIf="totalMembers > 7"
+                        [label]="(totalMembers - 7).toString()"
+                        shape="circle"
+                        size="large"
+                        [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"
+                    />
+                </p-avatarGroup>
+                <h2 class="text-2xl font-bold">{{ meet?.title }}</h2>
+                <h3 class="text-lg font-normal">
+                    {{ totalMembers }} membre{{ totalMembers > 1 ? 's' : '' }}
+                </h3>
+            </div>
         </div>
     </div>
     <div
@@ -25,6 +44,8 @@
                 [message]="item.content"
                 [myMessage]="item.senderId === myId"
                 [time]="formatTime(item.createdAt)"
+                [avatar]="item.senderId !== myId ? item.sender.avatar?.url : undefined"
+                [name]="item.senderId !== myId ? item.sender.firstname : undefined"
             ></app-message>
         </div>
     </div>

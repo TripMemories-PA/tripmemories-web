@@ -6,26 +6,29 @@ import {
     OnInit,
     ViewChild,
 } from '@angular/core';
-import { UsersService } from '../../../services/users/users.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../services/auth/auth.service';
+import Pusher, { Channel } from 'pusher-js';
 import { MessageModel } from '../../../message.model';
+import { User } from '../../../models/user';
+import { IMessageRequest } from '../../../models/interface/IMessageRequest';
+import { format, isSameDay } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import { MeetService } from '../../../services/meet/meet.service';
+import { MeetModel } from '../../../models/meet.model';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { MessageComponent } from '../../../components/message/message.component';
-import { NgClass, NgForOf, NgIf, NgOptimizedImage } from '@angular/common';
-import { format, isSameDay } from 'date-fns';
-import { AuthService } from '../../../services/auth/auth.service';
-import { User } from '../../../models/user';
-import { IMessageRequest } from '../../../models/interface/IMessageRequest';
+import { NgClass, NgForOf, NgIf, SlicePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import Pusher, { Channel } from 'pusher-js';
-import { fr } from 'date-fns/locale';
+import { AvatarGroupModule } from 'primeng/avatargroup';
+import { AvatarModule } from 'primeng/avatar';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ConfigService } from '../../../services/config/config.service';
 
 @Component({
-    selector: 'app-conversation-user',
+    selector: 'app-conversation-meet',
     standalone: true,
     imports: [
         ButtonModule,
@@ -33,36 +36,40 @@ import { ConfigService } from '../../../services/config/config.service';
         MessageComponent,
         NgForOf,
         NgClass,
-        NgOptimizedImage,
         FormsModule,
+        AvatarGroupModule,
+        AvatarModule,
+        SlicePipe,
         NgIf,
         PickerComponent,
     ],
-    templateUrl: './conversation-user.component.html',
-    styleUrl: './conversation-user.component.css',
+    templateUrl: './conversation-meet.component.html',
+    styleUrl: './conversation-meet.component.css',
 })
-export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDestroy {
+export class ConversationMeetComponent implements OnInit, AfterViewChecked, OnDestroy {
     constructor(
-        private userService: UsersService,
+        private meetService: MeetService,
         private _activatedRoute: ActivatedRoute,
         private authService: AuthService,
-        private router: Router,
         private configService: ConfigService,
     ) {}
+
     @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
     pusher: Pusher = new Pusher(this.configService.pusherAppKey, {
         cluster: this.configService.pusherAppCluster,
     });
 
-    nbrPage: number = 2;
     channel?: Channel;
 
+    messages: (MessageModel | { date: string })[] = [];
+    meet?: MeetModel;
+    users: User[] = [];
+
+    totalMembers: number = 0;
+    nbrPage: number = 2;
     shouldScroll = true;
     showEmojiPicker = false;
-
-    messages: (MessageModel | { date: string })[] = [];
-    user: User = new User();
 
     message: IMessageRequest = {
         content: '',
@@ -71,11 +78,11 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
     ngOnInit() {
         this._activatedRoute.paramMap.subscribe((params) => {
             if (params.has('id')) {
-                this.userService.getUser(params.get('id') as string, this.isConnect).subscribe({
+                this.meetService.getMeet(params.get('id') as string).subscribe({
                     next: (response) => {
-                        this.user = response;
-                        if (this.user.channel) {
-                            this.channel = this.pusher.subscribe(this.user.channel);
+                        this.meet = response;
+                        if (this.meet.channel) {
+                            this.channel = this.pusher.subscribe(this.meet.channel);
                             this.channel.bind('message', (data: MessageModel) => {
                                 this.addMessage(data);
                                 setTimeout(() => this.scrollToBottom(), 100);
@@ -86,10 +93,19 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
                         console.log(err);
                     },
                 });
-                this.userService.getMessages(params.get('id') as string).subscribe({
+                this.meetService.getMessages(params.get('id') as string).subscribe({
                     next: (response) => {
                         this.messages = this.processMessages(response.data);
                         setTimeout(() => this.scrollToBottom(), 100);
+                    },
+                    error: (err) => {
+                        console.log(err);
+                    },
+                });
+                this.meetService.getUsersMeet(params.get('id') as string).subscribe({
+                    next: (response) => {
+                        this.users = response.data;
+                        this.totalMembers = response.meta.total;
                     },
                     error: (err) => {
                         console.log(err);
@@ -106,6 +122,11 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
         }
     }
 
+    ngOnDestroy(): void {
+        this.channel?.unsubscribe();
+        this.pusher.unsubscribe(this.meet?.channel as string);
+    }
+
     scrollToBottom(): void {
         try {
             this.scrollContainer.nativeElement.scrollTop =
@@ -115,33 +136,13 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
         }
     }
 
-    get isConnect(): boolean {
-        return this.authService.user?.access_token !== undefined;
-    }
-
-    submitMessage() {
-        if (!this.message.content) {
-            return;
-        }
-        this.userService.storeMessage(this.user.id as string, this.message).subscribe({
-            next: (_) => {
-                this.message.content = '';
-                setTimeout(() => {
-                    this.shouldScroll = true;
-                }, 100);
-            },
-            error: (err) => {
-                console.log(err);
-            },
-        });
-    }
-
     getNextMessages() {
-        this.userService.getMessages(this.user.id as string, this.nbrPage).subscribe({
+        this.meetService.getMessages(this.meet?.id.toString() as string, this.nbrPage).subscribe({
             next: (response) => {
-                this.messages = this.processMessages(
-                    response.data.concat(this.messages as MessageModel[]),
-                );
+                this.messages = this.processMessages([
+                    ...response.data,
+                    ...(this.messages as MessageModel[]),
+                ]);
                 this.nbrPage += 1;
             },
             error: (err) => {
@@ -159,6 +160,21 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
         }
     }
 
+    submitMessage() {
+        if (!this.message.content) {
+            return;
+        }
+        this.meetService.storeMessage(this.meet?.id.toString() as string, this.message).subscribe({
+            next: (_) => {
+                this.message.content = '';
+                setTimeout(() => (this.shouldScroll = true), 100);
+            },
+            error: (err) => {
+                console.log(err);
+            },
+        });
+    }
+
     get myId(): number {
         return this.authService.user?.id as unknown as number;
     }
@@ -167,13 +183,10 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
         return format(time, 'HH:mm');
     }
 
-    goToProfile() {
-        this.router.navigate(['/user', this.user.id]);
-    }
-
     processMessages(messages: MessageModel[]): (MessageModel | { date: string })[] {
         const result: (MessageModel | { date: string })[] = [];
         let lastDate: Date | null = null;
+
         for (const message of messages) {
             const messageDate = new Date(message.createdAt);
             if (isNaN(messageDate.valueOf())) {
@@ -199,11 +212,6 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
         });
     }
 
-    addMessage(message: MessageModel) {
-        this.messages.push(message);
-        this.messages = this.processMessages(this.messages as MessageModel[]);
-    }
-
     addEmoji(event: EmojiEvent) {
         const emoji = event.emoji;
         this.message.content += emoji.native;
@@ -214,12 +222,12 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
         this.showEmojiPicker = !this.showEmojiPicker;
     }
 
-    isDateMarker(item: any): item is { date: string } {
-        return 'date' in item;
+    addMessage(message: MessageModel) {
+        this.messages.push(message);
+        this.messages = this.processMessages(this.messages as MessageModel[]);
     }
 
-    ngOnDestroy(): void {
-        this.channel?.unsubscribe();
-        this.pusher.unsubscribe(this.user.channel as string);
+    isDateMarker(item: any): item is { date: string } {
+        return 'date' in item;
     }
 }

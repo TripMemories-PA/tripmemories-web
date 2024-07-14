@@ -1,1 +1,67 @@
-<p>backoffice-page works!</p>
+<div class="flex flex-col items-center mt-10">
+    <input
+        type="text"
+        pInputText
+        class="w-3/5"
+        [(ngModel)]="search"
+        (input)="debouncedSearch()"
+        placeholder="Rechercher par username, nom d'utilisateur"
+    />
+    <p-table
+        [value]="users"
+        [paginator]="true"
+        class="w-4/5 mt-10"
+        [rowsPerPageOptions]="[10, 20, 30]"
+        [rows]="itemsPerPage"
+        [totalRecords]="totalPages"
+        [lazy]="true"
+        (onPage)="onPageChange($event)"
+        [loading]="loading"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Id</th>
+                <th>Email</th>
+                <th>Nom d'utilisateur</th>
+                <th>Nom</th>
+                <th>Stripe</th>
+                <th>Total dépensé</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-user>
+            <tr>
+                <td>{{ user.id }}</td>
+                <td>
+                    <div class="flex">
+                        <div *ngIf="user.avatar">
+                            <p-avatar [image]="user.avatar.url" styleClass="mr-2" shape="circle" />
+                        </div>
+                        <div class="flex items-center ml-2">
+                            {{ user.email }}
+                        </div>
+                    </div>
+                </td>
+                <td>{{ user.username }}</td>
+                <td>
+                    {{
+                        user.firstname && user.lastname
+                            ? user.firstname + ' ' + user.lastname
+                            : 'Non renseigné'
+                    }}
+                </td>
+                <td>
+                    <div
+                        *ngIf="user.stripeId"
+                        class="flex items-center cursor-pointer"
+                        (click)="goToStripe(user.stripeId)"
+                    >
+                        {{ user.stripeId }}
+                        <i class="pi pi-arrow-up-right ml-2" pBadge value="2"></i>
+                    </div>
+                    <div *ngIf="!user.stripeId">Non renseigné</div>
+                </td>
+                <td class="text-center">{{ user.totalSpent + ' €' }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

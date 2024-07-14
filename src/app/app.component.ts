@@ -42,6 +42,8 @@ export class AppComponent implements OnInit {
                 if (user?.userTypeId && user?.userTypeId === UserTypes.ADMIN) {
                     this.showHeaderFooter = false;
                     this.showBackofficeSidenav = true;
+                } else {
+                    this.showBackofficeSidenav = false;
                 }
             }
         });

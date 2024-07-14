@@ -85,6 +85,7 @@ export class LoginFormComponent {
 
                 this.profileService.getMe().subscribe({
                     next: (user) => {
+                        user.access_token = res.token;
                         localStorage.setItem('user', JSON.stringify(user));
                         if (user.userTypeId === UserTypes.ADMIN) {
                             this.router.navigate(['/backoffice']);

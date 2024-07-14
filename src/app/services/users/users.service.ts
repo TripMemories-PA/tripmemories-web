@@ -53,10 +53,10 @@ export class UsersService {
         return this.http.get<SearchUsersResponse>(`${URL}?${params.toString()}`);
     }
 
-    search(search: string) {
+    search(search: string, perPage: number = 10, page: number = 1) {
         const params = new URLSearchParams();
-        params.append('page', '1');
-        params.append('perPage', '10');
+        params.append('page', page.toString());
+        params.append('perPage', perPage.toString());
         params.append('search', search);
         return this.http.get<SearchUsersResponse>(`${URL}?${params.toString()}`);
     }

@@ -6,6 +6,8 @@ import { NO_AUTH } from '../request.interceptor';
 import { User } from '../../models/user';
 import { MyFriendsResponse } from '../../models/response/myFriends.response';
 import { PostsResponse } from '../../models/response/posts.response';
+import { IMessageRequest } from '../../models/interface/IMessageRequest';
+import { MessageResponse } from '../../models/request/message.response';
 
 const URL = environment.apiUrl + '/users';
 const httpOptions = {
@@ -59,5 +61,16 @@ export class UsersService {
         params.append('perPage', '10');
         params.append('search', search);
         return this.http.get<SearchUsersResponse>(`${URL}?${params.toString()}`);
+    }
+
+    storeMessage(id: string, message: IMessageRequest) {
+        return this.http.post(`${URL}/${id}/messages`, message);
+    }
+
+    getMessages(id: string, page: string | number = 1, perPage: number | string = 10) {
+        const params = new URLSearchParams();
+        params.append('page', page.toString());
+        params.append('perPage', perPage.toString());
+        return this.http.get<MessageResponse>(`${URL}/${id}/messages?${params.toString()}`);
     }
 }

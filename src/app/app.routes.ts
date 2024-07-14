@@ -16,6 +16,7 @@ import { BasketPageComponent } from './pages/basket-page/basket-page.component';
 import { QuizzPageComponent } from './pages/quizz-page/quizz-page.component';
 import { RankingPageComponent } from './pages/ranking-page/ranking-page.component';
 import { MeetPageComponent } from './pages/meet-page/meet-page.component';
+import { ConversationUserComponent } from './container/conversations/conversation-user/conversation-user.component';
 
 export const routes: Routes = [
     {
@@ -77,6 +78,14 @@ export const routes: Routes = [
     {
         path: 'basket',
         component: BasketPageComponent,
+    },
+    {
+        path: 'conversations/:id',
+        component: ConversationUserComponent,
+    },
+    {
+        path: 'meets/conversations/:id',
+        component: MeetPageComponent,
     },
     {
         path: 'meets/:id',

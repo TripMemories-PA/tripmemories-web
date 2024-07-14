@@ -1,0 +1,23 @@
+<div class="relative mt-10 w-full h-72 flex flex-col gap-8 justify-center items-center text-center">
+    <div class="absolute inset-0 w-full h-72 bg-[var(--primary)] rounded-xl opacity-30 z-0"></div>
+    <h3 class="text-4xl text-[var(--primary)] font-['Urbanist'] font-semibold z-10">
+        Déjà {{ nbrPaid }} place{{ nbrPaid > 1 ? 's' : '' }} vendu{{ nbrPaid > 1 ? 'es' : '' }}
+    </h3>
+    <p-avatarGroup styleClass="avatar-group">
+        <p-avatarGroup styleClass="mb-3">
+            <p-avatar
+                *ngFor="let user of users | slice: 0 : 10"
+                [image]="user.avatar?.url"
+                size="large"
+                shape="circle"
+            />
+            <p-avatar
+                *ngIf="users.length > 10"
+                [label]="(users.length - 10).toString()"
+                shape="circle"
+                size="large"
+                [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"
+            />
+        </p-avatarGroup>
+    </p-avatarGroup>
+</div>

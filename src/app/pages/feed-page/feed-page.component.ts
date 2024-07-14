@@ -5,11 +5,13 @@ import { PostCardFeedComponent } from '../../components/post-card-feed/post-card
 import { MonumentCardFeedComponent } from '../../components/monument-card-feed/monument-card-feed.component';
 import { PostsService } from '../../services/posts/posts.service';
 import { PostModel } from '../../models/post.model';
-import { NgForOf, NgIf } from '@angular/common';
+import { NgForOf, NgIf, NgSwitch, NgSwitchCase } from '@angular/common';
 import { AuthService } from '../../services/auth/auth.service';
 import { MessageModule } from 'primeng/message';
 import { Router } from '@angular/router';
 import { FriendsService } from '../../services/friends/friends.service';
+import { TabMenuModule } from 'primeng/tabmenu';
+import { MenuItem } from 'primeng/api';
 
 @Component({
     selector: 'app-feed-page',
@@ -22,6 +24,9 @@ import { FriendsService } from '../../services/friends/friends.service';
         NgForOf,
         MessageModule,
         NgIf,
+        NgSwitch,
+        NgSwitchCase,
+        TabMenuModule,
     ],
     templateUrl: './feed-page.component.html',
     styleUrl: './feed-page.component.css',
@@ -38,23 +43,77 @@ export class FeedPageComponent implements OnInit {
     number = 2;
     isEnd = false;
     searchValue = '';
+    items: MenuItem[] | undefined;
+
+    activeItem: MenuItem | undefined;
 
     ngOnInit(): void {
-        this.getPosts();
+        this.items = [{ label: 'Pour vous' }];
+        if (this.authServices.user?.access_token !== undefined) {
+            this.items.push({ label: 'Amis' });
+        }
+        this.activeItem = this.items[0];
+        this.getGeneralPosts();
+    }
+
+    onActiveItemChange(event: MenuItem) {
+        this.activeItem = event;
+        if (event.label === 'Pour vous') {
+            this.setActiveTab('general');
+        } else {
+            this.setActiveTab('friends');
+        }
+    }
+
+    private setActiveTab(tab: string) {
+        if (tab === 'friends') {
+            this.getPosts();
+        } else {
+            this.getGeneralPosts();
+        }
+    }
+
+    get isAuth() {
+        return this.authServices.user?.access_token !== undefined;
     }
 
     getPosts(page: number = 1, perPage: number = 10) {
-        if (this.authServices.user?.access_token !== undefined) {
-            this.friendsService.getFriendsPost(page, perPage).subscribe({
-                next: (posts) => {
-                    this.posts = posts.data;
-                },
-                error: (error) => {
-                    console.error(error);
-                },
-            });
-        } else {
-            this.postsService.getPosts(perPage.toString()).subscribe({
+        this.posts = [];
+        this.isEnd = false;
+        this.friendsService.getFriendsPost(page, perPage).subscribe({
+            next: (posts) => {
+                if (posts.data.length === 0) {
+                    this.isEnd = true;
+                    return;
+                }
+                this.posts = posts.data;
+            },
+            error: (error) => {
+                console.error(error);
+            },
+        });
+    }
+
+    getGeneralPosts(page: number = 1, perPage: number = 10) {
+        this.posts = [];
+        this.isEnd = false;
+        this.postsService.getPosts(perPage.toString(), this.isAuth).subscribe({
+            next: (posts) => {
+                if (posts.data.length === 0) {
+                    this.isEnd = true;
+                    return;
+                }
+                this.posts = posts.data;
+            },
+            error: (error) => {
+                console.error(error);
+            },
+        });
+    }
+
+    getNextPosts() {
+        if (this.items && this.activeItem === this.items[1]) {
+            this.friendsService.getFriendsPost(this.number, 10).subscribe({
                 next: (posts) => {
                     if (posts.data.length === 0) {
                         this.isEnd = true;
@@ -67,20 +126,7 @@ export class FeedPageComponent implements OnInit {
                     console.error(error);
                 },
             });
-        }
-    }
-
-    getNextPosts() {
-        if (this.authServices.user?.access_token !== undefined) {
-            this.friendsService.getFriendsPost(this.number, 10).subscribe({
-                next: (posts) => {
-                    this.posts = posts.data;
-                },
-                error: (error) => {
-                    console.error(error);
-                },
-            });
-        } else {
+        } else if (this.items && this.activeItem === this.items[0]) {
             this.postsService.getPosts('10', false, this.number.toString()).subscribe({
                 next: (posts) => {
                     if (posts.data.length === 0) {

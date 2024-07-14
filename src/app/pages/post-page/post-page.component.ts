@@ -11,6 +11,12 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { ConfirmPopup, ConfirmPopupModule } from 'primeng/confirmpopup';
 import { CommentsSectionComponent } from '../../container/comments/comments-section/comments-section.component';
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { InputTextModule } from 'primeng/inputtext';
+import { InputGroupModule } from 'primeng/inputgroup';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { ChipsModule } from 'primeng/chips';
+import { MonumentCardFeedComponent } from '../../components/monument-card-feed/monument-card-feed.component';
 
 @Component({
     selector: 'app-post-page',
@@ -24,6 +30,12 @@ import { CommentsSectionComponent } from '../../container/comments/comments-sect
         ConfirmPopupModule,
         RouterLink,
         CommentsSectionComponent,
+        InputGroupAddonModule,
+        InputTextModule,
+        InputGroupModule,
+        OverlayPanelModule,
+        ChipsModule,
+        MonumentCardFeedComponent,
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './post-page.component.html',
@@ -49,17 +61,19 @@ export class PostPageComponent implements OnInit {
     error: string = '';
     alreadyLiked: boolean = false;
     showComments: boolean = false;
+    url: string = '';
 
     ngOnInit() {
+        this.url = window.location.href;
         this._activatedRoute.paramMap.subscribe((params) => {
             const param = params.get('id');
             this.postId = param as string;
-            if (this.authService.user?.access_token) {
-                this.getPost(param as string, true);
-            } else {
-                this.getPost(param as string);
-            }
+            this.getPost(this.postId, this.isAuth);
         });
+    }
+
+    get isAuth(): boolean {
+        return this.authService.user?.access_token !== undefined;
     }
 
     getPost(id: string, isConnected: boolean = false) {
@@ -91,9 +105,7 @@ export class PostPageComponent implements OnInit {
                         detail: 'Vous avez liké ce post !',
                         life: 5000,
                     });
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 5000);
+                    this.alreadyLiked = true;
                 },
                 error: (error) => {
                     this.error = error.message;
@@ -119,9 +131,7 @@ export class PostPageComponent implements OnInit {
                         detail: 'Vous avez dislike ce post !',
                         life: 5000,
                     });
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 5000);
+                    this.alreadyLiked = false;
                 },
                 error: (error) => {
                     this.error = error.message;
@@ -149,5 +159,35 @@ export class PostPageComponent implements OnInit {
 
     closeComments() {
         this.showComments = false;
+    }
+
+    copyLink(inputElement: HTMLInputElement | null) {
+        if (inputElement) {
+            inputElement.select();
+            inputElement.setSelectionRange(0, 99999); // Pour les mobiles
+
+            try {
+                navigator.clipboard.writeText(inputElement.value).then(
+                    () => {
+                        this.messageService.add({
+                            severity: 'success',
+                            summary: 'Lien copié',
+                            detail: 'Le lien a été copié dans votre presse-papier !',
+                            life: 5000,
+                        });
+                    },
+                    (_) => {
+                        this.messageService.add({
+                            severity: 'danger',
+                            summary: 'Erreur dans la copie du lien',
+                            detail: "Le lien n'a pas pu être copié dans votre presse-papier !",
+                            life: 5000,
+                        });
+                    },
+                );
+            } catch (err) {
+                console.error('Erreur lors de la copie!', err);
+            }
+        }
     }
 }

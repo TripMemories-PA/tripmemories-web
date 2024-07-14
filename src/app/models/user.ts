@@ -20,6 +20,7 @@ export class User {
     userTypeId?: number;
     userType?: IUserType;
     score?: number;
+    hasPaid?: boolean = false;
 }
 
 export class UserRegister {

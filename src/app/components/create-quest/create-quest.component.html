@@ -1,0 +1,76 @@
+<div class="review-container">
+    <div class="photo-upload">
+        <h3 class="text-xl font-bold mb-2">Ajoutez une photo pour commencer</h3>
+        <p-fileUpload
+            #fileUp
+            name="photo"
+            mode="basic"
+            accept="image/*"
+            maxFileSize="1000000"
+            chooseIcon="pi pi-upload"
+            chooseLabel="Ajouter une photo"
+            (onSelect)="storeImage($event)"
+            (onRemove)="labels = []"
+        ></p-fileUpload>
+        <button
+            *ngIf="file"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+            (click)="removeImage()"
+        >
+            Supprimer l'image choisie
+        </button>
+    </div>
+
+    <div class="mb-10" *ngIf="labels.length > 0">
+        <div class="title-input">
+            <h3 class="mt-5 mb-2 text-lg font-semibold">Titre de la mission</h3>
+            <input
+                pInputText
+                type="text"
+                [(ngModel)]="questRequest.title"
+                placeholder="Entrez un titre de mission"
+            />
+        </div>
+
+        <div class="monument">
+            <h3 class="text-lg mt-5 mb-2 font-semibold">
+                À quel label correspond le plus la photo ?
+            </h3>
+            <p-dropdown
+                [options]="labels"
+                [(ngModel)]="questRequest.label"
+                [showClear]="true"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="38"
+                scrollHeight="150px"
+                [placeholder]="'Sélectionne le label'"
+                [disabled]="loading"
+            />
+        </div>
+        <button
+            pButton
+            (click)="submitQuest()"
+            [disabled]="loading || labels.length === 0 || !valid"
+            type="button"
+            label="Valider"
+            class="p-button-rounded p-button-raised p-button-primary !mt-4"
+        ></button>
+    </div>
+    <p-progressBar
+        mode="indeterminate"
+        *ngIf="loading"
+        [style]="{ height: '6px', width: '100%', marginTop: '25px' }"
+    ></p-progressBar>
+    <p-message
+        *ngIf="success"
+        class="self-center mt-6"
+        severity="success"
+        text="{{ success }}"
+    ></p-message>
+    <p-message
+        *ngIf="error"
+        class="self-center mt-6"
+        severity="error"
+        text="{{ error }}"
+    ></p-message>
+</div>

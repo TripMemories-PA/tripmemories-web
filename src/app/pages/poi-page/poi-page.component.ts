@@ -20,6 +20,12 @@ import { SharedModule } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { BuyTicketPoiCardComponent } from '../../components/buy-ticket-poi-card/buy-ticket-poi-card.component';
 import { TicketModel } from '../../models/ticket.model';
+import { CreateMeetCardComponent } from '../../components/create-meet-card/create-meet-card.component';
+import { MeetModel } from '../../models/meet.model';
+import { MeetCardPoiComponent } from '../../components/meet-card-poi/meet-card-poi.component';
+import { MyMissionCardComponent } from '../../components/my-mission-card/my-mission-card.component';
+import { QuestModel } from '../../models/quest.model';
+import { AuthService } from '../../services/auth/auth.service';
 
 @Component({
     selector: 'app-poi-page',
@@ -37,6 +43,9 @@ import { TicketModel } from '../../models/ticket.model';
         ButtonModule,
         BuyTicketPoiCardComponent,
         NgClass,
+        CreateMeetCardComponent,
+        MeetCardPoiComponent,
+        MyMissionCardComponent,
     ],
     templateUrl: './poi-page.component.html',
     styleUrl: './poi-page.component.css',
@@ -44,6 +53,7 @@ import { TicketModel } from '../../models/ticket.model';
 export class PoiPageComponent implements OnInit, AfterViewInit {
     @ViewChild('scrollContainer') scrollContainer!: ElementRef;
     @ViewChild('containerTicket') scrollContainerTicket!: ElementRef;
+    @ViewChild('scrollContainerMeet') scrollContainerMeet!: ElementRef;
 
     @ViewChild('leftButton', { static: true }) leftButton!: ElementRef;
     @ViewChild('rightButton', { static: true }) rightButton!: ElementRef;
@@ -51,17 +61,26 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     @ViewChild('leftButtonTicket', { static: true }) leftButtonTicket!: ElementRef;
     @ViewChild('rightButtonTicket', { static: true }) rightButtonTicket!: ElementRef;
 
+    @ViewChild('leftButtonMeet', { static: true }) leftButtonMeet!: ElementRef;
+    @ViewChild('rightButtonMeet', { static: true }) rightButtonMeet!: ElementRef;
+
     poi: PoiModel = new PoiModel();
     poiPosts: PostModel[] = [];
     poiNear: PoiModel[] = [];
+    tickets: TicketModel[] = [];
+    meets: MeetModel[] = [];
+    quests: QuestModel[] = [];
 
     widthImage: number = 1;
     heightImage: number = 1;
     showDialog: boolean = false;
     showDialogQuiz: boolean = false;
+    showDialogMeet: boolean = false;
     nbrQuestions: number = 0;
 
-    tickets: TicketModel[] = [];
+    nbrPagePoiPost: number = 1;
+    nbrPagePoiMeet: number = 1;
+    nbrPagePoiNear: number = 1;
 
     isAtLeftEnd: boolean = true;
     isAtRightEnd: boolean = false;
@@ -69,19 +88,31 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     isAtLeftEndTicket: boolean = true;
     isAtRightEndTicket: boolean = false;
 
+    isAtLeftEndMeet: boolean = true;
+    isAtRightEndMeet: boolean = false;
+
+    idPoi: string = '';
+
     constructor(
         private _activatedRoute: ActivatedRoute,
         private router: Router,
         private poisService: PoisService,
         private imageService: ImageServiceService,
+        private authService: AuthService,
         private cdr: ChangeDetectorRef,
     ) {}
     ngOnInit(): void {
         this._activatedRoute.paramMap.subscribe((params) => {
             const param = params.get('id');
+            if (!param) {
+                return;
+            }
+            this.idPoi = param;
             this.getPoiDetails(param);
             this.getPoiTickets(param);
             this.getPoiPosts(param);
+            this.getPoiMeet(param);
+            this.getPoiQuests(param);
         });
     }
 
@@ -104,6 +135,17 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
             this.isAtRightEndTicket = true;
             this.isAtLeftEndTicket = true;
         }
+
+        if (this.scrollContainerMeet) {
+            this.checkScrollPositionMeet();
+            this.scrollContainerMeet.nativeElement.addEventListener('scroll', () =>
+                this.checkScrollPositionMeet(),
+            );
+        } else {
+            this.isAtRightEndMeet = true;
+            this.isAtLeftEndMeet = true;
+        }
+
         this.cdr.detectChanges();
     }
 
@@ -136,18 +178,32 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         });
     }
 
-    getPoiPosts(id: string | null): void {
+    getPoiPosts(id: string | null, page: number = 1): void {
         if (!id) {
             return;
         }
-        this.poisService.getPoiPosts(id, '10').subscribe({
+        this.poisService.getPoiPosts(id, '10', page.toString()).subscribe({
             next: (response) => {
-                this.poiPosts = response.data;
+                this.nbrPagePoiPost += 1;
+                this.poiPosts = this.poiPosts.concat(response.data);
             },
             error: (error) => {
                 console.error(error);
             },
         });
+    }
+
+    getPoiQuests(id: string | null): void {
+        if (!id) {
+            return;
+        }
+        this.poisService
+            .getPoiQuests(id, '1', '12', this.authService.user?.access_token !== undefined)
+            .subscribe({
+                next: (response) => {
+                    this.quests = response.data;
+                },
+            });
     }
 
     getPoiTickets(id: string | null): void {
@@ -164,6 +220,21 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         });
     }
 
+    getPoiMeet(id: string | null, page: number = 1): void {
+        if (!id) {
+            return;
+        }
+        this.poisService.getPoiMeets(id, page.toString(), '10').subscribe({
+            next: (response) => {
+                this.nbrPagePoiMeet += 1;
+                this.meets = this.meets.concat(response.data);
+            },
+            error: (error) => {
+                console.error(error);
+            },
+        });
+    }
+
     openDialog() {
         this.showDialog = true;
     }
@@ -172,21 +243,78 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         this.showDialogQuiz = true;
     }
 
+    openDialogMeet() {
+        this.showDialogMeet = true;
+    }
+
     goToQuiz(difficulty: string = 'medium') {
         this.router.navigate(['/quiz', this.poi.id], {
             queryParams: { difficulty: difficulty },
         });
     }
 
-    getPoiNear() {
-        this.poisService.getPOIs('1', '10', this.poi.latitude, this.poi.longitude, '10').subscribe({
-            next: (response) => {
-                this.poiNear = response.data.filter((poi) => poi.id !== this.poi.id);
-            },
-            error: (error) => {
-                console.error(error);
-            },
-        });
+    reloadMeets() {
+        if (!this.poi.id) {
+            return;
+        }
+        this.showDialogMeet = false;
+        this.getPoiMeet(this.poi.id.toString());
+    }
+
+    getPoiNear(page: number = 1): void {
+        this.poisService
+            .getPOIs(page.toString(), '10', this.poi.latitude, this.poi.longitude, '10')
+            .subscribe({
+                next: (response) => {
+                    this.nbrPagePoiNear += 1;
+                    this.poiNear = this.poiNear.concat(
+                        response.data.filter(
+                            (poi) =>
+                                poi.id !== this.poi.id &&
+                                poi.name?.toLowerCase() !== this.poi.name?.toLowerCase(),
+                        ),
+                    );
+                    const seenNames = new Set<string>();
+                    this.poiNear = this.poiNear.filter((poi) => {
+                        const lowerCaseName = poi.name?.toLowerCase();
+                        if (lowerCaseName && !seenNames.has(lowerCaseName)) {
+                            seenNames.add(lowerCaseName);
+                            return true;
+                        }
+                        return false;
+                    });
+                },
+                error: (error) => {
+                    console.error(error);
+                },
+            });
+    }
+
+    scrollPoiPost(event: Event) {
+        const element = event.target as HTMLElement;
+        const isScrolledToRight = element.scrollWidth - element.scrollLeft === element.clientWidth;
+
+        if (isScrolledToRight) {
+            this.getPoiPosts(this.idPoi, this.nbrPagePoiPost);
+        }
+    }
+
+    scrollPoiMeet(event: Event) {
+        const element = event.target as HTMLElement;
+        const isScrolledToRight = element.scrollWidth - element.scrollLeft === element.clientWidth;
+
+        if (isScrolledToRight) {
+            this.getPoiMeet(this.idPoi, this.nbrPagePoiMeet);
+        }
+    }
+
+    scrollPoiNear(event: Event) {
+        const element = event.target as HTMLElement;
+        const isScrolledToRight = element.scrollWidth - element.scrollLeft === element.clientWidth;
+
+        if (isScrolledToRight) {
+            this.getPoiNear(this.nbrPagePoiNear);
+        }
     }
 
     scrollLeft(): void {
@@ -233,6 +361,28 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         setTimeout(() => this.checkScrollPositionTicket(), 300);
     }
 
+    scrollLeftMeet(): void {
+        if (!this.scrollContainerMeet) {
+            return;
+        }
+        this.scrollContainerMeet.nativeElement.scrollBy({
+            left: -200,
+            behavior: 'smooth',
+        });
+        setTimeout(() => this.checkScrollPositionMeet(), 300);
+    }
+
+    scrollRightMeet(): void {
+        if (!this.scrollContainerMeet) {
+            return;
+        }
+        this.scrollContainerMeet.nativeElement.scrollBy({
+            left: 200,
+            behavior: 'smooth',
+        });
+        setTimeout(() => this.checkScrollPositionMeet(), 300);
+    }
+
     private checkScrollPosition(): void {
         const scrollLeft = this.scrollContainer.nativeElement.scrollLeft;
         const scrollWidth = this.scrollContainer.nativeElement.scrollWidth;
@@ -250,6 +400,16 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
 
         this.isAtLeftEndTicket = scrollLeft === 0;
         this.isAtRightEndTicket = scrollLeft + clientWidth >= scrollWidth - 1;
+        this.cdr.detectChanges();
+    }
+
+    private checkScrollPositionMeet(): void {
+        const scrollLeft = this.scrollContainerMeet.nativeElement.scrollLeft;
+        const scrollWidth = this.scrollContainerMeet.nativeElement.scrollWidth;
+        const clientWidth = this.scrollContainerMeet.nativeElement.clientWidth;
+
+        this.isAtLeftEndMeet = scrollLeft === 0;
+        this.isAtRightEndMeet = scrollLeft + clientWidth >= scrollWidth - 1;
         this.cdr.detectChanges();
     }
 }

@@ -72,7 +72,7 @@
         >
             <div class="cart-total">
                 <h3 class="text-2xl">Total</h3>
-                <span class="text-2xl">{{ getTotal() }} €</span>
+                <span class="text-2xl">{{ getTotal }} €</span>
             </div>
             <div class="mt-6 h-[2px] w-full bg-white"></div>
             <button
@@ -85,45 +85,10 @@
         </div>
     </div>
 </div>
-
-<p-dialog
-    header="Confirmer votre paiement"
-    [(visible)]="showPaymentDialog"
-    [modal]="true"
-    [draggable]="false"
-    [style]="{ width: '50rem' }"
-    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
->
-    <ng-template pTemplate="content">
-        <form [formGroup]="checkoutForm" (ngSubmit)="payWithStripe()">
-            <div class="p-field mb-6">
-                <input pInputText placeholder="Nom sur la carte" formControlName="name" />
-            </div>
-            <div class="p-field mb-6">
-                <input pInputText placeholder="Votre email" type="email" formControlName="email" />
-            </div>
-            <ngx-stripe-elements [stripe]="stripeService" [elementsOptions]="elementsOptions">
-                <ngx-stripe-card [options]="cardOptions"></ngx-stripe-card>
-            </ngx-stripe-elements>
-            <button
-                pButton
-                [disabled]="loading || isPaymentConfirmed"
-                class="mt-6 mb-6"
-                type="submit"
-            >
-                Payer
-            </button>
-        </form>
-        <p-progressBar
-            mode="indeterminate"
-            [style]="{ height: '6px' }"
-            *ngIf="loading"
-        ></p-progressBar>
-        <p-message
-            *ngIf="successMessage"
-            severity="success"
-            text="Paiement effectué avec succès"
-        ></p-message>
-        <p-message *ngIf="errorMessage" severity="error" [text]="errorMessage"></p-message>
-    </ng-template>
-</p-dialog>
+<app-payment-card
+    [showPaymentDialog]="showPaymentDialog"
+    [paymentIntent]="paymentIntent"
+    (closeDialog)="closeDialog()"
+    (emitter)="updateCartItems()"
+    [amount]="getTotal"
+></app-payment-card>

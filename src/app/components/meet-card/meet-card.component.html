@@ -1,0 +1,131 @@
+<div class="card flex justify-content-center cursor-pointer">
+    <p-card styleClass="ui-card-shadow" class="bg-white" [style]="{ width: '450px' }">
+        <ng-template pTemplate="header">
+            <div class="w-full h-[16rem] relative">
+                <img
+                    ngSrc="{{
+                        meet?.poi?.cover?.url ??
+                            'https://decizia.com/blog/wp-content/uploads/2017/06/default-placeholder.png'
+                    }}"
+                    alt="{{ meet?.poiId }}"
+                    class="absolute rounded-2xl object-cover"
+                    fill
+                    priority
+                />
+            </div>
+        </ng-template>
+        <div class="flex flex-col gap-2">
+            <div class="flex flex-col gap-2 justify-between text-sm">
+                <p>
+                    Nombre de participant: <span class="font-semibold">{{ meet?.size }}</span>
+                </p>
+                <div *ngIf="meet?.ticketId" class="flex flex-row items-center gap-4">
+                    <p>
+                        Ticket: <span class="font-semibold">{{ meet?.ticket?.title }}</span>
+                    </p>
+                    <p>
+                        Prix total du billet:
+                        <span class="font-semibold">{{ meet?.ticket?.price }}€</span>
+                    </p>
+                </div>
+            </div>
+            <p>
+                Monument: <span class="font-semibold">{{ meet?.poi?.name }}</span>
+            </p>
+            <h2 class="p-mt-2 text-xl font-bold">{{ meet?.title }}</h2>
+            <h3 class="text-sm">{{ meet?.description }}</h3>
+        </div>
+        <ng-template pTemplate="footer">
+            <div class="flex flex-row justify-between">
+                <button
+                    pButton
+                    *ngIf="isOwner"
+                    type="button"
+                    icon="pi pi-pencil"
+                    [rounded]="true"
+                    class="p-button-rounded p-button-raised p-button-primary"
+                    (click)="visible = true"
+                ></button>
+                <button
+                    pButton
+                    type="button"
+                    icon="pi pi-arrow-right"
+                    [rounded]="true"
+                    class="p-button-rounded p-button-raised p-button-success"
+                    (click)="goToMeet()"
+                ></button>
+                <button
+                    *ngIf="isOwner"
+                    pButton
+                    type="button"
+                    icon="pi pi-trash"
+                    [rounded]="true"
+                    class="p-button-rounded p-button-raised p-button-danger"
+                    (click)="visibleDelete = true"
+                ></button>
+            </div>
+        </ng-template>
+    </p-card>
+</div>
+<div>
+    <p-dialog
+        header="Supprimer le meet"
+        [modal]="true"
+        [(visible)]="visibleDelete"
+        [style]="{ width: '25rem' }"
+    >
+        <span class="p-text-secondary block mb-5"
+            >Êtes vous sur de vouloir supprimer le meet, cette action est irréversible ?</span
+        >
+        <div class="flex justify-content-end gap-2">
+            <p-button label="Non" severity="secondary" (click)="visibleDelete = false" />
+            <p-button label="Oui" (click)="deleteMeet()" />
+        </div>
+        <p-progressBar
+            mode="indeterminate"
+            *ngIf="loading"
+            [style]="{ height: '6px', width: '100%' }"
+        ></p-progressBar>
+    </p-dialog>
+</div>
+<div class="card flex justify-content-center">
+    <p-dialog
+        header="Modifier le meet"
+        class="flex flex-col"
+        [modal]="true"
+        [draggable]="false"
+        [(visible)]="visible"
+        [style]="{ width: '50rem', borderRadius: '9999px' }"
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    >
+        <ng-template pTemplate="content">
+            <div>
+                <input
+                    pInputText
+                    type="text"
+                    class="w-full"
+                    [(ngModel)]="meetRequest.title"
+                    placeholder="Modifiez le titre"
+                />
+            </div>
+            <div>
+                <textarea
+                    pInputTextarea
+                    class="w-full mt-4"
+                    [(ngModel)]="meetRequest.description"
+                    rows="5"
+                    cols="30"
+                    placeholder="Modifiez la description"
+                ></textarea>
+            </div>
+            <button
+                pButton
+                [disabled]="!valid"
+                (click)="updateMeet()"
+                type="button"
+                label="Valider"
+                class="p-button-rounded p-button-raised p-button-primary w-full mt-4"
+            ></button>
+        </ng-template>
+    </p-dialog>
+</div>

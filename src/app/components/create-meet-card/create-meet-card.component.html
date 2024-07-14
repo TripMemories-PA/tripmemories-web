@@ -1,0 +1,177 @@
+<div class="review-container">
+    <div class="title-input">
+        <input pInputText type="text" [(ngModel)]="meetModel.title" placeholder="Entrez un titre" />
+    </div>
+
+    <div class="experience">
+        <h3>Description</h3>
+        <textarea
+            pInputTextarea
+            rows="5"
+            cols="30"
+            [(ngModel)]="meetModel.description"
+            placeholder="Description de votre meet"
+        ></textarea>
+    </div>
+
+    <div class="experience">
+        <h3>Date du meet</h3>
+        <p-calendar
+            [(ngModel)]="date"
+            [showButtonBar]="true"
+            [showIcon]="true"
+            [showTime]="true"
+            (ngModelChange)="updateDate()"
+            [hourFormat]="'24'"
+            [minDate]="minDate"
+            class="w-full"
+            dateFormat="dd/mm/yy"
+            inputId="buttondisplay"
+        />
+    </div>
+
+    <div class="flex flex-row justify-between mt-3">
+        <div class="flex flex-row items-center">
+            <label for="meetType" class="mr-2 font-semibold"
+                >Je souhaite faire des rencontres</label
+            >
+            <p-inputSwitch id="meetType" [(ngModel)]="meetCheck" (onChange)="onMeetCheckChange()" />
+        </div>
+        <div class="flex flex-row items-center">
+            <label for="reductionType" class="mr-2 font-semibold"
+                >Je souhaite profiter de réduction</label
+            >
+            <p-inputSwitch
+                id="reductionType"
+                [(ngModel)]="reductionCheck"
+                (onChange)="onReductionCheckChange()"
+            />
+        </div>
+    </div>
+    <div *ngIf="meetCheck">
+        <div class="experience">
+            <div class="monument">
+                <h3>Monument du meet</h3>
+                <p-dropdown
+                    [options]="poi"
+                    [(ngModel)]="selectedPoi"
+                    [filter]="true"
+                    filterBy="name"
+                    [showClear]="true"
+                    [virtualScroll]="true"
+                    [virtualScrollItemSize]="38"
+                    optionLabel="name"
+                    class="w-full"
+                    [placeholder]="
+                        inputPoiId
+                            ? inputPoiName
+                            : loadingPoi
+                              ? 'Chargement...'
+                              : 'Sélectionne ton monument'
+                    "
+                    (ngModelChange)="updatePoiId()"
+                    [disabled]="inputPoiId !== undefined || loading || loadingPoi"
+                />
+            </div>
+            <h3>Nombre de personne maximum pour le meet</h3>
+            <p-dropdown
+                [options]="nbrPeopleOptions"
+                [(ngModel)]="selectedSize"
+                [filter]="true"
+                filterBy="label"
+                class="w-full"
+                [showClear]="true"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="38"
+                optionLabel="label"
+                (ngModelChange)="updateSize()"
+                [placeholder]="
+                    meetModel.size ? meetModel.size.toString() : 'Sélectionne le nombre de personne'
+                "
+            />
+        </div>
+    </div>
+    <div *ngIf="reductionCheck">
+        <div class="monument">
+            <h3>Monument du meet</h3>
+            <p-dropdown
+                [options]="poi"
+                [(ngModel)]="selectedPoi"
+                [filter]="true"
+                filterBy="name"
+                [showClear]="true"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="38"
+                optionLabel="name"
+                class="w-full"
+                [placeholder]="
+                    inputPoiId
+                        ? inputPoiName
+                        : loadingPoi
+                          ? 'Chargement...'
+                          : 'Sélectionne ton monument'
+                "
+                (ngModelChange)="updatePoiId()"
+                [disabled]="inputPoiId !== undefined || loading || loadingPoi"
+            />
+        </div>
+
+        <div *ngIf="selectedPoi || inputPoiId" class="monument mt-3">
+            <h3>Le ticket à acheter</h3>
+            <p-dropdown
+                [options]="tickets"
+                [(ngModel)]="selectedTicket"
+                [filter]="true"
+                filterBy="title"
+                [showClear]="true"
+                [virtualScroll]="true"
+                [virtualScrollItemSize]="38"
+                [placeholder]="loadingTicket ? 'Chargement...' : 'Sélectionne ton ticket'"
+                (ngModelChange)="updateTicketId()"
+                [disabled]="loading || loadingTicket || tickets.length === 0"
+                class="w-full"
+            >
+                <ng-template let-ticket pTemplate="item">
+                    <div class="dropdown-item">
+                        <span class="ticket-title">{{ ticket.title }}</span>
+                        <span class="ticket-price">{{ ticket.price }}€</span>
+                        <span class="ticket-price">{{ ticket?.groupSize }} pers</span>
+                    </div>
+                </ng-template>
+                <ng-template let-ticket pTemplate="selectedItem">
+                    <div class="selected-item">
+                        <span class="ticket-title">{{ ticket?.title }}</span>
+                        <span class="ticket-price">{{ ticket?.price }}€</span>
+                        <span class="ticket-price">{{ ticket?.groupSize }} pers</span>
+                    </div>
+                </ng-template>
+            </p-dropdown>
+        </div>
+    </div>
+
+    <button
+        pButton
+        [disabled]="!valid || (disableButtonMeetCheck && disableButtonReductionCheck)"
+        (click)="submitMeet()"
+        type="button"
+        label="Valider"
+        class="p-button-rounded p-button-raised p-button-primary"
+    ></button>
+    <p-progressBar
+        mode="indeterminate"
+        *ngIf="loading"
+        [style]="{ height: '6px', width: '100%', marginTop: '25px' }"
+    ></p-progressBar>
+    <p-message
+        *ngIf="success"
+        class="self-center mt-6"
+        severity="success"
+        text="{{ success }}"
+    ></p-message>
+    <p-message
+        *ngIf="error"
+        class="self-center mt-6"
+        severity="error"
+        text="{{ error }}"
+    ></p-message>
+</div>

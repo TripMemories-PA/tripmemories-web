@@ -1,87 +1,117 @@
-<div
-    class="mt-32 mb-32 relative post-card p-card shadow-lg rounded-lg overflow-hidden bg-white mx-auto my-6 max-w-2xl"
->
-    <button pButton (click)="getBack()" class="absolute right-0">Revenir en arrière</button>
-    <p-toast />
-    <div class="post-header flex items-center p-4 border-b cursor-pointer">
-        <img
-            ngSrc="{{
-                post?.createdBy?.avatar?.url ??
-                    'https://oasys.ch/wp-content/uploads/2019/03/photo-avatar-profil.png'
-            }}"
-            [routerLink]="['/user', post?.createdBy?.id]"
-            alt="Profile"
-            class="w-10 h-10 rounded-full mr-3"
-            priority
-            width="100"
-            height="100"
-        />
-        <div>
-            <h3 class="text-lg font-semibold">
-                {{ post?.createdBy?.firstname }} {{ post?.createdBy?.lastname }}
-            </h3>
-            <p class="text-gray-600 text-sm" pTooltip="{{ postDateFormatted }}">
-                {{ postDate | timeAgo }}
-            </p>
-        </div>
-    </div>
-    <div class="post-body p-4">
-        <h2 class="text-2xl font-semibold mb-3">{{ post?.title }}</h2>
-        <p class="text-gray-800">
-            {{ post?.content }}
-        </p>
-        <img
-            ngSrc="{{ post?.image?.url ?? 'https://via.placeholder.com/150' }}"
-            alt="Post"
-            class="mt-4 rounded-lg w-full"
-            priority
-            width="100"
-            height="100"
-        />
-    </div>
-    <div class="post-footer p-4 border-t flex items-center justify-between">
-        <div class="flex items-center space-x-4">
-            <button
-                pButton
-                (click)="alreadyLiked ? removeLikePost() : likePost()"
-                type="button"
-                icon="pi {{ alreadyLiked ? 'pi-thumbs-up-fill' : 'pi-thumbs-up' }}"
-                label="Like"
-                class="p-button-text"
-            ></button>
-            <button
-                pButton
-                type="button"
-                icon="pi pi-comment"
-                label="Commenter"
-                (click)="showComments = true"
-                class="p-button-text"
-            ></button>
+<div class="flex flex-row items-center justify-center p-4">
+    <div
+        class="mt-32 mb-32 relative post-card p-card shadow-lg rounded-lg overflow-hidden bg-white mx-auto my-6 max-w-2xl"
+    >
+        <button pButton (click)="getBack()" class="absolute right-0">Revenir en arrière</button>
+        <p-toast />
+        <div class="post-header flex items-center p-4 border-b cursor-pointer">
+            <img
+                ngSrc="{{
+                    post?.createdBy?.avatar?.url ??
+                        'https://oasys.ch/wp-content/uploads/2019/03/photo-avatar-profil.png'
+                }}"
+                [routerLink]="['/user', post?.createdBy?.id]"
+                alt="Profile"
+                class="w-10 h-10 rounded-full mr-3"
+                priority
+                width="100"
+                height="100"
+            />
             <div>
-                <p-confirmPopup #confirmPopupRef>
-                    <ng-template pTemplate="headless" let-message let-test>
-                        <div class="border-round p-3">
-                            <span>{{ message.message }}</span>
-                            <div class="flex align-items-center gap-2 mt-3">
-                                <p-button [outlined]="true" icon="pi pi-twitter" />
-                                <p-button [outlined]="true" icon="pi pi-instagram" />
-                            </div>
-                        </div>
-                    </ng-template>
-                </p-confirmPopup>
+                <h3 class="text-lg font-semibold">
+                    {{ post?.createdBy?.firstname }} {{ post?.createdBy?.lastname }}
+                </h3>
+                <p class="text-gray-600 text-sm" pTooltip="{{ postDateFormatted }}">
+                    {{ postDate | timeAgo }}
+                </p>
+            </div>
+        </div>
+        <div class="post-body p-4">
+            <h2 class="text-2xl font-semibold mb-3">{{ post?.title }}</h2>
+            <p class="text-gray-800">
+                {{ post?.content }}
+            </p>
+            <img
+                ngSrc="{{ post?.image?.url ?? 'https://via.placeholder.com/150' }}"
+                alt="Post"
+                class="mt-4 rounded-lg w-full"
+                priority
+                width="100"
+                height="100"
+            />
+        </div>
+        <div class="post-footer p-4 border-t flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <button
+                    pButton
+                    (click)="alreadyLiked ? removeLikePost() : likePost()"
+                    type="button"
+                    icon="pi {{ alreadyLiked ? 'pi-thumbs-up-fill' : 'pi-thumbs-up' }}"
+                    label="Like"
+                    class="p-button-text"
+                ></button>
                 <button
                     pButton
                     type="button"
-                    (click)="confirm($event)"
-                    icon="pi pi-share-alt"
-                    label="Partager"
+                    icon="pi pi-comment"
+                    label="Commenter"
+                    (click)="showComments = true"
                     class="p-button-text"
                 ></button>
+                <div>
+                    <!--                <p-confirmPopup #confirmPopupRef>
+              <ng-template pTemplate="headless" let-message let-test>
+                  <div class="border-round p-3">
+                      <span>{{ message.message }}</span>
+                      <div class="flex align-items-center gap-2 mt-3">
+                          <p-button [outlined]="true" icon="pi pi-twitter" />
+                          <p-button [outlined]="true" icon="pi pi-instagram" />
+                      </div>
+                  </div>
+              </ng-template>
+          </p-confirmPopup>-->
+                    <button
+                        pButton
+                        type="button"
+                        (click)="op.toggle($event)"
+                        icon="pi pi-share-alt"
+                        label="Partager"
+                        class="p-button-text"
+                    ></button>
+                </div>
+            </div>
+            <p class="text-gray-600 text-sm">{{ post?.likesCount }} like</p>
+        </div>
+    </div>
+    <app-monument-card-feed [monument]="post?.poi"></app-monument-card-feed>
+</div>
+
+<p-overlayPanel #op>
+    <div class="flex flex-col gap-3 w-25rem">
+        <div>
+            <span class="font-medium text-900 block mb-2">Partager ce post</span>
+            <p-inputGroup>
+                <input #urlInput pInputText [value]="url" readonly class="w-25rem" />
+                <p-inputGroupAddon class="cursor-pointer" (click)="copyLink(urlInput)">
+                    <i class="pi pi-copy"></i>
+                </p-inputGroupAddon>
+            </p-inputGroup>
+        </div>
+        <div>
+            <span class="font-medium text-900 block mb-2">Inviter à partager</span>
+            <div class="flex">
+                <p-chips disabled />
+                <p-button label="Invite" icon="pi pi-users" />
             </div>
         </div>
-        <p class="text-gray-600 text-sm">{{ post?.likesCount }} like</p>
+        <!--        <div>
+            <span class="font-medium text-900 block mb-2">Test</span>
+            <ul class="list-none p-0 m-0 flex flex-column gap-3">
+                <li class="flex align-items-center gap-2"></li>
+            </ul>
+        </div>-->
     </div>
-</div>
+</p-overlayPanel>
 <app-comments-section
     [showDialog]="showComments"
     [postId]="postId"

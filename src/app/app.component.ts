@@ -5,6 +5,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { HeaderComponent } from './components/header/header.component';
 import { NgIf } from '@angular/common';
 import { FooterComponent } from './components/footer/footer.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { PrimeNGConfig } from 'primeng/api';
 
 @Component({
     selector: 'app-root',
@@ -16,7 +18,11 @@ import { FooterComponent } from './components/footer/footer.component';
 export class AppComponent implements OnInit {
     title = 'TripMemories';
     showHeaderFooter: boolean = true;
-    constructor(private router: Router) {}
+    constructor(
+        private router: Router,
+        private config: PrimeNGConfig,
+        private translateService: TranslateService,
+    ) {}
     ngOnInit(): void {
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
@@ -28,5 +34,11 @@ export class AppComponent implements OnInit {
                 );
             }
         });
+        this.translate('fr');
+    }
+
+    translate(lang: string) {
+        this.translateService.use(lang);
+        this.translateService.get('primeng').subscribe((res) => this.config.setTranslation(res));
     }
 }

@@ -1,1 +1,43 @@
-<p>comments-backoffice-page works!</p>
+<div class="flex flex-col items-center mt-10">
+    <p-table
+        [value]="comments"
+        [paginator]="true"
+        class="w-4/5 mt-5"
+        [rowsPerPageOptions]="[10, 20, 30]"
+        [rows]="itemsPerPage"
+        [totalRecords]="totalPages"
+        [lazy]="true"
+        (onPage)="onPageChange($event)"
+        [loading]="loading"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Id</th>
+                <th>Écrit par</th>
+                <th>Le</th>
+                <th>Contenu</th>
+                <th>Supprimer</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-comment>
+            <tr>
+                <td>{{ comment.id }}</td>
+                <td>
+                    {{ comment.createdBy.firstname + ' ' + comment.createdBy.lastname }} ({{
+                        comment.createdBy.username
+                    }})
+                </td>
+                <td>{{ comment.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
+                <td>{{ comment.content }}</td>
+                <td>
+                    <p-button
+                        icon="pi pi-trash"
+                        [rounded]="true"
+                        severity="danger"
+                        (onClick)="deleteComment(comment.id)"
+                    />
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</div>

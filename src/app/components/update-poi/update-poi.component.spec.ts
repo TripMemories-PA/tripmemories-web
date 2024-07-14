@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ListMembersMeetComponent } from './list-members-meet.component';
+import { UpdatePoiComponent } from './update-poi.component';
 import { HttpClientModule } from '@angular/common/http';
 
-describe('ListMembersMeetComponent', () => {
-    let component: ListMembersMeetComponent;
-    let fixture: ComponentFixture<ListMembersMeetComponent>;
+describe('UpdatePoiComponent', () => {
+    let component: UpdatePoiComponent;
+    let fixture: ComponentFixture<UpdatePoiComponent>;
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [ListMembersMeetComponent, HttpClientModule],
+            imports: [UpdatePoiComponent, HttpClientModule],
         }).compileComponents();
 
-        fixture = TestBed.createComponent(ListMembersMeetComponent);
+        fixture = TestBed.createComponent(UpdatePoiComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });

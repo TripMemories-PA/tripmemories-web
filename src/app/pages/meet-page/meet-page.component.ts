@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MeetService } from '../../services/meet/meet.service';
 import { AuthService } from '../../services/auth/auth.service';
-import { UsersService } from '../../services/users/users.service';
 import { MeetModel } from '../../models/meet.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { BuyTicketPoiCardComponent } from '../../components/buy-ticket-poi-card/buy-ticket-poi-card.component';
@@ -17,6 +16,7 @@ import { ButtonModule } from 'primeng/button';
 import { TicketModel } from '../../models/ticket.model';
 import { PoisService } from '../../services/pois/pois.service';
 import { MonumentCardFeedComponent } from '../../components/monument-card-feed/monument-card-feed.component';
+import { ChatCardMeetComponent } from '../../components/chat-card-meet/chat-card-meet.component';
 
 @Component({
     selector: 'app-meet-page',
@@ -32,6 +32,7 @@ import { MonumentCardFeedComponent } from '../../components/monument-card-feed/m
         NgIf,
         NgForOf,
         MonumentCardFeedComponent,
+        ChatCardMeetComponent,
     ],
     templateUrl: './meet-page.component.html',
     styleUrl: './meet-page.component.css',
@@ -49,6 +50,7 @@ export class MeetPageComponent implements OnInit {
     hasPaid: boolean = false;
     ticket?: TicketModel;
     amount: string | number = 0;
+    totalMessage: number = 0;
 
     tickets: TicketModel[] = [];
 
@@ -68,6 +70,7 @@ export class MeetPageComponent implements OnInit {
                 const meetId = params.get('id') as string;
                 this.idMeet = meetId;
                 this.getMeet(meetId);
+                this.getMessageMeet(meetId);
             } else {
                 this.router.navigate(['/']);
             }
@@ -76,6 +79,10 @@ export class MeetPageComponent implements OnInit {
 
     get isOwner(): boolean {
         return this.meet?.createdById === (this.authService.user?.id as unknown as number);
+    }
+
+    get userId(): string {
+        return this.authService.user?.id as unknown as string;
     }
 
     private getUsers(meetId: string, page: string | number = 1, perPage: number | string = 10) {
@@ -121,6 +128,17 @@ export class MeetPageComponent implements OnInit {
                     this.getPoiTickets(meet.poiId.toString());
                 }
                 this.getUsers(meetId, 1, meet.size);
+            },
+            error: (error) => {
+                console.error(error);
+            },
+        });
+    }
+
+    private getMessageMeet(meetId: string) {
+        this.meetService.getMessages(meetId, '1', '0').subscribe({
+            next: (messages) => {
+                this.totalMessage = messages.meta.total;
             },
             error: (error) => {
                 console.error(error);

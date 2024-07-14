@@ -1,0 +1,48 @@
+<div class="review-container">
+    <div class="title-input">
+        <h3>Nom du lieu</h3>
+        <input
+            pInputText
+            type="text"
+            [(ngModel)]="updatePoiRequest.name"
+            placeholder="Entrez un titre"
+        />
+    </div>
+
+    <div class="rating">
+        <h3>Description du lieu</h3>
+        <textarea
+            pInputTextarea
+            rows="5"
+            cols="50"
+            type="text"
+            [(ngModel)]="updatePoiRequest.description"
+            placeholder="Entrez une description"
+        ></textarea>
+    </div>
+    <button
+        pButton
+        (click)="updatePoi()"
+        [disabled]="!valid"
+        type="button"
+        label="Valider"
+        class="p-button-rounded p-button-raised p-button-primary"
+    ></button>
+    <p-progressBar
+        mode="indeterminate"
+        *ngIf="loading"
+        [style]="{ height: '6px', width: '100%', marginTop: '25px' }"
+    ></p-progressBar>
+    <p-message
+        *ngIf="success"
+        class="self-center mt-6"
+        severity="success"
+        text="{{ success }}"
+    ></p-message>
+    <p-message
+        *ngIf="error"
+        class="self-center mt-6"
+        severity="error"
+        text="{{ error }}"
+    ></p-message>
+</div>

@@ -71,4 +71,11 @@ export class FriendCardComponent {
         }
         this.router.navigate(['/user', id]);
     }
+
+    navigateToConversation(id: string | undefined) {
+        if (!id) {
+            return;
+        }
+        this.router.navigate(['/conversations', id]);
+    }
 }

@@ -1,0 +1,30 @@
+.message {
+  margin: 10px 0;
+  padding: 10px;
+  width: 40%;
+}
+
+.message.left {
+  background-color: var(--message);
+  align-self: flex-start;
+  border-bottom-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+  border-top-right-radius: 20px;
+}
+
+.message.right {
+  background-color: #2196F3;
+  align-self: flex-end;
+  text-align: right;
+  color: white;
+  border-bottom-left-radius: 20px;
+  border-top-left-radius: 20px;
+  border-bottom-right-radius: 20px;
+
+}
+
+.message .time {
+  display: block;
+  font-size: 0.8em;
+  color: #888;
+}

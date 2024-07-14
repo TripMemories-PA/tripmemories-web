@@ -1,0 +1,18 @@
+<div
+    class="message"
+    [ngClass]="{
+        left: !myMessage,
+        right: myMessage
+    }"
+>
+    <p>
+        {{ message }}
+    </p>
+    <span
+        class="time"
+        [ngClass]="{
+            '!text-white': myMessage
+        }"
+        >{{ time }}</span
+    >
+</div>

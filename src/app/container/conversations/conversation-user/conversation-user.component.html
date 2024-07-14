@@ -1,0 +1,43 @@
+<div class="chat-container">
+    <div class="header cursor-pointer" (click)="goToProfile()">
+        <img [src]="user.avatar?.url" alt="Profile Picture" class="profile-pic" />
+        <div class="user-info">
+            <h2 class="font-semibold">{{ user.firstname }} {{ user.lastname }}</h2>
+            <h3 class="font-semibold">&#64;{{ user.username }}</h3>
+        </div>
+    </div>
+    <div class="flex flex-col h-[700px] overflow-auto">
+        <div *ngFor="let item of messages">
+            <div *ngIf="isDateMarker(item)" class="date-divider">
+                {{ item.date }}
+            </div>
+            <app-message
+                *ngIf="!isDateMarker(item)"
+                class="flex"
+                [ngClass]="{
+                    'justify-end': item.senderId === myId,
+                    'justify-start': item.senderId !== myId
+                }"
+                [message]="item.content"
+                [myMessage]="item.senderId === myId"
+                [time]="formatTime(item.createdAt)"
+            ></app-message>
+        </div>
+    </div>
+    <div class="input-container">
+        <input
+            type="text"
+            [(ngModel)]="message.content"
+            pInputText
+            (keyup.enter)="submitMessage()"
+            placeholder="Ecrivez votre message..."
+        />
+        <button
+            (click)="submitMessage()"
+            [disabled]="!message.content"
+            pButton
+            type="button"
+            icon="pi pi-send"
+        ></button>
+    </div>
+</div>

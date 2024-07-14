@@ -16,6 +16,7 @@ import { MeetService } from '../../services/meet/meet.service';
 import { ButtonModule } from 'primeng/button';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
     selector: 'app-list-members-meet',
@@ -29,6 +30,7 @@ import { MessageService } from 'primeng/api';
         ButtonModule,
         NgIf,
         ProgressBarModule,
+        ToastModule,
     ],
     providers: [MessageService],
     templateUrl: './list-members-meet.component.html',

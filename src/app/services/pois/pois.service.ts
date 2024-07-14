@@ -85,7 +85,14 @@ export class PoisService {
         return this.http.get<TicketModel[]>(`${URL}/${id}/tickets`, httpOptions);
     }
 
-    getPoiSales(id: string) {
-        return this.http.get(`${URL}/${id}/sales`);
+    getPoiSales(id: string, startDate?: string, endDate?: string) {
+        const params = new URLSearchParams();
+        if (startDate) {
+            params.append('startDate', startDate);
+        }
+        if (endDate) {
+            params.append('endDate', endDate);
+        }
+        return this.http.get(`${URL}/${id}/sales?${params.toString()}`);
     }
 }

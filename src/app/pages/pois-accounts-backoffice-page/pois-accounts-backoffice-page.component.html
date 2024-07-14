@@ -23,9 +23,9 @@
                 <th>Id</th>
                 <th>Poi</th>
                 <th>Contact</th>
-                <th>Profit</th>
+                <th>Solde</th>
                 <th>À reverser</th>
-                <th>Actions</th>
+                <th>Modifier</th>
             </tr>
         </ng-template>
         <ng-template pTemplate="body" let-user>
@@ -46,8 +46,16 @@
                         </div>
                     </div>
                 </td>
-                <td>{{ (user.totalEarned - user.totalEarned * 0.2).toFixed(2) + ' €' }}</td>
-                <td>TODO</td>
+                <td>
+                    <p-button
+                        icon="pi pi-calculator"
+                        [rounded]="true"
+                        (click)="openRepaymentDialog(user.poiId)"
+                    />
+                </td>
+                <td>
+                    <p-button icon="pi pi-pencil" [rounded]="true" [disabled]="true" />
+                </td>
             </tr>
         </ng-template>
     </p-table>
@@ -60,4 +68,44 @@
     [style]="{ width: '75rem' }"
 >
     <p-chart type="line" [data]="data" />
+</p-dialog>
+
+<p-dialog
+    [modal]="true"
+    [(visible)]="repaymentDialog"
+    *ngIf="repaymentDialog"
+    [style]="{ width: '50rem', height: '25rem' }"
+>
+    <div class="w-full flex items-center flex-col">
+        <p-calendar
+            class="w-1/2"
+            [(ngModel)]="repayment.startDate"
+            [maxDate]="maxDate"
+            [style]="{ width: '100%' }"
+            dateFormat="dd/mm/yy"
+            placeholder="Date de début de la période"
+        />
+        <p-calendar
+            class="mt-10 w-1/2"
+            [disabled]="!repayment.startDate"
+            [(ngModel)]="repayment.endDate"
+            [maxDate]="maxDate"
+            [style]="{ width: '100%' }"
+            dateFormat="dd/mm/yy"
+            placeholder="Date de fin de la période"
+        />
+        <span class="mt-10"> Marge de bénéfice : 20%</span>
+        <p-button
+            class="w-1/4 mt-10"
+            label="Calculer"
+            [loading]="loadingRepayment"
+            [rounded]="true"
+            (click)="calculateRepayment()"
+            [style]="{ width: '100%' }"
+            [disabled]="!repayment.startDate || !repayment.endDate"
+        />
+        <span class="mt-10">
+            Montant à reverser : {{ repayment.amount ? repayment.amount + ' €' : '...' }}</span
+        >
+    </div>
 </p-dialog>

@@ -20,6 +20,6 @@ export class ChatCardMeetComponent {
     @Input() meetId: string = '';
 
     goToChat() {
-        this.router.navigate([`/meet/conversations`, this.meetId]);
+        this.router.navigate([`/meets/conversations`, this.meetId]);
     }
 }

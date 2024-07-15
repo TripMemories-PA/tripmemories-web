@@ -21,9 +21,9 @@
         <ng-template pTemplate="header">
             <tr>
                 <th>Id</th>
-                <th>Email</th>
                 <th>Nom d'utilisateur</th>
                 <th>Nom</th>
+                <th>Email</th>
                 <th>Stripe</th>
                 <th>Total dépensé</th>
             </tr>
@@ -37,11 +37,10 @@
                             <p-avatar [image]="user.avatar.url" styleClass="mr-2" shape="circle" />
                         </div>
                         <div class="flex items-center ml-2">
-                            {{ user.email }}
+                            {{ user.username }}
                         </div>
                     </div>
                 </td>
-                <td>{{ user.username }}</td>
                 <td>
                     {{
                         user.firstname && user.lastname
@@ -49,6 +48,7 @@
                             : 'Non renseigné'
                     }}
                 </td>
+                <td>{{ user.email }}</td>
                 <td>
                     <div
                         *ngIf="user.stripeId"

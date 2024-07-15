@@ -1,12 +1,25 @@
 <div class="flex flex-col items-center mt-10">
-    <input
-        type="text"
-        pInputText
-        class="w-3/5"
-        [(ngModel)]="search"
-        (input)="debouncedSearch()"
-        placeholder="Rechercher par username, nom d'utilisateur"
-    />
+    <div class="flex w-4/5 justify-center">
+        <div class="w-3/5">
+            <input
+                type="text"
+                pInputText
+                class="w-full"
+                [(ngModel)]="search"
+                (input)="debouncedSearch()"
+                placeholder="Rechercher par username, nom d'utilisateur"
+            />
+        </div>
+        <div class="w-1/5 ml-5">
+            <p-button
+                [style]="{ width: '100%' }"
+                icon="pi pi-user-plus"
+                [rounded]="true"
+                (click)="openSaveDialog()"
+                label="Créer un compte"
+            />
+        </div>
+    </div>
     <p-table
         [value]="users"
         [paginator]="true"
@@ -31,7 +44,9 @@
         <ng-template pTemplate="body" let-user>
             <tr>
                 <td>{{ user.id }}</td>
-                <td>{{ user.poi.name }} ({{ user.poi.id }})</td>
+                <td>
+                    {{ user.poi.name }} ({{ user.poi.city.name + ' - ' + user.poi.city.zipCode }})
+                </td>
                 <td>{{ user.email }}</td>
                 <td>
                     <div
@@ -54,7 +69,11 @@
                     />
                 </td>
                 <td>
-                    <p-button icon="pi pi-pencil" [rounded]="true" [disabled]="true" />
+                    <p-button
+                        icon="pi pi-pencil"
+                        [rounded]="true"
+                        (click)="openSaveDialog(user.id)"
+                    />
                 </td>
             </tr>
         </ng-template>
@@ -68,6 +87,96 @@
     [style]="{ width: '75rem' }"
 >
     <p-chart type="line" [data]="data" />
+</p-dialog>
+
+<p-dialog [modal]="true" [(visible)]="saveDialog" *ngIf="saveDialog" [style]="{ width: '30rem' }">
+    <div class="w-full flex items-center flex-col">
+        <p-floatLabel class="w-full" *ngIf="!selectedId">
+            <p-dropdown
+                [options]="pois"
+                [(ngModel)]="user.poi"
+                placeholder=""
+                optionLabel="name"
+                [style]="{ width: '100%' }"
+                [filter]="true"
+            >
+                <ng-template pTemplate="filter" let-options="options">
+                    <input
+                        type="text"
+                        pInputText
+                        placeholder="Filtre"
+                        [(ngModel)]="searchPois"
+                        (keyup)="debouncedSearchPois()"
+                    />
+                </ng-template>
+            </p-dropdown>
+            <label>Sélectionner un POI</label>
+        </p-floatLabel>
+        <p-floatLabel class="w-full mt-10">
+            <input
+                type="text"
+                pInputText
+                [(ngModel)]="user.email"
+                placeholder="Email de contact"
+                class="w-full"
+            />
+            <label>Email de contact</label>
+        </p-floatLabel>
+        <p-button
+            *ngIf="selectedId"
+            class="w-1/2 mt-10"
+            label="Enregistrer"
+            [loading]="loadingUpdate"
+            [rounded]="true"
+            (click)="save()"
+            [style]="{ width: '100%' }"
+            [disabled]="!user.email"
+        />
+        <p-floatLabel class="mt-10 w-full">
+            <p-password
+                [(ngModel)]="user.password"
+                [toggleMask]="true"
+                class="w-full"
+                [style]="{ width: '100%' }"
+                placeholder="Mot de passe"
+            />
+            <label>Mot de passe</label>
+        </p-floatLabel>
+        <p-floatLabel class="mt-10 w-full">
+            <p-password
+                placeholder="Confirmer le mot de passe"
+                [(ngModel)]="user.confirmPassword"
+                [toggleMask]="true"
+                [feedback]="false"
+                class="mt-5 w-full"
+                [style]="{ width: '100%' }"
+            />
+            <label>Confirmer le mot de passe</label>
+        </p-floatLabel>
+        <p-button
+            *ngIf="!selectedId"
+            class="w-1/2 mt-10"
+            label="Enregistrer"
+            [loading]="loadingSave"
+            [rounded]="true"
+            (click)="save()"
+            [style]="{ width: '100%' }"
+            [disabled]="!user.email || !user.password || !user.confirmPassword || !user.poi"
+        />
+        <p-button
+            *ngIf="selectedId"
+            class="w-1/2 mt-10"
+            label="Enregistrer"
+            [loading]="loadingSave"
+            [rounded]="true"
+            (click)="savePassword()"
+            [style]="{ width: '100%' }"
+            [disabled]="!user.password || !user.confirmPassword"
+        />
+        <div *ngIf="errorSave" class="mt-5">
+            <span class="text-red-500">{{ errorSave }}</span>
+        </div>
+    </div>
 </p-dialog>
 
 <p-dialog
@@ -96,7 +205,7 @@
         />
         <span class="mt-10"> Marge de bénéfice : 20%</span>
         <p-button
-            class="w-1/4 mt-10"
+            class="w-1/2 mt-10"
             label="Calculer"
             [loading]="loadingRepayment"
             [rounded]="true"

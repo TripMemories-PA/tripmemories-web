@@ -6,6 +6,7 @@ import { NO_AUTH } from '../request.interceptor';
 import { User } from '../../models/user';
 import { MyFriendsResponse } from '../../models/response/myFriends.response';
 import { PostsResponse } from '../../models/response/posts.response';
+import { CreateUserRequest } from '../../models/request/createUser.request';
 
 const URL = environment.apiUrl + '/users';
 const httpOptions = {
@@ -62,5 +63,17 @@ export class UsersService {
             params.append('userTypeId', userTypeId.toString());
         }
         return this.http.get<SearchUsersResponse>(`${URL}?${params.toString()}`);
+    }
+
+    create(payload: CreateUserRequest) {
+        return this.http.post<User>(URL, payload);
+    }
+
+    update(id: number, email: string) {
+        return this.http.put<User>(`${URL}/${id}`, { email });
+    }
+
+    updatePassword(id: number, password: string) {
+        return this.http.put<User>(`${URL}/${id}/password`, { password });
     }
 }

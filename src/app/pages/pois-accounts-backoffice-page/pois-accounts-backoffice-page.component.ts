@@ -11,6 +11,9 @@ import { DialogModule } from 'primeng/dialog';
 import { ChartModule } from 'primeng/chart';
 import { PoisService } from '../../services/pois/pois.service';
 import { CalendarModule } from 'primeng/calendar';
+import { PasswordModule } from 'primeng/password';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { DropdownModule } from 'primeng/dropdown';
 import { format } from 'date-fns';
 
 @Component({
@@ -25,6 +28,9 @@ import { format } from 'date-fns';
         DialogModule,
         ChartModule,
         CalendarModule,
+        PasswordModule,
+        FloatLabelModule,
+        DropdownModule,
     ],
     templateUrl: './pois-accounts-backoffice-page.component.html',
     styleUrl: './pois-accounts-backoffice-page.component.css',
@@ -36,20 +42,33 @@ export class PoisAccountsBackofficePageComponent implements OnInit {
     ) {}
 
     users: any[] = [];
+    pois: any[] = [];
+    searchPois: string = '';
     itemsPerPage: number = 10;
     currentPage: number = 1;
     totalPages: number = 0;
     search: string = '';
     loading: boolean = false;
+    loadingSave: boolean = false;
+    loadingUpdate: boolean = false;
 
     profitDialog: boolean = false;
     repaymentDialog: boolean = false;
     selectedId: number | null = null;
+    saveDialog: boolean = false;
+    errorSave: string | null = null;
 
     repayment = {
         startDate: null,
         endDate: null,
         amount: null as string | null,
+    };
+
+    user = {
+        email: null as string | null,
+        password: null as string | null,
+        confirmPassword: null as string | null,
+        poi: null as any | null,
     };
 
     maxDate = new Date();
@@ -85,6 +104,7 @@ export class PoisAccountsBackofficePageComponent implements OnInit {
     }
 
     debouncedSearch = debounce(this.searchUsers, 500);
+    debouncedSearchPois = debounce(this.getPois, 500);
 
     onPageChange(event: any) {
         if (event.first === 0) {
@@ -128,5 +148,115 @@ export class PoisAccountsBackofficePageComponent implements OnInit {
                 this.repayment.amount = (total - total * 0.2).toFixed(2);
                 this.loadingRepayment = false;
             });
+    }
+
+    openSaveDialog(id?: number) {
+        this.getPois();
+        this.selectedId = null;
+        this.errorSave = null;
+        if (id) {
+            this.selectedId = id;
+            const user = this.users.find((user) => user.id === id);
+            this.user.email = user.email;
+        } else {
+            this.user.email = null;
+        }
+        this.user.password = null;
+        this.user.confirmPassword = null;
+        this.user.poi = null;
+        this.saveDialog = true;
+    }
+
+    getPois() {
+        this.poiService
+            .getPOIs(undefined, undefined, undefined, undefined, undefined, this.searchPois)
+            .subscribe((pois) => {
+                this.pois = pois.data;
+            });
+    }
+
+    save() {
+        this.errorSave = null;
+        if (!this.selectedId) {
+            if (!this.checkPassword()) {
+                return;
+            }
+        }
+
+        if (this.selectedId) {
+            this.loadingUpdate = true;
+            this.userService.update(this.selectedId, this.user.email!).subscribe({
+                next: () => {
+                    this.loadingUpdate = false;
+                    this.saveDialog = false;
+                    this.searchUsers();
+                },
+                error: () => {
+                    this.loadingUpdate = false;
+                    this.errorSave = 'Une erreur est survenue';
+                },
+            });
+            return;
+        }
+
+        this.loadingSave = true;
+        this.userService
+            .create({
+                email: this.user.email!,
+                password: this.user.password!,
+                poiId: this.user.poi!.id!,
+            })
+            .subscribe({
+                next: () => {
+                    this.loadingSave = false;
+                    this.saveDialog = false;
+                    this.searchUsers();
+                },
+                error: () => {
+                    this.loadingSave = false;
+                    this.errorSave = 'Une erreur est survenue';
+                },
+            });
+    }
+
+    checkPassword() {
+        if (this.user.password !== this.user.confirmPassword) {
+            this.errorSave = 'Les mots de passe ne correspondent pas';
+            return false;
+        }
+
+        if (
+            !RegExp(/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z\d]).+$/).exec(
+                this.user.password!,
+            ) ||
+            this.user.password!.length < 8 ||
+            this.user.password!.length > 32
+        ) {
+            this.errorSave =
+                'Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial';
+            return false;
+        }
+
+        return true;
+    }
+
+    savePassword() {
+        this.errorSave = null;
+        if (!this.checkPassword()) {
+            return;
+        }
+
+        this.loadingSave = true;
+        this.userService.updatePassword(this.selectedId!, this.user.password!).subscribe({
+            next: () => {
+                this.loadingSave = false;
+                this.saveDialog = false;
+                this.searchUsers();
+            },
+            error: () => {
+                this.loadingSave = false;
+                this.errorSave = 'Une erreur est survenue';
+            },
+        });
     }
 }

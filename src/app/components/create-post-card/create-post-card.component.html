@@ -1,6 +1,7 @@
 <div class="review-container">
     <div class="photo-upload">
         <p-fileUpload
+            #fileUp
             name="photo"
             mode="basic"
             accept="image/*"
@@ -9,6 +10,13 @@
             chooseLabel="Ajouter photos"
             (onSelect)="onUpload($event)"
         ></p-fileUpload>
+        <button
+            *ngIf="file"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+            (click)="removeImage()"
+        >
+            Supprimer l'image choisie
+        </button>
     </div>
 
     <div class="title-input">

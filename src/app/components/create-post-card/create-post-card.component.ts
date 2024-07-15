@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { RatingModule } from 'primeng/rating';
 import { InputTextModule } from 'primeng/inputtext';
 import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
@@ -49,6 +49,8 @@ export class CreatePostCardComponent implements OnInit {
     loadingPoi: boolean = false;
     poi: PoiModel[] = [];
     selectedPoi?: PoiModel;
+
+    @ViewChild('fileUp') fileUp: any;
 
     @Input() inputPoiId?: number;
     @Input() inputPoiName?: string;
@@ -142,6 +144,11 @@ export class CreatePostCardComponent implements OnInit {
                 console.error(error);
             },
         });
+    }
+
+    removeImage() {
+        this.file = null;
+        this.fileUp.clear();
     }
 
     ngOnInit(): void {

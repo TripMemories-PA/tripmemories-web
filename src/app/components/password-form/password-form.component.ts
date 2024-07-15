@@ -39,6 +39,10 @@ export class PasswordFormComponent {
         private profilService: ProfilService,
     ) {}
 
+    get valid(): boolean {
+        return !!this.user.password && !!this.confirmPassword;
+    }
+
     submit() {
         if (this.isLoading) return;
         this.error = null;

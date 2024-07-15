@@ -59,6 +59,7 @@
         <div class="p-col-12 p-md-10">
             <button
                 pButton
+                [disabled]="!valid"
                 (click)="submit()"
                 type="button"
                 label="Modifier les informations"

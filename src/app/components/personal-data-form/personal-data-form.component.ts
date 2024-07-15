@@ -31,7 +31,25 @@ export class PersonalDataFormComponent {
     constructor(
         private profilServices: ProfilService,
         private authService: AuthService,
-    ) {}
+    ) {
+        if (this.authService.user) {
+            this.user = {
+                username: this.authService.user.username,
+                email: this.authService.user.email,
+                firstname: this.authService.user.firstname,
+                lastname: this.authService.user.lastname,
+            };
+        }
+    }
+
+    get valid(): boolean {
+        return (
+            !!this.user.username &&
+            !!this.user.email &&
+            !!this.user.firstname &&
+            !!this.user.lastname
+        );
+    }
 
     submit(): void {
         if (this.isLoading) return;

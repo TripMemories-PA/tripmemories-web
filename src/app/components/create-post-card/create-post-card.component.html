@@ -32,7 +32,17 @@
     </div>
     <div class="monument">
         <h3>Mon monument visité</h3>
-        <p-dropdown
+        <p-autoComplete
+            [(ngModel)]="selectedPoi"
+            [suggestions]="poi"
+            (ngModelChange)="updatePoiId()"
+            [dropdown]="true"
+            (completeMethod)="searchPoi($event)"
+            optionLabel="name"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="38"
+        />
+        <!--        <p-dropdown
             [options]="poi"
             [(ngModel)]="selectedPoi"
             [filter]="true"
@@ -50,11 +60,7 @@
             "
             (ngModelChange)="updatePoiId()"
             [disabled]="inputPoiId !== undefined || loading || loadingPoi"
-        />
-    </div>
-    <div class="tags">
-        <h3>Les +</h3>
-        <p-chips></p-chips>
+        />-->
     </div>
     <button
         pButton

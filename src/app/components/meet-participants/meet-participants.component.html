@@ -55,6 +55,7 @@
             pButton
             (click)="payMeet()"
             type="button"
+            *ngIf="hasTicketMeet"
             [disabled]="hasPaid || isLocked || !hasTicketMeet || !hasJoined"
             label="Je paye mon billet"
             class="w-full mt-6"

@@ -23,7 +23,7 @@
                         <div class="user-name">{{ user.firstname }}</div>
                         <div class="user-username">&#64;{{ user.username }}</div>
                     </div>
-                    <div class="user-status">
+                    <div *ngIf="hasTicket" class="user-status">
                         <span class="status-label">Statut</span>
                         <span
                             [ngClass]="{

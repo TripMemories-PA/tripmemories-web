@@ -1,43 +1,58 @@
-<div class="card flex justify-content-center cursor-pointer">
-    <p-card styleClass="ui-card-shadow" class="bg-white" [style]="{ width: '450px' }">
-        <ng-template pTemplate="header">
-            <span class="text-xl font-bold font-['Urbanist'] text-[var(--primary)] mt-4 mb-3 ml-2"
-                >Mission #Photo</span
-            >
-            <div class="w-5/6 left-1/2 -translate-x-1/2 h-[10rem] relative">
-                <img
-                    ngSrc="{{
-                        quest?.image?.url ??
-                            'https://decizia.com/blog/wp-content/uploads/2017/06/default-placeholder.png'
-                    }}"
-                    alt="{{ quest?.image?.id }}"
-                    class="absolute rounded-2xl object-cover"
-                    fill
-                    priority
-                />
-            </div>
-        </ng-template>
-        <div class="flex flex-col gap-2">
-            <h2 class="p-mt-2 text-xl font-bold ml-2">{{ quest?.title }}</h2>
+<div class="p-card mt-8">
+    <div class="p-card-body">
+        <div class="image-container">
+            <img
+                [ngSrc]="
+                    quest?.image?.url ??
+                    'https://decizia.com/blog/wp-content/uploads/2017/06/default-placeholder.png'
+                "
+                alt="{{ quest?.image?.id }}"
+                class="eiffel-image"
+                [loading]="'auto'"
+                (load)="isLoadingImage = false"
+                (error)="isLoadingImage = false"
+                fill
+            />
         </div>
-        <ng-template pTemplate="footer">
-            <div class="flex flex-row justify-end">
+        <div class="ticket-content">
+            <div class="flex flex-row justify-between mb-3">
+                <div class="flex flex-row gap-2 items-center">
+                    <img
+                        ngSrc="assets/quest/controller.png"
+                        alt="controller"
+                        width="35"
+                        height="35"
+                    />
+                    <span class="text-[var(--primary)] font-semibold text-2xl">Jeux</span>
+                </div>
+                <div
+                    class="p-0.5 border-[1px] border-[var(--primary)] rounded-full text-[var(--primary)] flex flex-row gap-0.5"
+                >
+                    <img ngSrc="assets/quest/Gift.png" alt="gift" width="20" height="20" />
+                    <span class="ml-2">50 points</span>
+                </div>
+            </div>
+            <h2>Mission {{ questNbr }} 📸</h2>
+            <p>{{ quest?.title }}</p>
+            <div class="price-button">
                 <button
                     pButton
                     *ngIf="isPoi"
                     type="button"
                     icon="pi pi-pencil"
-                    class="p-button-rounded p-button-raised p-button-primary mr-3"
+                    class="p-button-rounded p-button-primary mr-3"
                     [rounded]="true"
+                    [outlined]="true"
                     (click)="visible = true"
                 ></button>
                 <button
                     *ngIf="isPoi"
                     pButton
                     type="button"
-                    class="p-button-rounded p-button-raised p-button-danger"
+                    class="p-button-rounded p-button-danger"
                     icon="pi pi-times"
                     [rounded]="true"
+                    [outlined]="true"
                     (click)="visibleDelete = true"
                 ></button>
                 <span
@@ -50,9 +65,10 @@
                     >{{ done ? 'Mission validé' : 'Mission à effectuer' }}</span
                 >
             </div>
-        </ng-template>
-    </p-card>
+        </div>
+    </div>
 </div>
+
 <div>
     <p-dialog
         header="Supprimer la mission"
@@ -88,7 +104,7 @@
 </div>
 <div class="card flex justify-content-center">
     <p-dialog
-        header="Modifier le meet"
+        header="Modifier la mission"
         class="flex flex-col"
         [modal]="true"
         [draggable]="false"

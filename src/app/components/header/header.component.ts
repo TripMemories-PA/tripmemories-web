@@ -50,6 +50,10 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    get poiAvatar(): string | undefined {
+        return sessionStorage.getItem('poiAvatar') ?? undefined;
+    }
+
     ngOnInit() {
         this.updateMenuItems();
         this.subscriptions.add(

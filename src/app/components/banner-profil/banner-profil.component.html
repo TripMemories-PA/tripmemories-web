@@ -1,23 +1,38 @@
-<div (click)="triggerFileInput()">
-    <img
-        *ngIf="banner"
-        [ngSrc]="banner"
-        fill
-        class="absolute object-cover cursor-pointer"
-        alt="banner"
-        priority
-    />
-    <input
-        type="file"
-        id="fileBanner"
-        (change)="submitFile($event)"
-        style="display: none"
-        #fileInput
-    />
-</div>
+<ng-container *ngIf="isPoi; else isNotPoi">
+    <div>
+        <img
+            *ngIf="banner"
+            [ngSrc]="banner"
+            fill
+            class="absolute object-cover cursor-pointer"
+            alt="banner"
+            priority
+        />
+    </div>
+</ng-container>
+<ng-template #isNotPoi>
+    <div (click)="triggerFileInput()">
+        <img
+            *ngIf="banner"
+            [ngSrc]="banner"
+            fill
+            class="absolute object-cover cursor-pointer"
+            alt="banner"
+            priority
+        />
+        <input
+            type="file"
+            id="fileBanner"
+            (change)="submitFile($event)"
+            style="display: none"
+            #fileInput
+        />
+    </div>
+</ng-template>
 <p-toast />
 <img
     [ngSrc]="'assets/profil/logo_edit.png'"
+    *ngIf="!isPoi"
     (click)="triggerFileInput()"
     class="absolute top-1/2 left-1/2 -translate-y-1/4 -translate-x-1/2 cursor-pointer edit-image"
     alt="edit_banner"

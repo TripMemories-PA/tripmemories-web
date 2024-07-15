@@ -44,6 +44,7 @@
             >
                 <img
                     [ngSrc]="
+                        poiAvatar ??
                         auth.user?.avatar?.url ??
                         'https://oasys.ch/wp-content/uploads/2019/03/photo-avatar-profil.png'
                     "

@@ -13,6 +13,7 @@ import { MyTicketsComponent } from '../../container/profil/my-tickets/my-tickets
 import { MyQuizComponent } from '../../container/profil/my-quiz/my-quiz.component';
 import { MyMeetsComponent } from '../../container/profil/my-meets/my-meets.component';
 import { MyQuestsComponent } from '../../container/profil/my-quests/my-quests.component';
+import { PoisService } from '../../services/pois/pois.service';
 
 @Component({
     selector: 'app-profil-page',
@@ -55,6 +56,7 @@ export class ProfilPageComponent implements OnInit {
 
     constructor(
         private profilService: ProfilService,
+        private poiService: PoisService,
         private friendsService: FriendsService,
         private authServices: AuthService,
     ) {
@@ -84,13 +86,19 @@ export class ProfilPageComponent implements OnInit {
                 this.banner = user.banner?.url;
                 if (user.poiId) {
                     this.poiId = user.poiId as number;
+                    this.poiService.getPOI(this.poiId.toString()).subscribe({
+                        next: (poi) => {
+                            this.profilPic = poi.cover?.url;
+                            this.banner = poi.cover?.url;
+                            sessionStorage.setItem('poiAvatar', poi.cover?.url ?? '');
+                        },
+                    });
                 }
                 if (this.authServices.user?.avatar) {
                     this.profilPic = user.avatar?.url;
                 }
             },
         });
-
         this.friendsService.getFriends().subscribe({
             next: (friends) => {
                 this.nbrFriends = friends.data.length;

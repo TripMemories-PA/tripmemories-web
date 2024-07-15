@@ -96,6 +96,7 @@ export class AuthService {
     logout() {
         this.setUser(null);
         localStorage.removeItem('rememberMe');
+        sessionStorage.removeItem('poiAvatar');
         this.router.navigate(['/login']);
     }
 

@@ -44,6 +44,9 @@
 .input-container .input-emoji {
   flex: 1;
   margin-right: 10px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
 }
 
 .input-container button {

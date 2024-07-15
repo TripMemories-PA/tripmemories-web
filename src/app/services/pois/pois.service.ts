@@ -9,6 +9,7 @@ import { QuestionResponse } from '../../models/response/question.response';
 import { MeetsResponse } from '../../models/response/meets.response';
 import { QuestResponse } from '../../models/response/quest.response';
 import { ICreatePoi } from '../../models/interface/ICreatePoi';
+import { IFileImage } from '../../models/interface/FileImage';
 
 const URL = environment.apiUrl + '/pois';
 const httpOptions = {
@@ -95,6 +96,12 @@ export class PoisService {
 
     getPoisTickets(id: string) {
         return this.http.get<TicketModel[]>(`${URL}/${id}/tickets`, httpOptions);
+    }
+
+    storeCover(file: File) {
+        const formData = new FormData();
+        formData.append('file', file);
+        return this.http.post<IFileImage>(`${URL}/cover`, formData);
     }
 
     updatePoi(id: string, data: ICreatePoi) {

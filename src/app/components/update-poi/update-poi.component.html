@@ -9,6 +9,27 @@
         />
     </div>
 
+    <div class="photo-upload">
+        <h3>Modifier la photo du lieu (facultatif)</h3>
+        <p-fileUpload
+            #fileUp
+            name="photo"
+            mode="basic"
+            accept="image/*"
+            maxFileSize="1000000"
+            chooseIcon="pi pi-upload"
+            chooseLabel="Ajouter une photo"
+            (onSelect)="storeImage($event)"
+        ></p-fileUpload>
+        <button
+            *ngIf="file"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+            (click)="removeImage()"
+        >
+            Supprimer l'image choisie
+        </button>
+    </div>
+
     <div class="rating">
         <h3>Description du lieu</h3>
         <textarea

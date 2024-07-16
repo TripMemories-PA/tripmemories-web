@@ -1,6 +1,6 @@
 <div class="flex {{ widthImage > heightImage ? 'flex-col' : 'flex-row' }}">
     <div class="relative flex justify-center items-center">
-        <p class="title-poi text-center z-10 absolute">
+        <p class="title-poi text-center z-10 absolute text-shadow-lg">
             {{ poi.name }}
         </p>
         <div *ngIf="widthImage < heightImage" class="h-full w-[600px] relative">
@@ -75,7 +75,7 @@
                     [city]="poi.city?.name"
                 ></app-post-card>
             </div>
-            <span *ngIf="poiPosts.length === 0" class="text-2xl text-red-500 font-['Urbanist']">
+            <span *ngIf="poiPosts.length === 0" class="text-2xl text-gray-400 font-['Urbanist']">
                 Aucun post pour le moment</span
             >
         </div>
@@ -202,7 +202,7 @@
                     [link]="meetModel.id.toString()"
                 ></app-meet-card-poi>
             </div>
-            <span *ngIf="meets.length === 0" class="text-2xl text-red-500 font-['Urbanist']">
+            <span *ngIf="meets.length === 0" class="text-2xl text-gray-400 font-['Urbanist']">
                 Aucun Meet actuellement, soyez le premier à en créer un</span
             >
         </div>
@@ -239,7 +239,7 @@
                     [isConnect]="isConnect"
                 ></app-my-mission-card>
             </div>
-            <span *ngIf="quests.length === 0" class="text-2xl text-red-500 font-['Urbanist'] mt-6">
+            <span *ngIf="quests.length === 0" class="text-2xl text-gray-400 font-['Urbanist'] mt-6">
                 Aucune missions n'est disponibles pour le moment, patience cela peut arriver très
                 vite</span
             >
@@ -303,7 +303,7 @@
                     [link]="currentlyAt.id?.toString()"
                 ></app-currently-at-card>
             </div>
-            <span *ngIf="poiNear.length === 0" class="text-2xl text-red-500 font-['Urbanist']">
+            <span *ngIf="poiNear.length === 0" class="text-2xl text-gray-400 font-['Urbanist']">
                 Aucun lieu proche dans ce coin</span
             >
         </div>

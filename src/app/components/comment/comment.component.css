@@ -31,3 +31,7 @@
     margin-right: 10px;
   }
 }
+
+::ng-deep .report-comment .p-dialog-content {
+  padding: 30px;
+}

@@ -3,7 +3,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { PostsService } from '../../services/posts/posts.service';
 import { PostModel } from '../../models/post.model';
 import { ButtonModule } from 'primeng/button';
-import { Location, NgOptimizedImage } from '@angular/common';
+import { Location, NgClass, NgIf, NgOptimizedImage } from '@angular/common';
 import { TimeAgoPipe } from '../../time-ago.pipe';
 import { TooltipModule } from 'primeng/tooltip';
 import { AuthService } from '../../services/auth/auth.service';
@@ -17,6 +17,8 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { ChipsModule } from 'primeng/chips';
 import { MonumentCardFeedComponent } from '../../components/monument-card-feed/monument-card-feed.component';
+import { DialogModule } from 'primeng/dialog';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'app-post-page',
@@ -36,6 +38,10 @@ import { MonumentCardFeedComponent } from '../../components/monument-card-feed/m
         OverlayPanelModule,
         ChipsModule,
         MonumentCardFeedComponent,
+        NgIf,
+        DialogModule,
+        ProgressBarModule,
+        NgClass,
     ],
     providers: [MessageService, ConfirmationService],
     templateUrl: './post-page.component.html',
@@ -62,6 +68,9 @@ export class PostPageComponent implements OnInit {
     alreadyLiked: boolean = false;
     showComments: boolean = false;
     url: string = '';
+
+    visibleReportDialog: boolean = false;
+    loading: boolean = false;
 
     ngOnInit() {
         this.url = window.location.href;
@@ -93,6 +102,10 @@ export class PostPageComponent implements OnInit {
                 console.error(error);
             },
         });
+    }
+
+    get isOwner(): boolean {
+        return this.post?.createdById === (this.authService.user?.id as unknown as number);
     }
 
     likePost() {
@@ -138,6 +151,32 @@ export class PostPageComponent implements OnInit {
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Erreur lors du dislike',
+                        detail: error.message,
+                        life: 5000,
+                    });
+                },
+            });
+        }
+    }
+
+    reportPost() {
+        if (this.post?.id) {
+            this.postsService.reportPost(this.post.id).subscribe({
+                next: (_) => {
+                    this.visibleReportDialog = false;
+                    this.getPost(this.postId, this.isAuth);
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Post signalé',
+                        detail: 'Vous avez signalé ce post !',
+                        life: 5000,
+                    });
+                },
+                error: (error) => {
+                    this.error = error.message;
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Erreur lors du signalement',
                         detail: error.message,
                         life: 5000,
                     });

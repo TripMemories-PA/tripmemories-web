@@ -55,6 +55,8 @@
             optionLabel="name"
             [virtualScroll]="true"
             [virtualScrollItemSize]="38"
+            [placeholder]="inputPoiName"
+            [disabled]="inputPoiId !== undefined || loading"
         />
         <!--        <p-dropdown
             [options]="poi"

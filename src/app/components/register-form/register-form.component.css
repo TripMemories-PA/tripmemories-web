@@ -131,3 +131,16 @@ button.p-button-primary {
   border-color: #B4B4B4;
   border-style: solid;
 }
+
+::ng-deep .p-password {
+  width: 100%;
+}
+
+::ng-deep .p-password input {
+  width: 100%;
+  border: inherit;
+  border-bottom: solid;
+  border-bottom-width: 1px;
+  border-color: #b4b4b4;
+  background: inherit;
+}

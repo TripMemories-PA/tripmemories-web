@@ -12,7 +12,7 @@
         </div>
         <div class="p-card-body">
             <h3 class="p-text-center !text-3xl font-bold">Prêt à monter à bord ? 👋</h3>
-            <p class="p-text-center !text-lg">Entre tes infos pour créer ton compte Tripmemories</p>
+            <p class="p-text-center !text-lg">Entre tes infos pour créer ton compte TripMemories</p>
             <!--            <div class="p-d-flex p-jc-center p-mb-3">
                 <button
                     pButton
@@ -64,39 +64,25 @@
                         [(ngModel)]="user.username"
                     />
                 </div>
-                <div class="flex flex-row flex-wrap gap-3.5 justify-between mb-8">
-                    <p-iconField iconPosition="right">
-                        <p-inputIcon
-                            class="cursor-pointer"
-                            (click)="hide1 = !hide1"
-                            [styleClass]="hide1 ? 'pi pi-eye' : 'pi pi-eye-slash'"
-                        />
-                        <input
-                            pInputText
-                            placeholder="Mot de passe"
-                            id="password"
-                            name="password"
-                            [class]="error ? 'ng-invalid ng-dirty' : ''"
-                            [type]="hide1 ? 'password' : 'text'"
-                            [(ngModel)]="user.password"
-                        />
-                    </p-iconField>
-                    <p-iconField iconPosition="right">
-                        <p-inputIcon
-                            class="cursor-pointer"
-                            (click)="hide2 = !hide2"
-                            [styleClass]="hide2 ? 'pi pi-eye' : 'pi pi-eye-slash'"
-                        />
-                        <input
-                            pInputText
-                            placeholder="Confirmer le mot de passe"
-                            id="confirmPassword"
-                            name="confirmPassword"
-                            [class]="error ? 'ng-invalid ng-dirty' : ''"
-                            [type]="hide2 ? 'password' : 'text'"
-                            [(ngModel)]="user.password_confirmation"
-                        />
-                    </p-iconField>
+                <div class="flex flex-col flex-wrap gap-4 justify-between mb-8">
+                    <p-password
+                        [(ngModel)]="user.password"
+                        id="password"
+                        name="password"
+                        placeholder="Mot de passe"
+                        class="w-full"
+                        [toggleMask]="true"
+                    >
+                    </p-password>
+                    <p-password
+                        [(ngModel)]="user.password_confirmation"
+                        id="confirmPassword"
+                        name="confirmPassword"
+                        class="w-full"
+                        placeholder="Confirmer le mot de passe"
+                        [toggleMask]="true"
+                    >
+                    </p-password>
                 </div>
                 <div class="p-field p-mb-3">
                     <button

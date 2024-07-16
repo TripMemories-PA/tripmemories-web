@@ -2,6 +2,10 @@
   "primeng": {
     "today": "Aujourd'hui",
     "clear": "Réinitialiser",
+    "weakLabel": "Faible",
+    "mediumLabel": "Moyen",
+    "strongLabel": "Fort",
+    "promptLabel": "Saisir un mot de passe",
     "dayNamesMin": [
       "Di",
       "Lu",

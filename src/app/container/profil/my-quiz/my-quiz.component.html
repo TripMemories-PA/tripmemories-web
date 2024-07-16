@@ -33,7 +33,10 @@
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
 >
     <ng-template pTemplate="content">
-        <app-create-question></app-create-question>
+        <app-create-question
+            (reload)="reloadQuestions()"
+            (closeDialog)="closeDialog()"
+        ></app-create-question>
     </ng-template>
 </p-dialog>
 <p-paginator

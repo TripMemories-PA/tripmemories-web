@@ -24,7 +24,6 @@ export class CreateQuestComponent implements OnInit {
     file: File | null = null;
     questRequest: QuestRequest = {
         title: '',
-        imageId: -1,
         poiId: -1,
         label: '',
     };
@@ -87,7 +86,7 @@ export class CreateQuestComponent implements OnInit {
         this.file = null;
         this.fileUp.clear();
         this.labels = [];
-        this.questRequest.imageId = -1;
+        delete this.questRequest.imageId;
     }
 
     ngOnInit() {

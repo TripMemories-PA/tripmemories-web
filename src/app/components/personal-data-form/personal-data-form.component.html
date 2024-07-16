@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <div>
     <form>
         <div class="flex flex-row gap-10">
@@ -59,7 +60,7 @@
         <div class="p-col-12 p-md-10">
             <button
                 pButton
-                [disabled]="!valid"
+                [disabled]="!valid || isLoading"
                 (click)="submit()"
                 type="button"
                 label="Modifier les informations"
@@ -67,4 +68,9 @@
             ></button>
         </div>
     </form>
+    <p-progressBar
+        mode="indeterminate"
+        *ngIf="isLoading"
+        [style]="{ height: '6px', width: '100%' }"
+    ></p-progressBar>
 </div>

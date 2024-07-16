@@ -99,13 +99,15 @@ export class ProfilPageComponent implements OnInit {
                 }
             },
         });
-        this.friendsService.getFriends().subscribe({
-            next: (friends) => {
-                this.nbrFriends = friends.data.length;
-            },
-            error: (error) => {
-                console.error(error);
-            },
-        });
+        if (!this.authServices.user?.poiId) {
+            this.friendsService.getFriends().subscribe({
+                next: (friends) => {
+                    this.nbrFriends = friends.data.length;
+                },
+                error: (error) => {
+                    console.error(error);
+                },
+            });
+        }
     }
 }

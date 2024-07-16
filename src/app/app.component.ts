@@ -8,17 +8,28 @@ import { FooterComponent } from './components/footer/footer.component';
 import { TranslateService } from '@ngx-translate/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { Subscription } from 'rxjs';
+import { UserTypes } from './models/enum/UserTypes';
+import { BackofficeSidenavComponent } from './components/backoffice-sidenav/backoffice-sidenav.component';
 
 @Component({
     selector: 'app-root',
     standalone: true,
-    imports: [RouterOutlet, ButtonModule, InputTextModule, HeaderComponent, NgIf, FooterComponent],
+    imports: [
+        RouterOutlet,
+        ButtonModule,
+        InputTextModule,
+        HeaderComponent,
+        NgIf,
+        FooterComponent,
+        BackofficeSidenavComponent,
+    ],
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit, OnDestroy {
     title = 'TripMemories';
     showHeaderFooter: boolean = true;
+    showBackofficeSidenav: boolean = false;
     subscription?: Subscription;
 
     constructor(
@@ -35,6 +46,17 @@ export class AppComponent implements OnInit, OnDestroy {
                     url === '/register' ||
                     url === '/forgotPassword'
                 );
+
+                const user = JSON.parse(
+                    (localStorage.getItem('user') as string) ??
+                        (sessionStorage.getItem('user') as string),
+                );
+                if (user?.userTypeId && user?.userTypeId === UserTypes.ADMIN) {
+                    this.showHeaderFooter = false;
+                    this.showBackofficeSidenav = true;
+                } else {
+                    this.showBackofficeSidenav = false;
+                }
             }
         });
         this.translateService.setDefaultLang('fr');
@@ -43,7 +65,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     translate(lang: string) {
         this.translateService.use(lang);
-        this.translateService.get('primeng').subscribe((res) => this.config.setTranslation(res));
+        this.translateService
+            .get('primeng')
+            .subscribe((res: any) => this.config.setTranslation(res));
     }
 
     ngOnDestroy() {

@@ -8,6 +8,7 @@ import { MyFriendsResponse } from '../../models/response/myFriends.response';
 import { PostsResponse } from '../../models/response/posts.response';
 import { IMessageRequest } from '../../models/interface/IMessageRequest';
 import { MessageResponse } from '../../models/request/message.response';
+import { CreateUserRequest } from '../../models/request/createUser.request';
 
 const URL = environment.apiUrl + '/users';
 const httpOptions = {
@@ -55,11 +56,14 @@ export class UsersService {
         return this.http.get<SearchUsersResponse>(`${URL}?${params.toString()}`);
     }
 
-    search(search: string) {
+    search(search: string, perPage: number = 10, page: number = 1, userTypeId?: number) {
         const params = new URLSearchParams();
-        params.append('page', '1');
-        params.append('perPage', '10');
+        params.append('page', page.toString());
+        params.append('perPage', perPage.toString());
         params.append('search', search);
+        if (userTypeId) {
+            params.append('userTypeId', userTypeId.toString());
+        }
         return this.http.get<SearchUsersResponse>(`${URL}?${params.toString()}`);
     }
 
@@ -72,5 +76,17 @@ export class UsersService {
         params.append('page', page.toString());
         params.append('perPage', perPage.toString());
         return this.http.get<MessageResponse>(`${URL}/${id}/messages?${params.toString()}`);
+    }
+
+    create(payload: CreateUserRequest) {
+        return this.http.post<User>(URL, payload);
+    }
+
+    update(id: number, email: string) {
+        return this.http.put<User>(`${URL}/${id}`, { email });
+    }
+
+    updatePassword(id: number, password: string) {
+        return this.http.put<User>(`${URL}/${id}/password`, { password });
     }
 }

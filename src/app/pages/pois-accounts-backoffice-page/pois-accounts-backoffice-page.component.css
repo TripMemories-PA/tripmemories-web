@@ -1,0 +1,7 @@
+::ng-deep .p-dialog-content {
+  overflow: visible !important;
+}
+
+::ng-deep .p-inputtext {
+  width: 100%;
+}

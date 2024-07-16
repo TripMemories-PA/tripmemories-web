@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {
     AbstractControl,
     FormArray,
@@ -40,6 +40,8 @@ export class CreateQuestionComponent implements OnInit {
     questionForm: FormGroup;
     @Input() questionModel?: QuestionModel;
     @Input() update: boolean = false;
+    @Output() reload: EventEmitter<any> = new EventEmitter();
+    @Output() closeDialog: EventEmitter<any> = new EventEmitter();
     loading = false;
     success = '';
     error = '';
@@ -106,9 +108,10 @@ export class CreateQuestionComponent implements OnInit {
                     next: (_) => {
                         this.loading = false;
                         this.success = 'La question a bien été mise à jour';
+                        this.reload.emit();
                         setTimeout(() => {
-                            window.location.reload();
-                        }, 5000);
+                            this.closeDialog.emit();
+                        }, 3000);
                     },
                     error: (_) => {
                         this.loading = false;
@@ -124,9 +127,10 @@ export class CreateQuestionComponent implements OnInit {
                     next: (_) => {
                         this.loading = false;
                         this.success = 'La question a bien été créée';
+                        this.reload.emit();
                         setTimeout(() => {
-                            window.location.reload();
-                        }, 5000);
+                            this.closeDialog.emit();
+                        }, 3000);
                     },
                     error: (_) => {
                         this.loading = false;

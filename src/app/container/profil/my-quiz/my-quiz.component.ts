@@ -140,4 +140,8 @@ export class MyQuizComponent implements OnInit {
     openDialog() {
         this.showDialog = true;
     }
+
+    closeDialog() {
+        this.showDialog = false;
+    }
 }

@@ -46,7 +46,7 @@ export class PoisService {
             params.append('radius', radius.toString());
         }
 
-        return this.http.get<PoisSearchResponse>(`${URL}?${params.toString()}`, httpOptions);
+        return this.http.get<PoisSearchResponse>(`${URL}?${params.toString()}`);
     }
 
     getPOI(id: string) {

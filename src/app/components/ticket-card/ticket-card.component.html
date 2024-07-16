@@ -16,7 +16,7 @@
         </ng-template>
         <div class="flex flex-col gap-2">
             <div class="flex flex-row justify-between text-sm">
-                <p>Nbr personnes: {{ ticket?.groupSize }}</p>
+                <p>Nombre personne: {{ ticket?.groupSize }}</p>
                 <div class="flex flex-row items-center gap-2">
                     <p>Prix: {{ ticket?.price }}€</p>
                     <svg
@@ -28,7 +28,7 @@
                     >
                         <circle cx="5.5" cy="5.5" r="5.5" fill="#767676" />
                     </svg>
-                    <p *ngIf="ticket && ticket.quantity > 0">En stock: {{ ticket.quantity }}</p>
+                    <p *ngIf="ticket && ticket.quantity > 0">Stock: {{ ticket.quantity }}</p>
                     <p *ngIf="ticket && ticket.quantity <= 0">Rupture de stock</p>
                 </div>
             </div>
@@ -41,14 +41,18 @@
                     pButton
                     type="button"
                     label="Modifier"
-                    class="p-button-rounded p-button-raised p-button-primary"
+                    icon="pi pi-pencil"
+                    [outlined]="true"
+                    class="p-button-rounded p-button-primary"
                     (click)="visible = true"
                 ></button>
                 <button
                     pButton
                     type="button"
                     label="Supprimer"
-                    class="p-button-rounded p-button-raised p-button-danger"
+                    [outlined]="true"
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-danger"
                     (click)="visibleDelete = true"
                 ></button>
             </div>

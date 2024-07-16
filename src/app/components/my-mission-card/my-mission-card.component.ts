@@ -37,6 +37,7 @@ export class MyMissionCardComponent implements OnInit {
     @Input() done: boolean = false;
     @Input() questNbr: number = 0;
     @Output() reloadQuest: EventEmitter<any> = new EventEmitter();
+    @Input() isConnect: boolean = false;
 
     visible: boolean = false;
     visibleDelete: boolean = false;

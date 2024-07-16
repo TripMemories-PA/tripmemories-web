@@ -9,6 +9,7 @@ import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { CreatePostCardComponent } from '../../../components/create-post-card/create-post-card.component';
 import { PoisService } from '../../../services/pois/pois.service';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'app-my-posts',
@@ -21,6 +22,7 @@ import { PoisService } from '../../../services/pois/pois.service';
         ButtonModule,
         DialogModule,
         CreatePostCardComponent,
+        ProgressBarModule,
     ],
     templateUrl: './my-posts.component.html',
     styleUrl: './my-posts.component.css',
@@ -45,12 +47,15 @@ export class MyPostsComponent implements OnInit, OnChanges {
     previousPageUrl: string | null = '';
     showDialog: boolean = false;
 
+    loading: boolean = false;
+
     constructor(
         private profilService: ProfilService,
         private poiService: PoisService,
     ) {}
 
     ngOnInit(): void {
+        this.loading = true;
         if (!this.userId || this.userId === -1) {
             return;
         }
@@ -68,8 +73,10 @@ export class MyPostsComponent implements OnInit, OnChanges {
                     this.nextPageUrl = response.meta.nextPageUrl;
                     this.previousPageUrl = response.meta.previousPageUrl;
                     this.itemsPerPage = response.meta.perPage;
+                    this.loading = false;
                 },
                 error: (error) => {
+                    this.loading = false;
                     console.error(error);
                 },
             });
@@ -87,8 +94,10 @@ export class MyPostsComponent implements OnInit, OnChanges {
                     this.nextPageUrl = response.meta.nextPageUrl;
                     this.previousPageUrl = response.meta.previousPageUrl;
                     this.itemsPerPage = response.meta.perPage;
+                    this.loading = false;
                 },
                 error: (error) => {
+                    this.loading = false;
                     console.error(error);
                 },
             });
@@ -165,6 +174,7 @@ export class MyPostsComponent implements OnInit, OnChanges {
                     this.nextPageUrl = response.meta.nextPageUrl;
                     this.previousPageUrl = response.meta.previousPageUrl;
                     this.itemsPerPage = response.meta.perPage;
+                    this.loading = false;
                 },
                 error: (error) => {
                     console.error(error);
@@ -184,6 +194,7 @@ export class MyPostsComponent implements OnInit, OnChanges {
                     this.nextPageUrl = response.meta.nextPageUrl;
                     this.previousPageUrl = response.meta.previousPageUrl;
                     this.itemsPerPage = response.meta.perPage;
+                    this.loading = false;
                 },
                 error: (error) => {
                     console.error(error);

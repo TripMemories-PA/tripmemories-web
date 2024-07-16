@@ -13,7 +13,10 @@
 >
     Créer une mission
 </button>
-<div class="flex flex-row flex-wrap gap-20">
+<div *ngIf="loading">
+    <p-progressBar mode="indeterminate" [style]="{ height: '6px', width: '100%' }"></p-progressBar>
+</div>
+<div *ngIf="!loading" class="flex flex-row flex-wrap gap-20">
     <app-my-mission-card
         *ngFor="let quest of quests; index as i"
         [quest]="quest"

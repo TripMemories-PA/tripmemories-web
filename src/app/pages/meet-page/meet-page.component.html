@@ -21,9 +21,7 @@
             <h2 class="text-6xl text-[var(--primary)] font-bold font-['Urbanist']">
                 {{ meet?.title }}
             </h2>
-            <h4 class="font-['Urbanist'] text-[#5B5B5B] text-3xl">
-                Meet du<span class="text-lg">&nbsp;&nbsp;{{ date }}</span>
-            </h4>
+            <h4 class="font-['Urbanist'] text-[#5B5B5B] text-3xl">Meet du {{ date }}</h4>
             <p class="font-['Urbanist'] font-semibold leading-10 text-2xl">
                 {{ meet?.description }}
             </p>
@@ -75,20 +73,22 @@
             class="w-full mt-6"
         ></button>
         <app-chat-card-meet
-            class="mt-8"
+            class="mt-16"
             [meetId]="idMeet"
             [nbrMembres]="users.length"
             [title]="meet?.title"
             [nbrMessages]="totalMessage"
             [image]="meet?.poi?.cover?.url"
+            [hasJoined]="hasJoined"
         ></app-chat-card-meet>
-        <app-meet-selling [users]="users" [nbrPaid]="nbrPaid"></app-meet-selling>
+        <app-meet-selling [users]="userPaid" [nbrPaid]="nbrPaid"></app-meet-selling>
         <app-list-members-meet
             [displayDialog]="displayDialog"
             [members]="users"
             [userId]="userId"
             [meetId]="meet?.id"
             [owner]="isOwner"
+            [hasTicket]="meet?.ticketId !== null"
             (closeDialog)="onClosedDialog()"
             (reloadMeet)="reload()"
         ></app-list-members-meet>

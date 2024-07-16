@@ -17,7 +17,7 @@
         <div class="flex flex-col gap-2">
             <div class="flex flex-col gap-2 justify-between text-sm">
                 <p>
-                    Nombre de participant: <span class="font-semibold">{{ meet?.size }}</span>
+                    Nombre de participants: <span class="font-semibold">{{ meet?.size }}</span>
                 </p>
                 <div *ngIf="meet?.ticketId" class="flex flex-row items-center gap-4">
                     <p>
@@ -43,7 +43,8 @@
                     type="button"
                     icon="pi pi-pencil"
                     [rounded]="true"
-                    class="p-button-rounded p-button-raised p-button-primary"
+                    [outlined]="true"
+                    class="p-button-rounded p-button-primary"
                     (click)="visible = true"
                 ></button>
                 <button
@@ -51,7 +52,8 @@
                     type="button"
                     icon="pi pi-arrow-right"
                     [rounded]="true"
-                    class="p-button-rounded p-button-raised p-button-success"
+                    [outlined]="true"
+                    class="p-button-rounded p-button-success"
                     (click)="goToMeet()"
                 ></button>
                 <button
@@ -59,8 +61,9 @@
                     pButton
                     type="button"
                     icon="pi pi-trash"
+                    [outlined]="true"
                     [rounded]="true"
-                    class="p-button-rounded p-button-raised p-button-danger"
+                    class="p-button-rounded p-button-danger"
                     (click)="visibleDelete = true"
                 ></button>
             </div>

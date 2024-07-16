@@ -12,8 +12,8 @@
         </div>
         <div class="p-card-body">
             <h3 class="p-text-center !text-3xl font-bold">Bon retour parmi nous ! 👋</h3>
-            <p class="p-text-center !text-lg">Continue avec Google ou entre tes infos.</p>
-            <div class="p-d-flex p-jc-center p-mb-3">
+            <p class="p-text-center !text-lg">Entre tes infos pour continuer.</p>
+            <!--            <div class="p-d-flex p-jc-center p-mb-3">
                 <button
                     pButton
                     class="p-button-rounded p-button-secondary p-button-outlined"
@@ -21,7 +21,7 @@
                     label="Continuer avec Google"
                 ></button>
             </div>
-            <hr />
+            <hr />-->
             <form>
                 <div class="p-field p-mb-3">
                     <input
@@ -52,7 +52,12 @@
                     />
                 </p-iconField>
                 <div class="p-field-checkbox mt-10">
-                    <p-checkbox inputId="remember" binary="true"></p-checkbox>
+                    <p-checkbox
+                        inputId="remember"
+                        binary="true"
+                        [(ngModel)]="rememberMe"
+                        name="remember"
+                    ></p-checkbox>
                     <label>Se souvenir de moi</label>
                     <a [routerLink]="['/forgotPassword']" class="p-ml-2">Mot de passe oublié</a>
                 </div>

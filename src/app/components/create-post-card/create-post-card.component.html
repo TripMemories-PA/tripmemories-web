@@ -1,6 +1,7 @@
 <div class="review-container">
     <div class="photo-upload">
         <p-fileUpload
+            #fileUp
             name="photo"
             mode="basic"
             accept="image/*"
@@ -9,6 +10,13 @@
             chooseLabel="Ajouter photos"
             (onSelect)="onUpload($event)"
         ></p-fileUpload>
+        <button
+            *ngIf="file"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+            (click)="removeImage()"
+        >
+            Supprimer l'image choisie
+        </button>
     </div>
 
     <div class="title-input">
@@ -32,7 +40,17 @@
     </div>
     <div class="monument">
         <h3>Mon monument visité</h3>
-        <p-dropdown
+        <p-autoComplete
+            [(ngModel)]="selectedPoi"
+            [suggestions]="poi"
+            (ngModelChange)="updatePoiId()"
+            [dropdown]="true"
+            (completeMethod)="searchPoi($event)"
+            optionLabel="name"
+            [virtualScroll]="true"
+            [virtualScrollItemSize]="38"
+        />
+        <!--        <p-dropdown
             [options]="poi"
             [(ngModel)]="selectedPoi"
             [filter]="true"
@@ -50,11 +68,7 @@
             "
             (ngModelChange)="updatePoiId()"
             [disabled]="inputPoiId !== undefined || loading || loadingPoi"
-        />
-    </div>
-    <div class="tags">
-        <h3>Les +</h3>
-        <p-chips></p-chips>
+        />-->
     </div>
     <button
         pButton

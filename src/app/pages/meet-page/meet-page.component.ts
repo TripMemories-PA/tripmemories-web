@@ -81,6 +81,10 @@ export class MeetPageComponent implements OnInit {
         return this.meet?.createdById === (this.authService.user?.id as unknown as number);
     }
 
+    get userPaid(): User[] {
+        return this.users.filter((user) => user.hasPaid);
+    }
+
     get userId(): string {
         return this.authService.user?.id as unknown as string;
     }

@@ -35,10 +35,12 @@ export class MyMissionCardComponent implements OnInit {
     @Input() quest?: QuestModel;
     @Input() isPoi: boolean = false;
     @Input() done: boolean = false;
+    @Input() questNbr: number = 0;
     @Output() reloadQuest: EventEmitter<any> = new EventEmitter();
 
     visible: boolean = false;
     visibleDelete: boolean = false;
+    isLoadingImage = true;
 
     loading: boolean = false;
     success: string | null = null;

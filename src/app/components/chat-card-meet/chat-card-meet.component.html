@@ -1,4 +1,7 @@
-<div class="p-card p-component border-gray-400 border-2 border-solid relative" style="width: 100%">
+<div
+    class="p-card p-component border-gray-200 border-[1px] border-solid relative"
+    style="width: 100%"
+>
     <img
         ngSrc="assets/logo/logo_chat.png"
         alt="chat"
@@ -35,6 +38,7 @@
                         pButton
                         type="button"
                         [rounded]="true"
+                        *ngIf="hasJoined"
                         (click)="goToChat()"
                         label="Rejoindre le chat"
                         class="p-button-primary p-ml-3 h-14"

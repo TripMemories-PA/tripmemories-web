@@ -1,7 +1,12 @@
 <p-toast></p-toast>
 <div class="cart-container">
-    <div class="flex flex-row gap-4">
+    <div class="flex flex-row gap-4 font-['Urbanist']">
         <div class="flex flex-col gap-4 max-h-[550px] overflow-auto">
+            <span
+                *ngIf="cartItems.length === 0"
+                class="text-center text-[var(--info)] text-3xl font-semibold mt-10 ml-5"
+                >Il n'y a pas d'élément dans le panier</span
+            >
             <div *ngFor="let item of cartItems" class="cart-item">
                 <p-card>
                     <ng-template pTemplate="header">

@@ -15,7 +15,7 @@ export class RegisterPageComponent implements OnInit {
     constructor(private router: Router) {}
 
     ngOnInit(): void {
-        if (localStorage.getItem('user')) {
+        if (localStorage.getItem('user') || sessionStorage.getItem('user')) {
             this.router.navigate(['/profil']);
         }
     }

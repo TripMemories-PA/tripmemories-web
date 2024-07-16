@@ -4,7 +4,7 @@
         <div class="image-container">
             <img
                 [ngSrc]="
-                    ticket?.image?.url ??
+                    ticket?.poi?.cover?.url ??
                     'https://www.timographie360.fr/photos/realisations/principal/vignettes/visite-virtuelle-arc-triomphe_80.jpg'
                 "
                 alt="Ticket avatar"
@@ -32,12 +32,15 @@
                     width="15"
                     height="15"
                 />
-                <span class="ml-2">{{ ticket?.quantity }} Billets restants</span>
+                <span class="ml-2" *ngIf="ticket && ticket.quantity > 0"
+                    >{{ ticket.quantity }} Billets restants</span
+                >
+                <span class="ml-2" *ngIf="ticket && ticket.quantity <= 0">Rupture de stock</span>
             </div>
             <div class="price-button">
                 <span class="price">{{ ticket?.price }} €</span>
                 <button
-                    *ngIf="authServices.user?.access_token && canBuy"
+                    *ngIf="!authServices.user?.poiId && authServices.user?.access_token && canBuy"
                     pButton
                     type="button"
                     (click)="addTicketToBasket()"

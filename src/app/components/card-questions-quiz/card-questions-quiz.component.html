@@ -40,14 +40,20 @@
                     pButton
                     type="button"
                     label="Modifier"
-                    class="p-button-rounded p-button-raised p-button-primary"
+                    [rounded]="true"
+                    [outlined]="true"
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-primary"
                     (click)="visible = true"
                 ></button>
                 <button
                     pButton
                     type="button"
                     label="Supprimer"
-                    class="p-button-rounded p-button-raised p-button-danger"
+                    [rounded]="true"
+                    [outlined]="true"
+                    icon="pi pi-trash"
+                    class="p-button-rounded p-button-danger"
                     (click)="visibleDelete = true"
                 ></button>
             </div>

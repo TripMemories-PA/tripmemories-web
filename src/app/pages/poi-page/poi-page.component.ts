@@ -116,6 +116,10 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         });
     }
 
+    get isSameId(): boolean {
+        return this.authService.user?.poiId?.toString() === this.idPoi;
+    }
+
     ngAfterViewInit() {
         if (this.scrollContainer) {
             this.checkScrollPosition();

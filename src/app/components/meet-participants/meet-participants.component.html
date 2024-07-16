@@ -55,6 +55,7 @@
             pButton
             (click)="payMeet()"
             type="button"
+            *ngIf="hasTicketMeet"
             [disabled]="hasPaid || isLocked || !hasTicketMeet || !hasJoined"
             label="Je paye mon billet"
             class="w-full mt-6"
@@ -87,8 +88,9 @@
     [style]="{ width: '25rem' }"
 >
     <span class="p-text-secondary block mb-5"
-        >Êtes vous sur de vouloir quitter ce meet ? Si vous avez payé votre billet, celui-ci vous
-        sera remboursé en intégralité</span
+        >Êtes vous sur de vouloir quitter ce meet ? Si vous avez payé votre billet enregistré pour
+        le meet, celui-ci vous sera remboursé en intégralité. (Les billets achetés hors du billet
+        intégré pour le meet ne seront pas remboursés)</span
     >
     <div class="flex justify-content-end gap-2">
         <p-button label="Non" severity="secondary" (click)="visibleLeaveMeet = false" />

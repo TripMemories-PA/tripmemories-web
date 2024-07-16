@@ -8,11 +8,25 @@ import { User } from '../../models/user';
 import { UpdateMeModel } from '../../models/updateme.model';
 import { ProfilService } from '../../services/profil/profil.service';
 import { AuthService } from '../../services/auth/auth.service';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { NgIf } from '@angular/common';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'app-personal-data-form',
     standalone: true,
-    imports: [InputTextModule, ButtonModule, IconFieldModule, InputIconModule, PaginatorModule],
+    imports: [
+        InputTextModule,
+        ButtonModule,
+        IconFieldModule,
+        InputIconModule,
+        PaginatorModule,
+        ToastModule,
+        NgIf,
+        ProgressBarModule,
+    ],
+    providers: [MessageService],
     templateUrl: './personal-data-form.component.html',
     styleUrl: './personal-data-form.component.css',
 })
@@ -31,7 +45,26 @@ export class PersonalDataFormComponent {
     constructor(
         private profilServices: ProfilService,
         private authService: AuthService,
-    ) {}
+        private messageService: MessageService,
+    ) {
+        if (this.authService.user) {
+            this.user = {
+                username: this.authService.user.username,
+                email: this.authService.user.email,
+                firstname: this.authService.user.firstname,
+                lastname: this.authService.user.lastname,
+            };
+        }
+    }
+
+    get valid(): boolean {
+        return (
+            !!this.user.username &&
+            !!this.user.email &&
+            !!this.user.firstname &&
+            !!this.user.lastname
+        );
+    }
 
     submit(): void {
         if (this.isLoading) return;
@@ -39,6 +72,11 @@ export class PersonalDataFormComponent {
         this.isLoading = true;
         this.profilServices.updateMe(this.user).subscribe({
             next: (res: UpdateMeModel) => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Changement effectué avec succès',
+                });
                 this.isLoading = false;
                 this.ok = 'Changement effectué avec succès';
                 this.updateLocalStorage(res);
@@ -47,6 +85,11 @@ export class PersonalDataFormComponent {
                 }, 3000);
             },
             error: (err: Error) => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: 'Erreur lors du changement de données',
+                });
                 this.isLoading = false;
                 this.error = err.message;
             },
@@ -54,7 +97,9 @@ export class PersonalDataFormComponent {
     }
 
     private updateLocalStorage(user: UpdateMeModel): void {
-        const userLocalStorage: User = JSON.parse(localStorage.getItem('user') as string);
+        const userLocalStorage: User = JSON.parse(
+            (localStorage.getItem('user') as string) ?? (sessionStorage.getItem('user') as string),
+        );
         userLocalStorage.firstname = user.firstname;
         userLocalStorage.lastname = user.lastname;
         userLocalStorage.email = user.email;

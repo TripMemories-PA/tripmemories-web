@@ -8,6 +8,11 @@ import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { DialogModule } from 'primeng/dialog';
 import { ImageModule } from 'primeng/image';
+import { FloatLabelModule } from 'primeng/floatlabel';
+import { DropdownModule } from 'primeng/dropdown';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { CityService } from '../../services/city/city.service';
+import { FileUploadModule } from 'primeng/fileupload';
 
 @Component({
     selector: 'app-pois-backoffice-page',
@@ -20,12 +25,19 @@ import { ImageModule } from 'primeng/image';
         ButtonModule,
         DialogModule,
         ImageModule,
+        FloatLabelModule,
+        DropdownModule,
+        InputTextareaModule,
+        FileUploadModule,
     ],
     templateUrl: './pois-backoffice-page.component.html',
     styleUrl: './pois-backoffice-page.component.css',
 })
 export class PoisBackofficePageComponent implements OnInit {
-    constructor(private poiService: PoisService) {}
+    constructor(
+        private poiService: PoisService,
+        private cityService: CityService,
+    ) {}
 
     pois: any[] = [];
     itemsPerPage: number = 10;
@@ -37,6 +49,22 @@ export class PoisBackofficePageComponent implements OnInit {
     selectedImage: string = '';
     dialogDescription: boolean = false;
     selectedDescription: string = '';
+    saveDialog: boolean = false;
+    searchCity: string = '';
+
+    poi = {
+        name: null,
+        description: null,
+        coverId: null,
+        latitude: null,
+        longitude: null,
+        city: null,
+        address: null,
+        type: null,
+    };
+
+    cities: any[] = [];
+    types: any = [];
 
     ngOnInit(): void {
         this.searchPois();
@@ -61,6 +89,7 @@ export class PoisBackofficePageComponent implements OnInit {
     }
 
     debouncedSearch = debounce(this.searchPois, 500);
+    debouncedSearchCity = debounce(this.getCities, 500);
 
     onPageChange(event: any) {
         if (event.first === 0) {
@@ -82,5 +111,33 @@ export class PoisBackofficePageComponent implements OnInit {
     openDescriptionDialog(description: string) {
         this.selectedDescription = description;
         this.dialogDescription = true;
+    }
+
+    openSaveDialog() {
+        this.saveDialog = true;
+        this.getTypes();
+        this.getCities();
+    }
+
+    getTypes() {
+        this.poiService.getTypes().subscribe((types) => {
+            this.types = types;
+        });
+    }
+
+    getCities() {
+        this.cityService.getCities(undefined, undefined, this.searchCity).subscribe((cities) => {
+            const data = cities.data.map((city) => {
+                return {
+                    ...city,
+                    label: city.name + ' (' + city.zipCode + ')',
+                };
+            });
+            this.cities = data;
+        });
+    }
+
+    onUpload(event: any) {
+        console.log(event);
     }
 }

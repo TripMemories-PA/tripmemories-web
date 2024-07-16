@@ -68,7 +68,7 @@ export class PoisAccountsBackofficePageComponent implements OnInit {
         email: null as string | null,
         password: null as string | null,
         confirmPassword: null as string | null,
-        poi: null as any | null,
+        poi: null as any,
     };
 
     maxDate = new Date();

@@ -95,4 +95,8 @@ export class PoisService {
         }
         return this.http.get(`${URL}/${id}/sales?${params.toString()}`);
     }
+
+    getTypes() {
+        return this.http.get(`${URL}/types`);
+    }
 }

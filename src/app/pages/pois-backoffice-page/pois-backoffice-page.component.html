@@ -1,12 +1,25 @@
 <div class="flex flex-col items-center mt-10">
-    <input
-        type="text"
-        pInputText
-        class="w-3/5"
-        [(ngModel)]="search"
-        (input)="debouncedSearch()"
-        placeholder="Rechercher par nom, ville"
-    />
+    <div class="flex w-4/5 justify-center">
+        <div class="w-3/5">
+            <input
+                type="text"
+                pInputText
+                class="w-full"
+                [(ngModel)]="search"
+                (input)="debouncedSearch()"
+                placeholder="Rechercher par nom, ville"
+            />
+        </div>
+        <div class="w-1/5 ml-5">
+            <p-button
+                [style]="{ width: '100%' }"
+                icon="pi pi-user-plus"
+                [rounded]="true"
+                (click)="openSaveDialog()"
+                label="Créer un poi"
+            />
+        </div>
+    </div>
     <p-table
         [value]="pois"
         [paginator]="true"
@@ -62,6 +75,97 @@
         </ng-template>
     </p-table>
 </div>
+
+<p-dialog [style]="{ width: '30rem' }" [(visible)]="saveDialog" *ngIf="saveDialog" [modal]="true">
+    <div class="w-full flex items-center flex-col">
+        <p-floatLabel class="w-full mt-5">
+            <p-dropdown
+                [options]="types"
+                [(ngModel)]="poi.type"
+                placeholder="Type"
+                optionLabel="name"
+                [style]="{ width: '100%' }"
+            />
+            <label>Type</label>
+        </p-floatLabel>
+        <p-fileUpload
+            class="mt-8 w-full"
+            mode="basic"
+            accept="image/*"
+            maxFileSize="4000000"
+            chooseIcon="pi pi-upload"
+            chooseLabel="Ajouter une couverture"
+            (onSelect)="onUpload($event)"
+            [style]="{ width: '100%' }"
+        />
+        <p-floatLabel class="w-full mt-8">
+            <input type="text" pInputText [(ngModel)]="poi.name" placeholder="Nom" class="w-full" />
+            <label>Nom</label>
+        </p-floatLabel>
+        <p-floatLabel class="w-full mt-8">
+            <textarea
+                rows="5"
+                cols="30"
+                pInputTextarea
+                [(ngModel)]="poi.description"
+                [autoResize]="true"
+                class="w-full"
+            ></textarea>
+            <label>Description</label>
+        </p-floatLabel>
+        <p-floatLabel class="w-full mt-8">
+            <p-dropdown
+                [options]="cities"
+                [(ngModel)]="poi.city"
+                placeholder="Ville"
+                optionLabel="label"
+                [style]="{ width: '100%' }"
+                [filter]="true"
+            >
+                <ng-template pTemplate="filter">
+                    <input
+                        type="text"
+                        pInputText
+                        placeholder="Filtre"
+                        [(ngModel)]="searchCity"
+                        (keyup)="debouncedSearchCity()"
+                    />
+                </ng-template>
+            </p-dropdown>
+            <label>Ville</label>
+        </p-floatLabel>
+        <p-floatLabel class="w-full mt-8">
+            <input
+                type="text"
+                pInputText
+                [(ngModel)]="poi.address"
+                placeholder="Adresse"
+                class="w-full"
+            />
+            <label>Adresse</label>
+        </p-floatLabel>
+        <p-floatLabel class="w-full mt-8">
+            <input
+                type="number"
+                pInputText
+                [(ngModel)]="poi.latitude"
+                placeholder="Latitude"
+                class="w-full"
+            />
+            <label>Latitude</label>
+        </p-floatLabel>
+        <p-floatLabel class="w-full mt-8">
+            <input
+                type="number"
+                pInputText
+                [(ngModel)]="poi.longitude"
+                placeholder="Longitude"
+                class="w-full"
+            />
+            <label>Longitude</label>
+        </p-floatLabel>
+    </div>
+</p-dialog>
 
 <p-dialog [(visible)]="dialogImage" *ngIf="dialogImage" [modal]="true">
     <p-image [src]="selectedImage" alt="Image" width="500" />

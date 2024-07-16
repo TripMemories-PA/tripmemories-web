@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { debounce } from 'lodash';
 import { PoisService } from '../../services/pois/pois.service';
 import { CommonModule } from '@angular/common';
@@ -12,7 +12,7 @@ import { FloatLabelModule } from 'primeng/floatlabel';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CityService } from '../../services/city/city.service';
-import { FileUploadModule } from 'primeng/fileupload';
+import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
 
 @Component({
     selector: 'app-pois-backoffice-page',
@@ -51,16 +51,22 @@ export class PoisBackofficePageComponent implements OnInit {
     selectedDescription: string = '';
     saveDialog: boolean = false;
     searchCity: string = '';
+    selectedId: number | null = null;
+
+    errorSave: string | null = null;
+    loadingSave: boolean = false;
+
+    @ViewChild('fileUpload') fileUpload: any;
 
     poi = {
         name: null,
         description: null,
-        coverId: null,
+        cover: null as File | null,
         latitude: null,
         longitude: null,
-        city: null,
+        city: null as any,
         address: null,
-        type: null,
+        type: null as any,
     };
 
     cities: any[] = [];
@@ -113,8 +119,30 @@ export class PoisBackofficePageComponent implements OnInit {
         this.dialogDescription = true;
     }
 
-    openSaveDialog() {
+    openSaveDialog(id?: number) {
         this.saveDialog = true;
+        this.errorSave = null;
+        this.selectedId = null;
+        if (id) {
+            const poi = this.pois.find((poi) => poi.id === id);
+            this.selectedId = id;
+            this.poi.name = poi.name;
+            this.poi.description = poi.description;
+            this.poi.cover = poi.cover;
+            this.selectedImage = poi.cover.url;
+        } else {
+            this.poi = {
+                name: null,
+                description: null,
+                cover: null,
+                latitude: null,
+                longitude: null,
+                city: null,
+                address: null,
+                type: null,
+            };
+        }
+
         this.getTypes();
         this.getCities();
     }
@@ -137,7 +165,84 @@ export class PoisBackofficePageComponent implements OnInit {
         });
     }
 
-    onUpload(event: any) {
-        console.log(event);
+    onUpload(event: FileSelectEvent) {
+        this.selectedImage = URL.createObjectURL(event.files[0]);
+        this.poi.cover = event.files[0];
+    }
+
+    clear() {
+        this.poi.cover = null;
+        this.fileUpload.clear();
+    }
+
+    async save() {
+        this.errorSave = null;
+        this.loadingSave = true;
+
+        if (this.poi.cover instanceof File) {
+            this.saveImage();
+        } else {
+            this.savePoi();
+        }
+    }
+
+    saveImage() {
+        this.poiService.storeCover(this.poi.cover!, this.poi.cover!.name).subscribe({
+            next: (data: any) => {
+                this.savePoi(data);
+            },
+            error: (_) => {
+                this.errorSave = "Une erreur est survenue lors de l'envoi de l'image";
+                this.loadingSave = false;
+            },
+        });
+    }
+
+    savePoi(cover?: any) {
+        if (this.selectedId) {
+            this.poiService
+                .updatePoi(
+                    {
+                        name: this.poi.name!,
+                        description: this.poi.description!,
+                        coverId: cover ? cover.id : undefined,
+                    },
+                    this.selectedId.toString(),
+                )
+                .subscribe({
+                    next: (_) => {
+                        this.loadingSave = false;
+                        this.saveDialog = false;
+                        this.searchPois();
+                    },
+                    error: (_) => {
+                        this.errorSave = "Une erreur est survenue lors de l'envoi des données";
+                        this.loadingSave = false;
+                    },
+                });
+        } else {
+            this.poiService
+                .storePoi({
+                    name: this.poi.name!,
+                    description: this.poi.description!,
+                    coverId: cover ? cover.id : undefined,
+                    latitude: this.poi.latitude!,
+                    longitude: this.poi.longitude!,
+                    cityId: this.poi.city!.id!,
+                    address: this.poi.address!,
+                    typeId: this.poi.type!.id!,
+                })
+                .subscribe({
+                    next: (_) => {
+                        this.loadingSave = false;
+                        this.saveDialog = false;
+                        this.searchPois();
+                    },
+                    error: (_) => {
+                        this.errorSave = "Une erreur est survenue lors de l'envoi des données";
+                        this.loadingSave = false;
+                    },
+                });
+        }
     }
 }

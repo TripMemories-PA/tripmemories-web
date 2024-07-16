@@ -69,7 +69,11 @@
                     />
                 </td>
                 <td class="text-center">
-                    <p-button icon="pi pi-pencil" [rounded]="true" [disabled]="true" />
+                    <p-button
+                        icon="pi pi-pencil"
+                        [rounded]="true"
+                        (onClick)="openSaveDialog(poi.id)"
+                    />
                 </td>
             </tr>
         </ng-template>
@@ -78,7 +82,7 @@
 
 <p-dialog [style]="{ width: '30rem' }" [(visible)]="saveDialog" *ngIf="saveDialog" [modal]="true">
     <div class="w-full flex items-center flex-col">
-        <p-floatLabel class="w-full mt-5">
+        <p-floatLabel class="w-full mt-5" *ngIf="!selectedId">
             <p-dropdown
                 [options]="types"
                 [(ngModel)]="poi.type"
@@ -88,16 +92,40 @@
             />
             <label>Type</label>
         </p-floatLabel>
-        <p-fileUpload
-            class="mt-8 w-full"
-            mode="basic"
-            accept="image/*"
-            maxFileSize="4000000"
-            chooseIcon="pi pi-upload"
-            chooseLabel="Ajouter une couverture"
-            (onSelect)="onUpload($event)"
-            [style]="{ width: '100%' }"
-        />
+        <div class="flex w-full">
+            <p-fileUpload
+                class="mt-8 w-full"
+                mode="basic"
+                #fileUpload
+                accept="image/*"
+                maxFileSize="4000000"
+                chooseIcon="pi pi-upload"
+                chooseLabel="Couverture"
+                invalidFileSizeMessageSummary="Taille de fichier invalide"
+                invalidFileSizeMessageDetail="La taille du fichier doit être inférieure à 4 Mo"
+                invalidFileLimitMessageDetail="Vous ne pouvez pas uploader plus de 1 fichier"
+                invalidFileTypeMessageDetail="Seuls les fichiers de type image sont autorisés"
+                invalidFileLimitMessageSummary="Nombre de fichiers invalide"
+                invalidFileTypeMessageSummary="Type de fichier invalide"
+                (onSelect)="onUpload($event)"
+                [style]="{ width: '100%' }"
+            />
+            <p-button
+                class="w-1/4 mt-8 mx-2 flex items-end"
+                icon="pi pi-times"
+                (click)="clear()"
+                severity="danger"
+                [style]="{ width: '100%' }"
+                [disabled]="!poi.cover"
+            />
+            <p-button
+                class="w-1/4 mt-8 flex items-end"
+                icon="pi pi-eye"
+                (click)="dialogImage = true"
+                [style]="{ width: '100%' }"
+                [disabled]="!poi.cover"
+            />
+        </div>
         <p-floatLabel class="w-full mt-8">
             <input type="text" pInputText [(ngModel)]="poi.name" placeholder="Nom" class="w-full" />
             <label>Nom</label>
@@ -113,7 +141,7 @@
             ></textarea>
             <label>Description</label>
         </p-floatLabel>
-        <p-floatLabel class="w-full mt-8">
+        <p-floatLabel class="w-full mt-8" *ngIf="!selectedId">
             <p-dropdown
                 [options]="cities"
                 [(ngModel)]="poi.city"
@@ -126,6 +154,7 @@
                     <input
                         type="text"
                         pInputText
+                        class="w-full"
                         placeholder="Filtre"
                         [(ngModel)]="searchCity"
                         (keyup)="debouncedSearchCity()"
@@ -134,7 +163,7 @@
             </p-dropdown>
             <label>Ville</label>
         </p-floatLabel>
-        <p-floatLabel class="w-full mt-8">
+        <p-floatLabel class="w-full mt-8" *ngIf="!selectedId">
             <input
                 type="text"
                 pInputText
@@ -144,7 +173,7 @@
             />
             <label>Adresse</label>
         </p-floatLabel>
-        <p-floatLabel class="w-full mt-8">
+        <p-floatLabel class="w-full mt-8" *ngIf="!selectedId">
             <input
                 type="number"
                 pInputText
@@ -154,7 +183,7 @@
             />
             <label>Latitude</label>
         </p-floatLabel>
-        <p-floatLabel class="w-full mt-8">
+        <p-floatLabel class="w-full mt-8" *ngIf="!selectedId">
             <input
                 type="number"
                 pInputText
@@ -164,6 +193,38 @@
             />
             <label>Longitude</label>
         </p-floatLabel>
+        <p-button
+            *ngIf="!selectedId"
+            class="w-1/2 mt-8"
+            label="Enregistrer"
+            [loading]="loadingSave"
+            [rounded]="true"
+            (click)="save()"
+            [style]="{ width: '100%' }"
+            [disabled]="
+                !poi.type ||
+                !poi.cover ||
+                !poi.name ||
+                !poi.description ||
+                !poi.city ||
+                !poi.address ||
+                !poi.latitude ||
+                !poi.longitude
+            "
+        />
+        <p-button
+            *ngIf="selectedId"
+            class="w-1/2 mt-8"
+            label="Enregistrer"
+            [loading]="loadingSave"
+            [rounded]="true"
+            (click)="save()"
+            [style]="{ width: '100%' }"
+            [disabled]="!poi.cover || !poi.name || !poi.description"
+        />
+        <div *ngIf="errorSave" class="mt-5">
+            <span class="text-red-500">{{ errorSave }}</span>
+        </div>
     </div>
 </p-dialog>
 

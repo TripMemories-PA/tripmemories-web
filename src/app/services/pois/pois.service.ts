@@ -7,6 +7,8 @@ import { PoisPostResponse, PoisSearchResponse } from '../../models/response/pois
 import { TicketModel } from '../../models/ticket.model';
 import { QuestionResponse } from '../../models/response/question.response';
 import { MeetsResponse } from '../../models/response/meets.response';
+import { StorePoiRequest } from '../../models/request/storePoi.request';
+import { UpdatePoiRequest } from '../../models/request/updatePoi.request';
 
 const URL = environment.apiUrl + '/pois';
 const httpOptions = {
@@ -98,5 +100,19 @@ export class PoisService {
 
     getTypes() {
         return this.http.get(`${URL}/types`);
+    }
+
+    storeCover(file: File, id: string) {
+        const formData: FormData = new FormData();
+        formData.append('file', file, file.name);
+        return this.http.post(`${URL}/cover`, formData);
+    }
+
+    storePoi(data: StorePoiRequest) {
+        return this.http.post(`${URL}`, data);
+    }
+
+    updatePoi(data: UpdatePoiRequest, id: string) {
+        return this.http.put(`${URL}/${id}`, data);
     }
 }

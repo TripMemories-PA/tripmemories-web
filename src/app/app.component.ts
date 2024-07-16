@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { HeaderComponent } from './components/header/header.component';
 import { NgIf } from '@angular/common';
 import { FooterComponent } from './components/footer/footer.component';
+import { TranslateService } from '@ngx-translate/core';
+import { PrimeNGConfig } from 'primeng/api';
+import { Subscription } from 'rxjs';
 import { UserTypes } from './models/enum/UserTypes';
 import { BackofficeSidenavComponent } from './components/backoffice-sidenav/backoffice-sidenav.component';
 
@@ -23,11 +26,17 @@ import { BackofficeSidenavComponent } from './components/backoffice-sidenav/back
     templateUrl: './app.component.html',
     styleUrl: './app.component.css',
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
     title = 'TripMemories';
     showHeaderFooter: boolean = true;
     showBackofficeSidenav: boolean = false;
-    constructor(private router: Router) {}
+    subscription?: Subscription;
+
+    constructor(
+        private router: Router,
+        private config: PrimeNGConfig,
+        private translateService: TranslateService,
+    ) {}
     ngOnInit(): void {
         this.router.events.subscribe((event) => {
             if (event instanceof NavigationEnd) {
@@ -38,7 +47,10 @@ export class AppComponent implements OnInit {
                     url === '/forgotPassword'
                 );
 
-                const user = JSON.parse(localStorage.getItem('user') as string);
+                const user = JSON.parse(
+                    (localStorage.getItem('user') as string) ??
+                        (sessionStorage.getItem('user') as string),
+                );
                 if (user?.userTypeId && user?.userTypeId === UserTypes.ADMIN) {
                     this.showHeaderFooter = false;
                     this.showBackofficeSidenav = true;
@@ -47,5 +59,20 @@ export class AppComponent implements OnInit {
                 }
             }
         });
+        this.translateService.setDefaultLang('fr');
+        this.translate('fr');
+    }
+
+    translate(lang: string) {
+        this.translateService.use(lang);
+        this.translateService
+            .get('primeng')
+            .subscribe((res: any) => this.config.setTranslation(res));
+    }
+
+    ngOnDestroy() {
+        if (this.subscription) {
+            this.subscription.unsubscribe();
+        }
     }
 }

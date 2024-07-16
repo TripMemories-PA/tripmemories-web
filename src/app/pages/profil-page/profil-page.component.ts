@@ -12,6 +12,8 @@ import { BannerProfilComponent } from '../../components/banner-profil/banner-pro
 import { MyTicketsComponent } from '../../container/profil/my-tickets/my-tickets.component';
 import { MyQuizComponent } from '../../container/profil/my-quiz/my-quiz.component';
 import { MyMeetsComponent } from '../../container/profil/my-meets/my-meets.component';
+import { MyQuestsComponent } from '../../container/profil/my-quests/my-quests.component';
+import { PoisService } from '../../services/pois/pois.service';
 
 @Component({
     selector: 'app-profil-page',
@@ -29,6 +31,7 @@ import { MyMeetsComponent } from '../../container/profil/my-meets/my-meets.compo
         MyTicketsComponent,
         MyQuizComponent,
         MyMeetsComponent,
+        MyQuestsComponent,
     ],
     templateUrl: './profil-page.component.html',
     styleUrl: './profil-page.component.css',
@@ -41,7 +44,9 @@ export class ProfilPageComponent implements OnInit {
     banner: string | undefined | null = undefined;
     activeTab: string = 'posts';
     isHoveredBanner: boolean = false;
-    user: User = JSON.parse(localStorage.getItem('user') as string);
+    user: User = JSON.parse(
+        (localStorage.getItem('user') as string) ?? (sessionStorage.getItem('user') as string),
+    );
     userType: number = -1;
     poiId: number = -1;
 
@@ -51,10 +56,13 @@ export class ProfilPageComponent implements OnInit {
 
     constructor(
         private profilService: ProfilService,
+        private poiService: PoisService,
         private friendsService: FriendsService,
         private authServices: AuthService,
     ) {
-        const user = JSON.parse(localStorage.getItem('user') as string);
+        const user = JSON.parse(
+            (localStorage.getItem('user') as string) ?? (sessionStorage.getItem('user') as string),
+        );
         if (!this.authServices.user?.access_token) {
             this.authServices.logout();
             return;
@@ -68,7 +76,7 @@ export class ProfilPageComponent implements OnInit {
         this.profilService.getMe().subscribe({
             next: (user) => {
                 user.access_token = this.authServices.user?.access_token;
-                this.authServices.setUser(user);
+                this.authServices.setUser(user, !!localStorage.getItem('user'));
                 if (user.userTypeId) {
                     this.userType = user.userTypeId;
                 }
@@ -78,14 +86,19 @@ export class ProfilPageComponent implements OnInit {
                 this.banner = user.banner?.url;
                 if (user.poiId) {
                     this.poiId = user.poiId as number;
+                    this.poiService.getPOI(this.poiId.toString()).subscribe({
+                        next: (poi) => {
+                            this.profilPic = poi.cover?.url;
+                            this.banner = poi.cover?.url;
+                            sessionStorage.setItem('poiAvatar', poi.cover?.url ?? '');
+                        },
+                    });
                 }
-                localStorage.setItem('user', JSON.stringify(user));
                 if (this.authServices.user?.avatar) {
                     this.profilPic = user.avatar?.url;
                 }
             },
         });
-
         this.friendsService.getFriends().subscribe({
             next: (friends) => {
                 this.nbrFriends = friends.data.length;

@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { PoisAccountsBackofficePageComponent } from './pois-accounts-backoffice-page.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('PoisAccountsBackofficePageComponent', () => {
     let component: PoisAccountsBackofficePageComponent;
@@ -8,7 +9,7 @@ describe('PoisAccountsBackofficePageComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [PoisAccountsBackofficePageComponent],
+            imports: [PoisAccountsBackofficePageComponent, HttpClientTestingModule],
         }).compileComponents();
 
         fixture = TestBed.createComponent(PoisAccountsBackofficePageComponent);

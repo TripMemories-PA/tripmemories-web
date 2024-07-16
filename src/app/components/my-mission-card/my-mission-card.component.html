@@ -1,0 +1,152 @@
+<div class="p-card mt-8">
+    <div class="p-card-body">
+        <div class="image-container">
+            <img
+                [ngSrc]="
+                    quest?.image?.url ??
+                    'https://decizia.com/blog/wp-content/uploads/2017/06/default-placeholder.png'
+                "
+                alt="{{ quest?.image?.id }}"
+                class="eiffel-image"
+                [loading]="'auto'"
+                (load)="isLoadingImage = false"
+                (error)="isLoadingImage = false"
+                fill
+            />
+        </div>
+        <div class="ticket-content">
+            <div class="flex flex-row justify-between mb-3">
+                <div class="flex flex-row gap-2 items-center">
+                    <img
+                        ngSrc="assets/quest/controller.png"
+                        alt="controller"
+                        width="35"
+                        height="35"
+                    />
+                    <span class="text-[var(--primary)] font-semibold text-2xl">Jeux</span>
+                </div>
+                <div
+                    class="p-0.5 pl-2 pr-2 border-[1px] border-[var(--primary)] rounded-full text-[var(--primary)] flex flex-row gap-0.5"
+                >
+                    <img ngSrc="assets/quest/Gift.png" alt="gift" width="20" height="20" />
+                    <span class="ml-2">50 points</span>
+                </div>
+            </div>
+            <h2>Mission {{ questNbr }} 📸</h2>
+            <p>{{ quest?.title }}</p>
+            <div class="price-button">
+                <button
+                    pButton
+                    *ngIf="isPoi"
+                    type="button"
+                    icon="pi pi-pencil"
+                    class="p-button-rounded p-button-primary mr-3"
+                    [rounded]="true"
+                    [outlined]="true"
+                    (click)="visible = true"
+                ></button>
+                <button
+                    *ngIf="isPoi"
+                    pButton
+                    type="button"
+                    class="p-button-rounded p-button-danger"
+                    icon="pi pi-times"
+                    [rounded]="true"
+                    [outlined]="true"
+                    (click)="visibleDelete = true"
+                ></button>
+                <span
+                    *ngIf="!isPoi && isConnect"
+                    class="mb-2 mr-2"
+                    [ngClass]="{
+                        'status-finished': done,
+                        'status-waiting': !done
+                    }"
+                    >{{ done ? 'Mission validé' : 'Mission à effectuer' }}</span
+                >
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <p-dialog
+        header="Supprimer la mission"
+        [modal]="true"
+        [(visible)]="visibleDelete"
+        [style]="{ width: '25rem' }"
+    >
+        <span class="p-text-secondary block mb-5"
+            >Êtes vous sur de vouloir supprimer la mission: "{{ quest?.title }}" ?</span
+        >
+        <div class="flex justify-content-end gap-2">
+            <p-button label="Non" severity="secondary" (click)="visibleDelete = false" />
+            <p-button label="Oui" (click)="deleteQuest()" />
+        </div>
+        <p-progressBar
+            mode="indeterminate"
+            *ngIf="loading"
+            [style]="{ height: '6px', width: '100%' }"
+        ></p-progressBar>
+        <p-message
+            *ngIf="success"
+            class="self-center mt-6"
+            severity="success"
+            text="{{ success }}"
+        ></p-message>
+        <p-message
+            *ngIf="error"
+            class="self-center mt-6"
+            severity="error"
+            text="{{ error }}"
+        ></p-message>
+    </p-dialog>
+</div>
+<div class="card flex justify-content-center">
+    <p-dialog
+        header="Modifier la mission"
+        class="flex flex-col"
+        [modal]="true"
+        [draggable]="false"
+        [(visible)]="visible"
+        [style]="{ width: '50rem', borderRadius: '9999px' }"
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
+    >
+        <ng-template pTemplate="content">
+            <div>
+                <input
+                    pInputText
+                    type="text"
+                    class="w-full"
+                    [(ngModel)]="questRequest.title"
+                    placeholder="Modifiez le titre"
+                />
+            </div>
+            <button
+                pButton
+                [disabled]="!questRequest.title"
+                (click)="updateQuest()"
+                type="button"
+                label="Valider"
+                class="p-button-rounded p-button-raised p-button-primary w-full mt-4"
+            ></button>
+            <p-progressBar
+                mode="indeterminate"
+                *ngIf="loading"
+                [style]="{ height: '6px', width: '100%', marginTop: '25px' }"
+            ></p-progressBar>
+            <p-message
+                *ngIf="success"
+                class="self-center mt-6"
+                severity="success"
+                text="{{ success }}"
+            ></p-message>
+            <p-message
+                *ngIf="error"
+                class="self-center mt-6"
+                severity="error"
+                text="{{ error }}"
+            ></p-message>
+        </ng-template>
+    </p-dialog>
+</div>

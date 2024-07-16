@@ -85,6 +85,7 @@ export class MeetParticipantsComponent {
             next: (_) => {
                 this.loading = false;
                 this.hasJoined = true;
+                this.visibleJoinMeet = false;
                 this.reloadMeet.emit();
             },
             error: (err) => {
@@ -102,6 +103,7 @@ export class MeetParticipantsComponent {
             next: (_) => {
                 this.loading = false;
                 this.hasJoined = false;
+                this.visibleLeaveMeet = false;
                 this.reloadMeet.emit();
             },
             error: (err) => {

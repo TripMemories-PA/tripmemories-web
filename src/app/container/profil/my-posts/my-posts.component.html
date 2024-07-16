@@ -14,7 +14,10 @@
 >
     Créer un memories (post)
 </button>
-<div class="flex flex-row flex-wrap gap-20">
+<div *ngIf="loading">
+    <p-progressBar mode="indeterminate" [style]="{ height: '6px', width: '100%' }"></p-progressBar>
+</div>
+<div *ngIf="!loading" class="flex flex-row flex-wrap gap-20">
     <app-post-card
         *ngFor="let post of posts"
         [post]="post"
@@ -28,7 +31,7 @@
     [modal]="true"
     [draggable]="false"
     [(visible)]="showDialog"
-    [style]="{ width: '50rem', borderRadius: '9999px' }"
+    [style]="{ width: '50rem', borderRadius: '9999px', height: '70rem' }"
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
 >
     <ng-template pTemplate="content">

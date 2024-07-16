@@ -15,13 +15,18 @@
             </div>
         </ng-template>
         <div class="flex flex-col gap-2">
-            <div class="flex flex-row justify-between text-sm">
+            <div class="flex flex-col gap-2 justify-between text-sm">
                 <p>
-                    Nombre de participant: <span class="font-semibold">{{ meet?.size }}</span>
+                    Nombre de participants: <span class="font-semibold">{{ meet?.size }}</span>
                 </p>
-                <div *ngIf="meet?.ticketId" class="flex flex-row items-center gap-2">
-                    <p>Prix: {{ meet?.ticket?.price }}€</p>
-                    <p>Ticket: {{ meet?.ticket?.title }}</p>
+                <div *ngIf="meet?.ticketId" class="flex flex-row items-center gap-4">
+                    <p>
+                        Ticket: <span class="font-semibold">{{ meet?.ticket?.title }}</span>
+                    </p>
+                    <p>
+                        Prix total du billet:
+                        <span class="font-semibold">{{ meet?.ticket?.price }}€</span>
+                    </p>
                 </div>
             </div>
             <p>
@@ -36,23 +41,29 @@
                     pButton
                     *ngIf="isOwner"
                     type="button"
-                    label="Modifier"
-                    class="p-button-rounded p-button-raised p-button-primary"
+                    icon="pi pi-pencil"
+                    [rounded]="true"
+                    [outlined]="true"
+                    class="p-button-rounded p-button-primary"
                     (click)="visible = true"
                 ></button>
                 <button
                     pButton
                     type="button"
-                    label="accéder au meet"
-                    class="p-button-rounded p-button-raised p-button-success"
+                    icon="pi pi-arrow-right"
+                    [rounded]="true"
+                    [outlined]="true"
+                    class="p-button-rounded p-button-success"
                     (click)="goToMeet()"
                 ></button>
                 <button
                     *ngIf="isOwner"
                     pButton
                     type="button"
-                    label="Supprimer"
-                    class="p-button-rounded p-button-raised p-button-danger"
+                    icon="pi pi-trash"
+                    [outlined]="true"
+                    [rounded]="true"
+                    class="p-button-rounded p-button-danger"
                     (click)="visibleDelete = true"
                 ></button>
             </div>

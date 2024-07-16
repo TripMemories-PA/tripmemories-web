@@ -1,0 +1,111 @@
+<button
+    (click)="goBack()"
+    pButton
+    icon="pi pi-arrow-left"
+    [rounded]="true"
+    class="absolute top-20 left-6"
+></button>
+<div class="chat-container">
+    <div class="header cursor-pointer">
+        <div class="header-background">
+            <img [src]="meet?.poi?.cover?.url" alt="Background Image" class="background-image" />
+            <div class="header-content">
+                <p-avatarGroup>
+                    <p-avatar
+                        *ngFor="let user of users | slice: 0 : 7"
+                        [image]="user.avatar?.url"
+                        size="large"
+                        shape="circle"
+                    />
+                    <p-avatar
+                        *ngIf="totalMembers > 7"
+                        [label]="(totalMembers - 7).toString()"
+                        shape="circle"
+                        size="large"
+                        [style]="{ 'background-color': '#9c27b0', color: '#ffffff' }"
+                    />
+                </p-avatarGroup>
+                <h2 class="text-2xl font-bold">{{ meet?.title }}</h2>
+                <h3 class="text-lg font-normal">
+                    {{ totalMembers }} membre{{ totalMembers > 1 ? 's' : '' }}
+                </h3>
+            </div>
+        </div>
+    </div>
+    <div
+        (scroll)="scrollTop($event)"
+        class="flex flex-col h-[700px] overflow-auto"
+        #scrollContainer
+    >
+        <div *ngFor="let item of messages">
+            <div *ngIf="isDateMarker(item)" class="date-divider">
+                {{ item.date }}
+            </div>
+            <app-message
+                *ngIf="!isDateMarker(item)"
+                class="flex"
+                [ngClass]="{
+                    'justify-end': item.senderId === myId,
+                    'justify-start': item.senderId !== myId
+                }"
+                [message]="item.content"
+                [myMessage]="item.senderId === myId"
+                [time]="formatTime(item.createdAt)"
+                [avatar]="item.senderId !== myId ? item.sender.avatar?.url : undefined"
+                [name]="item.senderId !== myId ? item.sender.firstname : undefined"
+            ></app-message>
+        </div>
+    </div>
+    <div class="input-container">
+        <div class="input-emoji relative">
+            <textarea
+                [(ngModel)]="message.content"
+                pInputTextarea
+                rows="2"
+                cols="30"
+                class="w-5/6 mr-1"
+                (keyup.enter)="submitMessage()"
+                placeholder="Ecrivez votre message..."
+            ></textarea>
+            <button
+                pButton
+                type="button"
+                (click)="toggleEmojiPicker()"
+                icon="pi pi-face-smile"
+                class="ui-button-secondary"
+            ></button>
+            <emoji-mart
+                *ngIf="showEmojiPicker"
+                style="position: absolute; bottom: 60px; right: 80px; z-index: 1000"
+                [i18n]="{
+                    search: 'Rechercher',
+                    emojilist: 'Liste d\'emojis',
+                    notfound: 'Aucun emoji trouvé',
+                    clear: 'Réinitialiser',
+                    categories: {
+                        search: 'Résultats de recherche',
+                        recent: 'Les plus utilisés',
+                        people: 'Personnes & Smileys',
+                        nature: 'Animaux & Nature',
+                        foods: 'Aliments & Boissons',
+                        activity: 'Activités',
+                        places: 'Voyages & Lieux',
+                        objects: 'Objets',
+                        symbols: 'Symboles',
+                        flags: 'Drapeaux',
+                        custom: 'Personnalisé'
+                    }
+                }"
+                (emojiClick)="addEmoji($event)"
+            ></emoji-mart>
+        </div>
+        <button
+            (click)="submitMessage()"
+            [disabled]="!message.content"
+            pButton
+            class="self-end"
+            type="button"
+            icon="pi pi-send"
+        ></button>
+    </div>
+</div>

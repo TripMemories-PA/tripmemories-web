@@ -10,6 +10,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { CreateMeetCardComponent } from '../../../components/create-meet-card/create-meet-card.component';
 import { MeetCardComponent } from '../../../components/meet-card/meet-card.component';
 import { AuthService } from '../../../services/auth/auth.service';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'app-my-meets',
@@ -23,6 +24,7 @@ import { AuthService } from '../../../services/auth/auth.service';
         NgIf,
         CreateMeetCardComponent,
         MeetCardComponent,
+        ProgressBarModule,
     ],
     templateUrl: './my-meets.component.html',
     styleUrl: './my-meets.component.css',
@@ -30,6 +32,7 @@ import { AuthService } from '../../../services/auth/auth.service';
 export class MyMeetsComponent implements OnInit {
     meets: MeetModel[] = [];
     meta: MetaModel = new MetaModel();
+    loading: boolean = false;
 
     currentPage: number = 1;
     itemsPerPage: number = 10;
@@ -54,7 +57,7 @@ export class MyMeetsComponent implements OnInit {
 
     get idUser(): string | number | undefined {
         if (!this.authService.user?.id) {
-            return;
+            return undefined;
         }
         return this.authService.user?.id as unknown as number;
     }
@@ -73,8 +76,10 @@ export class MyMeetsComponent implements OnInit {
                 this.nextPageUrl = response.meta.nextPageUrl;
                 this.previousPageUrl = response.meta.previousPageUrl;
                 this.itemsPerPage = response.meta.perPage;
+                this.loading = false;
             },
             error: (error) => {
+                this.loading = false;
                 console.error(error);
             },
         });
@@ -96,6 +101,7 @@ export class MyMeetsComponent implements OnInit {
     }
 
     ngOnInit(): void {
+        this.loading = true;
         this.getMeets();
     }
 }

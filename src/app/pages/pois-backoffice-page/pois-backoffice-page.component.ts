@@ -201,14 +201,11 @@ export class PoisBackofficePageComponent implements OnInit {
     savePoi(cover?: any) {
         if (this.selectedId) {
             this.poiService
-                .updatePoi(
-                    {
-                        name: this.poi.name!,
-                        description: this.poi.description!,
-                        coverId: cover ? cover.id : undefined,
-                    },
-                    this.selectedId.toString(),
-                )
+                .updatePoi(this.selectedId.toString(), {
+                    name: this.poi.name!,
+                    description: this.poi.description!,
+                    coverId: cover ? cover.id : undefined,
+                })
                 .subscribe({
                     next: (_) => {
                         this.loadingSave = false;

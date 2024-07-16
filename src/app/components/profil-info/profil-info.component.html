@@ -1,8 +1,16 @@
 <div class="relative flex flex-row items-center">
-    <app-change-profil-pic
-        class="flex justify-center"
-        [profilPicOnServer]="profilPic"
-    ></app-change-profil-pic>
+    <ng-container *ngIf="hasPoiId; else isNotPoi">
+        <app-profil-pic-user
+            class="flex justify-center"
+            [profilPicOnServer]="profilPic"
+        ></app-profil-pic-user>
+    </ng-container>
+    <ng-template #isNotPoi>
+        <app-change-profil-pic
+            class="flex justify-center"
+            [profilPicOnServer]="profilPic"
+        ></app-change-profil-pic>
+    </ng-template>
     <app-my-informations
         [user]="user"
         [nbrFriends]="nbrFriends"

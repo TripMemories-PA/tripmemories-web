@@ -11,6 +11,7 @@ import { DialogModule } from 'primeng/dialog';
 import { MetaModel } from '../../../models/meta.model';
 import { PaginatorModule } from 'primeng/paginator';
 import { CreateQuestionComponent } from '../../../components/create-question/create-question.component';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'app-my-quiz',
@@ -25,6 +26,7 @@ import { CreateQuestionComponent } from '../../../components/create-question/cre
         NgIf,
         PaginatorModule,
         CreateQuestionComponent,
+        ProgressBarModule,
     ],
     templateUrl: './my-quiz.component.html',
     styleUrl: './my-quiz.component.css',
@@ -50,7 +52,10 @@ export class MyQuizComponent implements OnInit {
     previousPageUrl: string | null = '';
     showDialog: boolean = false;
 
+    loading: boolean = false;
+
     ngOnInit() {
+        this.loading = true;
         if (!this.authService.user?.poiId) return;
         this.poisService
             .getPoiQuestions(this.authService.user?.poiId.toString(), '1', '10', true)
@@ -67,6 +72,11 @@ export class MyQuizComponent implements OnInit {
                     this.nextPageUrl = response.meta.nextPageUrl;
                     this.previousPageUrl = response.meta.previousPageUrl;
                     this.itemsPerPage = response.meta.perPage;
+                    this.loading = false;
+                },
+                error: (error) => {
+                    console.error(error);
+                    this.loading = false;
                 },
             });
     }

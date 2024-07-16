@@ -9,6 +9,7 @@ export class MeetModel {
     size: number;
     date: Date;
     price: number;
+    channel: string;
     createdById: number;
     poiId: number;
     createdAt: Date;
@@ -29,6 +30,7 @@ export class MeetModel {
         size: number,
         date: Date,
         price: number,
+        channel: string,
         createdById: number,
         poiId: number,
         createdAt: Date,
@@ -48,6 +50,7 @@ export class MeetModel {
         this.size = size;
         this.date = date;
         this.price = price;
+        this.channel = channel;
         this.createdById = createdById;
         this.poiId = poiId;
         this.createdAt = createdAt;

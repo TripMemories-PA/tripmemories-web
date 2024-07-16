@@ -50,7 +50,7 @@ export class FeedPageComponent implements OnInit {
     ngOnInit(): void {
         this.items = [{ label: 'Pour vous' }];
         if (this.authServices.user?.access_token !== undefined) {
-            this.items.push({ label: 'Amis' });
+            this.items.push({ label: 'Mes amis' });
         }
         this.activeItem = this.items[0];
         this.getGeneralPosts();
@@ -97,7 +97,7 @@ export class FeedPageComponent implements OnInit {
     getGeneralPosts(page: number = 1, perPage: number = 10) {
         this.posts = [];
         this.isEnd = false;
-        this.postsService.getPosts(perPage.toString()).subscribe({
+        this.postsService.getPosts(perPage.toString(), this.isAuth).subscribe({
             next: (posts) => {
                 if (posts.data.length === 0) {
                     this.isEnd = true;

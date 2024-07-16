@@ -21,6 +21,8 @@ import { PoisBackofficePageComponent } from './pages/pois-backoffice-page/pois-b
 import { CommentsBackofficePageComponent } from './pages/comments-backoffice-page/comments-backoffice-page.component';
 import { PostsBackofficePageComponent } from './pages/posts-backoffice-page/posts-backoffice-page.component';
 import { PoisAccountsBackofficePageComponent } from './pages/pois-accounts-backoffice-page/pois-accounts-backoffice-page.component';
+import { ConversationUserComponent } from './container/conversations/conversation-user/conversation-user.component';
+import { ConversationMeetComponent } from './container/conversations/conversation-meet/conversation-meet.component';
 
 export const routes: Routes = [
     {
@@ -82,6 +84,14 @@ export const routes: Routes = [
     {
         path: 'basket',
         component: BasketPageComponent,
+    },
+    {
+        path: 'conversations/:id',
+        component: ConversationUserComponent,
+    },
+    {
+        path: 'meets/conversations/:id',
+        component: ConversationMeetComponent,
     },
     {
         path: 'meets/:id',

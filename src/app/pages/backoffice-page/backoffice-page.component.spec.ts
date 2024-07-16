@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BackofficePageComponent } from './backoffice-page.component';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 describe('BackofficePageComponent', () => {
     let component: BackofficePageComponent;
@@ -8,7 +9,7 @@ describe('BackofficePageComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            imports: [BackofficePageComponent],
+            imports: [BackofficePageComponent, HttpClientTestingModule],
         }).compileComponents();
 
         fixture = TestBed.createComponent(BackofficePageComponent);

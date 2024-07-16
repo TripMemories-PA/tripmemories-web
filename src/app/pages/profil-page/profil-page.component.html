@@ -55,7 +55,18 @@
                     >
                         Mon quiz
                     </li>
-                    <li [class.active]="activeTab === 'profile'" (click)="setActiveTab('profile')">
+                    <li
+                        *ngIf="userType === 1 || userType === 3"
+                        [class.active]="activeTab === 'quest'"
+                        (click)="setActiveTab('quest')"
+                    >
+                        Missions
+                    </li>
+                    <li
+                        *ngIf="userType > -1 && userType < 3"
+                        [class.active]="activeTab === 'profile'"
+                        (click)="setActiveTab('profile')"
+                    >
                         Mon profil
                     </li>
                 </ul>
@@ -79,6 +90,9 @@
             </ng-container>
             <ng-container *ngSwitchCase="'quiz'">
                 <app-my-quiz></app-my-quiz>
+            </ng-container>
+            <ng-container *ngSwitchCase="'quest'">
+                <app-my-quests></app-my-quests>
             </ng-container>
         </div>
     </div>

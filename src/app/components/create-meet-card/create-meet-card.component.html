@@ -23,6 +23,7 @@
             [showTime]="true"
             (ngModelChange)="updateDate()"
             [hourFormat]="'24'"
+            [minDate]="minDate"
             class="w-full"
             dateFormat="dd/mm/yy"
             inputId="buttondisplay"
@@ -51,25 +52,15 @@
         <div class="experience">
             <div class="monument">
                 <h3>Monument du meet</h3>
-                <p-dropdown
-                    [options]="poi"
+                <p-autoComplete
                     [(ngModel)]="selectedPoi"
-                    [filter]="true"
-                    filterBy="name"
-                    [showClear]="true"
+                    [suggestions]="poi"
+                    (ngModelChange)="updatePoiId()"
+                    [dropdown]="true"
+                    (completeMethod)="searchPoi($event)"
+                    optionLabel="name"
                     [virtualScroll]="true"
                     [virtualScrollItemSize]="38"
-                    optionLabel="name"
-                    class="w-full"
-                    [placeholder]="
-                        inputPoiId
-                            ? inputPoiName
-                            : loadingPoi
-                              ? 'Chargement...'
-                              : 'Sélectionne ton monument'
-                    "
-                    (ngModelChange)="updatePoiId()"
-                    [disabled]="inputPoiId !== undefined || loading || loadingPoi"
                 />
             </div>
             <h3>Nombre de personne maximum pour le meet</h3>
@@ -93,25 +84,15 @@
     <div *ngIf="reductionCheck">
         <div class="monument">
             <h3>Monument du meet</h3>
-            <p-dropdown
-                [options]="poi"
+            <p-autoComplete
                 [(ngModel)]="selectedPoi"
-                [filter]="true"
-                filterBy="name"
-                [showClear]="true"
+                [suggestions]="poi"
+                (ngModelChange)="updatePoiId()"
+                [dropdown]="true"
+                (completeMethod)="searchPoi($event)"
+                optionLabel="name"
                 [virtualScroll]="true"
                 [virtualScrollItemSize]="38"
-                optionLabel="name"
-                class="w-full"
-                [placeholder]="
-                    inputPoiId
-                        ? inputPoiName
-                        : loadingPoi
-                          ? 'Chargement...'
-                          : 'Sélectionne ton monument'
-                "
-                (ngModelChange)="updatePoiId()"
-                [disabled]="inputPoiId !== undefined || loading || loadingPoi"
             />
         </div>
 
@@ -134,12 +115,14 @@
                     <div class="dropdown-item">
                         <span class="ticket-title">{{ ticket.title }}</span>
                         <span class="ticket-price">{{ ticket.price }}€</span>
+                        <span class="ticket-price">{{ ticket?.groupSize }} pers</span>
                     </div>
                 </ng-template>
                 <ng-template let-ticket pTemplate="selectedItem">
                     <div class="selected-item">
                         <span class="ticket-title">{{ ticket?.title }}</span>
                         <span class="ticket-price">{{ ticket?.price }}€</span>
+                        <span class="ticket-price">{{ ticket?.groupSize }} pers</span>
                     </div>
                 </ng-template>
             </p-dropdown>

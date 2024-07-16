@@ -1,0 +1,75 @@
+<div class="review-container">
+    <div class="title-input">
+        <h3>Nom du lieu</h3>
+        <input
+            pInputText
+            type="text"
+            [(ngModel)]="updatePoiRequest.name"
+            placeholder="Entrez un titre"
+        />
+    </div>
+
+    <div class="photo-upload">
+        <h3>Modifier la photo du lieu (facultatif)</h3>
+        <p-fileUpload
+            #fileUp
+            name="photo"
+            mode="basic"
+            accept="image/*"
+            maxFileSize="4000000"
+            invalidFileSizeMessageSummary="Taille de fichier invalide"
+            invalidFileSizeMessageDetail="La taille du fichier doit être inférieure à 4 Mo"
+            invalidFileLimitMessageDetail="Vous ne pouvez pas uploader plus de 1 fichier"
+            invalidFileTypeMessageDetail="Seuls les fichiers de type image sont autorisés"
+            invalidFileLimitMessageSummary="Nombre de fichiers invalide"
+            invalidFileTypeMessageSummary="Type de fichier invalide"
+            chooseIcon="pi pi-upload"
+            chooseLabel="Ajouter une photo"
+            (onSelect)="storeImage($event)"
+        ></p-fileUpload>
+        <button
+            *ngIf="file"
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full"
+            (click)="removeImage()"
+        >
+            Supprimer l'image choisie
+        </button>
+    </div>
+
+    <div class="rating">
+        <h3>Description du lieu</h3>
+        <textarea
+            pInputTextarea
+            rows="5"
+            cols="50"
+            type="text"
+            [(ngModel)]="updatePoiRequest.description"
+            placeholder="Entrez une description"
+        ></textarea>
+    </div>
+    <button
+        pButton
+        (click)="updatePoi()"
+        [disabled]="!valid"
+        type="button"
+        label="Valider"
+        class="p-button-rounded p-button-raised p-button-primary"
+    ></button>
+    <p-progressBar
+        mode="indeterminate"
+        *ngIf="loading"
+        [style]="{ height: '6px', width: '100%', marginTop: '25px' }"
+    ></p-progressBar>
+    <p-message
+        *ngIf="success"
+        class="self-center mt-6"
+        severity="success"
+        text="{{ success }}"
+    ></p-message>
+    <p-message
+        *ngIf="error"
+        class="self-center mt-6"
+        severity="error"
+        text="{{ error }}"
+    ></p-message>
+</div>

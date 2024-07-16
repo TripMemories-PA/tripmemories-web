@@ -16,8 +16,9 @@ import { PoiModel } from '../../models/Poi.model';
 import { TicketModel } from '../../models/ticket.model';
 import { CalendarModule } from 'primeng/calendar';
 import { MeetService } from '../../services/meet/meet.service';
-import { format } from 'date-fns';
+import { addDays, format } from 'date-fns';
 import { InputSwitchModule } from 'primeng/inputswitch';
+import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
 
 @Component({
     selector: 'app-create-meet-card',
@@ -36,6 +37,7 @@ import { InputSwitchModule } from 'primeng/inputswitch';
         RatingModule,
         CalendarModule,
         InputSwitchModule,
+        AutoCompleteModule,
     ],
     templateUrl: './create-meet-card.component.html',
     styleUrl: './create-meet-card.component.css',
@@ -73,7 +75,7 @@ export class CreateMeetCardComponent implements OnInit {
         private meetService: MeetService,
     ) {}
 
-    nbrPeopleOptions = Array.from({ length: 100 }, (_, i) => i + 1).map((i) => ({
+    nbrPeopleOptions = Array.from({ length: 49 }, (_, i) => i + 2).map((i) => ({
         label: i.toString(),
         value: i,
     }));
@@ -86,6 +88,8 @@ export class CreateMeetCardComponent implements OnInit {
         poiId: this.inputPoiId ?? -1,
         ticketId: null,
     };
+
+    minDate = addDays(new Date(), 7);
 
     get valid(): boolean {
         if (this.meetCheck) {
@@ -178,17 +182,46 @@ export class CreateMeetCardComponent implements OnInit {
         });
     }
 
+    searchPoi(event: AutoCompleteCompleteEvent) {
+        this.loadingPoi = true;
+        if (event.query === '') {
+            this.poiService.getPOIs('1', '20').subscribe({
+                next: (response) => {
+                    this.loadingPoi = false;
+                    this.poi = response.data;
+                },
+                error: (error) => {
+                    this.loadingPoi = false;
+                    console.error(error);
+                },
+            });
+            return;
+        }
+        this.poiService.getPOIs('1', '10', undefined, undefined, undefined, event.query).subscribe({
+            next: (response) => {
+                this.loadingPoi = false;
+                this.poi = response.data;
+            },
+            error: (error) => {
+                this.loadingPoi = false;
+                console.error(error);
+            },
+        });
+    }
+
     ngOnInit(): void {
         this.loadingPoi = true;
         if (this.inputPoiId && this.inputPoiName) {
             this.loadingPoi = false;
             if (this.ticketsInput.length > 0) {
-                this.tickets = this.ticketsInput;
+                this.tickets = this.ticketsInput.filter(
+                    (ticket) => ticket.groupSize > 1 && ticket.groupSize <= 50,
+                );
             }
             this.meetModel.poiId = this.inputPoiId;
             return;
         }
-        this.poiService.getPOIs('1', '100000000').subscribe({
+        this.poiService.getPOIs('1', '20').subscribe({
             next: (response) => {
                 this.loadingPoi = false;
                 this.poi = response.data;

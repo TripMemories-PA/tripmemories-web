@@ -2,10 +2,20 @@
     <div class="mt-3">
         <ng-container>
             <div class="flex flex-row items-center gap-2">
-                <p class="text-3xl font-bold text-['Urbanist']">
-                    {{ user?.firstname }} {{ user?.lastname }}
+                <p
+                    *ngIf="user && user.userTypeId !== 3"
+                    class="text-3xl font-bold text-['Urbanist']"
+                >
+                    {{ user.firstname }} {{ user.lastname }}
+                </p>
+                <p
+                    *ngIf="user && user.userTypeId === 3"
+                    class="text-3xl font-bold text-['Urbanist']"
+                >
+                    {{ poi.name }}
                 </p>
                 <div
+                    *ngIf="user && user.userTypeId !== 3"
                     class="relative w-7 h-7 rounded-full border-2 border-solid border-black cursor-pointer"
                 >
                     <img
@@ -20,7 +30,9 @@
             </div>
         </ng-container>
         <p class="text-xl mt-3 text-['Urbanist']">&#64;{{ user?.username }}</p>
-        <p class="text-md font-bold text-['Urbanist']">France</p>
+        <p *ngIf="user && user.userTypeId !== 3" class="text-md font-bold text-['Urbanist']">
+            France
+        </p>
     </div>
     <div
         *ngIf="user && user.userTypeId !== 3"
@@ -108,6 +120,22 @@
     </ng-container>
     <button
         pButton
+        *ngIf="user && user.userTypeId === 3"
+        type="button"
+        class="text-white bg-[color:var(--info)] m-auto"
+        label="Modifier les informations du lieu"
+        (click)="visiblePoi = true"
+    ></button>
+    <button
+        pButton
+        *ngIf="user && user.userTypeId === 3"
+        type="button"
+        class="text-white bg-[color:var(--info)] m-auto"
+        label="Afficher la page du lieu"
+        (click)="goToPoi()"
+    ></button>
+    <button
+        pButton
         *ngIf="user && user.userTypeId !== 3"
         type="button"
         class="text-white bg-[color:var(--error)] m-auto"
@@ -120,6 +148,17 @@
         [style]="{ height: '6px', width: '100%', marginTop: '10px' }"
     ></p-progressBar>
 </div>
+<p-dialog
+    [(visible)]="visiblePoi"
+    [draggable]="false"
+    [modal]="true"
+    [style]="{ width: '70rem' }"
+    header="Modifier le lieu"
+>
+    <ng-template pTemplate="content">
+        <app-update-poi [poiId]="poiId" [poi]="poi" (closeModal)="closeDialog()"></app-update-poi>
+    </ng-template>
+</p-dialog>
 <div class="card flex justify-content-center">
     <p-dialog
         header="Êtes-vous sûr de vouloir supprimer votre compte ?"

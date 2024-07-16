@@ -12,6 +12,7 @@ import { MessageModule } from 'primeng/message';
 import { NgIf, NgOptimizedImage } from '@angular/common';
 import { ProgressBarModule } from 'primeng/progressbar';
 import { CheckboxModule } from 'primeng/checkbox';
+import { PasswordModule } from 'primeng/password';
 
 @Component({
     selector: 'app-register-form',
@@ -29,6 +30,7 @@ import { CheckboxModule } from 'primeng/checkbox';
         CheckboxModule,
         NgOptimizedImage,
         RouterLink,
+        PasswordModule,
     ],
     templateUrl: './register-form.component.html',
     styleUrl: './register-form.component.css',

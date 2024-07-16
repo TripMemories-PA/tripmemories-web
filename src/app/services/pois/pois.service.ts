@@ -8,7 +8,9 @@ import { TicketModel } from '../../models/ticket.model';
 import { QuestionResponse } from '../../models/response/question.response';
 import { MeetsResponse } from '../../models/response/meets.response';
 import { StorePoiRequest } from '../../models/request/storePoi.request';
-import { UpdatePoiRequest } from '../../models/request/updatePoi.request';
+import { QuestResponse } from '../../models/response/quest.response';
+import { ICreatePoi } from '../../models/interface/ICreatePoi';
+import { IFileImage } from '../../models/interface/FileImage';
 
 const URL = environment.apiUrl + '/pois';
 const httpOptions = {
@@ -76,6 +78,16 @@ export class PoisService {
         );
     }
 
+    getPoiQuests(id: string, page = '1', perPage: string = '10', isConnected = false) {
+        const params = new URLSearchParams();
+        params.append('page', page);
+        params.append('perPage', perPage);
+        return this.http.get<QuestResponse>(
+            `${URL}/${id}/quests?${params.toString()}`,
+            isConnected ? undefined : httpOptions,
+        );
+    }
+
     getPoiMeets(id: string, page = '1', perPage: string = '10') {
         const params = new URLSearchParams();
         params.append('page', page);
@@ -102,17 +114,17 @@ export class PoisService {
         return this.http.get(`${URL}/types`);
     }
 
-    storeCover(file: File) {
-        const formData: FormData = new FormData();
-        formData.append('file', file, file.name);
-        return this.http.post(`${URL}/cover`, formData);
-    }
-
     storePoi(data: StorePoiRequest) {
         return this.http.post(`${URL}`, data);
     }
 
-    updatePoi(data: UpdatePoiRequest, id: string) {
-        return this.http.put(`${URL}/${id}`, data);
+    storeCover(file: File) {
+        const formData = new FormData();
+        formData.append('file', file);
+        return this.http.post<IFileImage>(`${URL}/cover`, formData);
+    }
+
+    updatePoi(id: string, data: ICreatePoi) {
+        return this.http.put<PoiModel>(`${URL}/${id}`, data);
     }
 }

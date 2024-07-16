@@ -1,10 +1,25 @@
-<div class="flex {{ widthImage > heightImage ? 'flex-col' : 'flex-row' }}">
+<div *ngIf="generalLoading" class="loader">
+    <app-loading-spinner></app-loading-spinner>
+</div>
+<div *ngIf="!generalLoading" class="flex {{ widthImage > heightImage ? 'flex-col' : 'flex-row' }}">
     <div class="relative flex justify-center items-center">
-        <p class="title-poi text-center z-10 absolute">
+        <p class="title-poi text-center z-10 absolute text-shadow-lg">
             {{ poi.name }}
         </p>
+        <div *ngIf="widthImage < heightImage" class="h-full w-[600px] relative">
+            <img
+                class="z-0 absolute object-cover"
+                [ngSrc]="
+                    poi.cover?.url ??
+                    'https://decizia.com/blog/wp-content/uploads/2017/06/default-placeholder.png'
+                "
+                alt="{{ poi.name }}"
+                fill
+            />
+        </div>
         <img
-            class="z-0 {{ widthImage > heightImage ? '' : 'max-w-none max-h-full' }}"
+            *ngIf="widthImage > heightImage"
+            class="z-0"
             [src]="
                 poi.cover?.url ??
                 'https://decizia.com/blog/wp-content/uploads/2017/06/default-placeholder.png'
@@ -14,8 +29,14 @@
             height="{{ heightImage }}"
         />
     </div>
-    <div class="p-9 flex {{ widthImage > heightImage ? 'flex-col' : 'flex-row gap-12' }}">
-        <div class="flex flex-col justify-center items-center gap-6">
+    <div class="p-9 flex flex-col">
+        <div
+            [ngClass]="{
+                'basis-9 shrink grow': widthImage < heightImage,
+                'w-full': widthImage > heightImage
+            }"
+            class="flex flex-col justify-center items-center gap-6 relative"
+        >
             <h2 class="text-6xl text-[var(--primary)] font-bold font-['Urbanist']">
                 {{ poi.name }}
             </h2>
@@ -25,7 +46,13 @@
             </h4>
             <p class="font-['Urbanist'] font-semibold leading-10">{{ poi.description }}</p>
         </div>
-        <div class="mt-10">
+        <div
+            [ngClass]="{
+                'basis-9  shrink grow': widthImage < heightImage,
+                'w-full': widthImage > heightImage
+            }"
+            class="mt-10"
+        >
             <div class="flex flex-row justify-between mb-10">
                 <h3 class="text-4xl font-bold font-['Urbanist']">
                     Les derniers posts du point d'intérêt "{{ poi.name }}"
@@ -35,25 +62,14 @@
                         pButton
                         class="p-button-rounded p-button-primary p-button-outlined"
                         label="Créer un memories sur ce lieu"
+                        *ngIf="!isSameId"
                         (click)="openDialog()"
-                    ></button>
-                    <button
-                        *ngIf="nbrQuestions > 0"
-                        pButton
-                        class="p-button-rounded p-button-primary p-button-outlined"
-                        label="Démarrer un quiz sur ce lieu"
-                        (click)="openDialogQuiz()"
-                    ></button>
-                    <button
-                        pButton
-                        class="p-button-rounded p-button-primary p-button-outlined"
-                        label="Créer un meet (rencontre) pour ce lieu"
-                        (click)="openDialogMeet()"
                     ></button>
                 </div>
             </div>
             <div
                 *ngIf="poiPosts.length > 0"
+                (scroll)="scrollPoiPost($event)"
                 class="flex flex-row flex-nowrap gap-10 overflow-x-auto post-scrollbar"
             >
                 <app-post-card
@@ -62,11 +78,18 @@
                     [city]="poi.city?.name"
                 ></app-post-card>
             </div>
-            <span *ngIf="poiPosts.length === 0" class="text-2xl text-red-500 font-['Urbanist']">
+            <span *ngIf="poiPosts.length === 0" class="text-2xl text-gray-400 font-['Urbanist']">
                 Aucun post pour le moment</span
             >
         </div>
-        <div *ngIf="tickets.length > 0" class="mt-16">
+        <div
+            [ngClass]="{
+                'basis-9 shrink grow': widthImage < heightImage,
+                'w-full': widthImage > heightImage
+            }"
+            *ngIf="tickets.length > 0"
+            class="mt-16"
+        >
             <div class="flex flex-row justify-between">
                 <h3 class="text-4xl font-bold font-['Urbanist']">
                     Acheter des billets pour {{ poi.name }}
@@ -108,11 +131,28 @@
                 ></app-buy-ticket-poi-card>
             </div>
         </div>
-        <div class="mt-16">
+        <div
+            [ngClass]="{
+                'basis-9 shrink grow': widthImage < heightImage,
+                'w-full': widthImage > heightImage
+            }"
+            class="mt-16"
+        >
             <div class="flex flex-row justify-between">
-                <h3 class="text-4xl font-bold font-['Urbanist']">
-                    Les meets disponible pour "{{ poi.name }}"
-                </h3>
+                <div class="flex flex-row justify-between mb-10">
+                    <h3 class="text-4xl font-bold font-['Urbanist']">
+                        Les meets disponible pour "{{ poi.name }}"
+                    </h3>
+                    <div class="flex flex-row gap-2 ml-16">
+                        <button
+                            pButton
+                            class="p-button-rounded p-button-primary p-button-outlined"
+                            label="Créer un meet (rencontre)"
+                            *ngIf="!isSameId"
+                            (click)="openDialogMeet()"
+                        ></button>
+                    </div>
+                </div>
                 <div class="flex flex-row ml-auto gap-2">
                     <div
                         class="rounded-full w-10 h-10 flex justify-center items-center cursor-pointer select-none"
@@ -149,7 +189,11 @@
                     </div>
                 </div>
             </div>
-            <div #scrollContainerMeet class="flex flex-row flex-nowrap gap-10 overflow-hidden">
+            <div
+                #scrollContainerMeet
+                (scroll)="scrollPoiMeet($event)"
+                class="flex flex-row flex-nowrap gap-10 overflow-hidden"
+            >
                 <app-meet-card-poi
                     *ngFor="let meetModel of meets"
                     [image]="meetModel.poi.cover?.url"
@@ -161,12 +205,55 @@
                     [link]="meetModel.id.toString()"
                 ></app-meet-card-poi>
             </div>
-            <span *ngIf="meets.length === 0" class="text-2xl text-red-500 font-['Urbanist']">
+            <span *ngIf="meets.length === 0" class="text-2xl text-gray-400 font-['Urbanist']">
                 Aucun Meet actuellement, soyez le premier à en créer un</span
             >
         </div>
-
-        <div class="mt-16">
+        <div
+            [ngClass]="{
+                'basis-9 shrink grow': widthImage < heightImage,
+                'w-full': widthImage > heightImage
+            }"
+            class="mt-16"
+        >
+            <div class="flex flex-row justify-between">
+                <h3 class="text-4xl font-bold font-['Urbanist']">Les missions disponibles</h3>
+                <div class="flex flex-row gap-2">
+                    <button
+                        *ngIf="nbrQuestions > 0"
+                        pButton
+                        class="p-button-rounded p-button-primary p-button-outlined"
+                        label="Démarrer un quiz sur ce lieu"
+                        (click)="openDialogQuiz()"
+                    ></button>
+                </div>
+            </div>
+            <div
+                #scrollContainerQuest
+                (scroll)="scrollPoiQuest($event)"
+                class="flex flex-row flex-nowrap gap-10 overflow-x-auto post-scrollbar p-4"
+            >
+                <app-my-mission-card
+                    *ngFor="let quest of quests; index as i"
+                    [quest]="quest"
+                    [isPoi]="false"
+                    [done]="quest.done"
+                    [questNbr]="i + 1"
+                    [isConnect]="isConnect"
+                ></app-my-mission-card>
+            </div>
+            <span *ngIf="quests.length === 0" class="text-2xl text-gray-400 font-['Urbanist'] mt-6">
+                Aucune missions n'est disponibles pour le moment, patience cela peut arriver très
+                vite</span
+            >
+        </div>
+        <div
+            [ngClass]="{
+                'basis-9 shrink grow': widthImage < heightImage,
+                'w-full': widthImage > heightImage
+            }"
+            class="mt-16"
+        >
             <div class="flex flex-row justify-between">
                 <h3 class="text-4xl font-bold font-['Urbanist']">Autour de "{{ poi.name }}"</h3>
                 <div class="flex flex-row ml-auto gap-2">
@@ -205,7 +292,11 @@
                     </div>
                 </div>
             </div>
-            <div #scrollContainer class="flex flex-row flex-nowrap gap-10 overflow-hidden">
+            <div
+                #scrollContainer
+                (scroll)="scrollPoiNear($event)"
+                class="flex flex-row flex-nowrap gap-10 overflow-hidden"
+            >
                 <app-currently-at-card
                     *ngFor="let currentlyAt of poiNear"
                     [image]="currentlyAt.cover?.url"
@@ -215,7 +306,7 @@
                     [link]="currentlyAt.id?.toString()"
                 ></app-currently-at-card>
             </div>
-            <span *ngIf="poiNear.length === 0" class="text-2xl text-red-500 font-['Urbanist']">
+            <span *ngIf="poiNear.length === 0" class="text-2xl text-gray-400 font-['Urbanist']">
                 Aucun lieu proche dans ce coin</span
             >
         </div>
@@ -227,7 +318,7 @@
     [modal]="true"
     [draggable]="false"
     [(visible)]="showDialog"
-    [style]="{ width: '50rem', borderRadius: '9999px' }"
+    [style]="{ width: '50rem', borderRadius: '9999px', height: '70rem' }"
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
 >
     <ng-template pTemplate="content">

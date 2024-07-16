@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { RatingModule } from 'primeng/rating';
 import { InputTextModule } from 'primeng/inputtext';
 import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
@@ -14,6 +14,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { PoiModel } from '../../models/Poi.model';
 import { DropdownModule } from 'primeng/dropdown';
 import { PoisService } from '../../services/pois/pois.service';
+import { AutoCompleteCompleteEvent, AutoCompleteModule } from 'primeng/autocomplete';
 
 @Component({
     selector: 'app-create-post-card',
@@ -29,6 +30,7 @@ import { PoisService } from '../../services/pois/pois.service';
         NgIf,
         MultiSelectModule,
         DropdownModule,
+        AutoCompleteModule,
     ],
     templateUrl: './create-post-card.component.html',
     styleUrl: './create-post-card.component.css',
@@ -47,6 +49,8 @@ export class CreatePostCardComponent implements OnInit {
     loadingPoi: boolean = false;
     poi: PoiModel[] = [];
     selectedPoi?: PoiModel;
+
+    @ViewChild('fileUp') fileUp: any;
 
     @Input() inputPoiId?: number;
     @Input() inputPoiName?: string;
@@ -115,12 +119,44 @@ export class CreatePostCardComponent implements OnInit {
         });
     }
 
+    searchPoi(event: AutoCompleteCompleteEvent) {
+        this.loadingPoi = true;
+        if (event.query === '') {
+            this.poiService.getPOIs('1', '20').subscribe({
+                next: (response) => {
+                    this.loadingPoi = false;
+                    this.poi = response.data;
+                },
+                error: (error) => {
+                    this.loadingPoi = false;
+                    console.error(error);
+                },
+            });
+            return;
+        }
+        this.poiService.getPOIs('1', '10', undefined, undefined, undefined, event.query).subscribe({
+            next: (response) => {
+                this.loadingPoi = false;
+                this.poi = response.data;
+            },
+            error: (error) => {
+                this.loadingPoi = false;
+                console.error(error);
+            },
+        });
+    }
+
+    removeImage() {
+        this.file = null;
+        this.fileUp.clear();
+    }
+
     ngOnInit(): void {
         this.loadingPoi = true;
         if (this.inputPoiId && this.inputPoiName) {
             return;
         }
-        this.poiService.getPOIs('1', '100000000').subscribe({
+        this.poiService.getPOIs('1', '20').subscribe({
             next: (response) => {
                 this.loadingPoi = false;
                 this.poi = response.data;

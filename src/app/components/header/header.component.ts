@@ -1,7 +1,7 @@
 import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
-import { NgIf, NgOptimizedImage } from '@angular/common';
+import { NgClass, NgIf, NgOptimizedImage } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../services/auth/auth.service';
 import { NavigationEnd, Router } from '@angular/router';
@@ -9,6 +9,7 @@ import { InputIconModule } from 'primeng/inputicon';
 import { InputTextModule } from 'primeng/inputtext';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { MenuModule } from 'primeng/menu';
 
 @Component({
     selector: 'app-header',
@@ -22,6 +23,8 @@ import { Subscription } from 'rxjs';
         InputTextModule,
         ReactiveFormsModule,
         FormsModule,
+        NgClass,
+        MenuModule,
     ],
     templateUrl: './header.component.html',
     styleUrl: './header.component.css',
@@ -40,6 +43,7 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
     };
 
     items: MenuItem[] | undefined;
+    itemsSearch: MenuItem[] = [];
     showSearchInput: boolean = false;
 
     ngOnChanges() {
@@ -50,7 +54,27 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    get poiAvatar(): string | undefined {
+        return sessionStorage.getItem('poiAvatar') ?? undefined;
+    }
+
     ngOnInit() {
+        this.itemsSearch = [
+            {
+                label: 'Recherche par ville',
+                style: {
+                    color: 'black',
+                },
+                routerLink: ['/search-city'],
+            },
+            {
+                label: 'Recherche par lieu',
+                style: {
+                    color: 'black',
+                },
+                routerLink: ['/search'],
+            },
+        ];
         this.updateMenuItems();
         this.subscriptions.add(
             this.auth.user$.subscribe(() => {
@@ -66,7 +90,10 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
                     url.includes('/profil') ||
                     url.includes('/user') ||
                     url.includes('/poi') ||
-                    url.includes('/meets')
+                    url.includes('/meets') ||
+                    url.includes('/conversations') ||
+                    url.includes('/login') ||
+                    url.includes('/register')
                 );
             }
         });
@@ -115,11 +142,12 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
             });
         }
         this.items.push({
-            label: 'Recherche par ville',
+            label: 'Rechercher',
+            styleClass: 'white-menu-icon',
             style: {
                 color: 'white',
             },
-            routerLink: ['/search-city'],
+            items: this.itemsSearch,
         });
     }
 

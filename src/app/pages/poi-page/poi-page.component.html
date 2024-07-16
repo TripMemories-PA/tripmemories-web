@@ -1,4 +1,7 @@
-<div class="flex {{ widthImage > heightImage ? 'flex-col' : 'flex-row' }}">
+<div *ngIf="generalLoading" class="loader">
+    <app-loading-spinner></app-loading-spinner>
+</div>
+<div *ngIf="!generalLoading" class="flex {{ widthImage > heightImage ? 'flex-col' : 'flex-row' }}">
     <div class="relative flex justify-center items-center">
         <p class="title-poi text-center z-10 absolute text-shadow-lg">
             {{ poi.name }}

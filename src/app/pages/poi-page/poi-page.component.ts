@@ -26,6 +26,9 @@ import { MeetCardPoiComponent } from '../../components/meet-card-poi/meet-card-p
 import { MyMissionCardComponent } from '../../components/my-mission-card/my-mission-card.component';
 import { QuestModel } from '../../models/quest.model';
 import { AuthService } from '../../services/auth/auth.service';
+import { catchError, combineLatest, finalize, from, of } from 'rxjs';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 
 @Component({
     selector: 'app-poi-page',
@@ -46,6 +49,8 @@ import { AuthService } from '../../services/auth/auth.service';
         CreateMeetCardComponent,
         MeetCardPoiComponent,
         MyMissionCardComponent,
+        ProgressSpinnerModule,
+        LoadingSpinnerComponent,
     ],
     templateUrl: './poi-page.component.html',
     styleUrl: './poi-page.component.css',
@@ -95,6 +100,8 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
 
     idPoi: string = '';
 
+    generalLoading: boolean = true;
+
     constructor(
         private _activatedRoute: ActivatedRoute,
         private router: Router,
@@ -107,15 +114,38 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         this._activatedRoute.paramMap.subscribe((params) => {
             const param = params.get('id');
             if (!param) {
+                this.generalLoading = false;
                 return;
             }
             this.idPoi = param;
-            this.getPoiDetails(param);
-            this.getPoiTickets(param);
-            this.getPoiPosts(param);
-            this.getPoiMeet(param);
-            this.getPoiQuests(param);
+            this.loadData(param);
         });
+    }
+
+    private loadData(id: string) {
+        const details$ = this.getPoiDetails(id);
+        const tickets$ = this.getPoiTickets(id);
+        const posts$ = this.getPoiPosts(id);
+        const meets$ = this.getPoiMeet(id);
+        const quests$ = this.getPoiQuests(id);
+
+        const sources = from([details$, tickets$, posts$, meets$, quests$]);
+
+        combineLatest([sources])
+            .pipe(
+                finalize(() => {
+                    setTimeout(() => {
+                        this.generalLoading = false;
+                        this.cdr.detectChanges();
+                    }, 2000);
+                }),
+                catchError((error) => {
+                    console.error('Error loading data', error);
+                    this.generalLoading = false;
+                    return of([]);
+                }),
+            )
+            .subscribe();
     }
 
     get isSameId(): boolean {

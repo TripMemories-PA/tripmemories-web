@@ -54,6 +54,7 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     @ViewChild('scrollContainer') scrollContainer!: ElementRef;
     @ViewChild('containerTicket') scrollContainerTicket!: ElementRef;
     @ViewChild('scrollContainerMeet') scrollContainerMeet!: ElementRef;
+    @ViewChild('scrollContainerQuest') scrollContainerQuest!: ElementRef;
 
     @ViewChild('leftButton', { static: true }) leftButton!: ElementRef;
     @ViewChild('rightButton', { static: true }) rightButton!: ElementRef;
@@ -81,6 +82,7 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
     nbrPagePoiPost: number = 1;
     nbrPagePoiMeet: number = 1;
     nbrPagePoiNear: number = 1;
+    nbrPagePoiQuest: number = 1;
 
     isAtLeftEnd: boolean = true;
     isAtRightEnd: boolean = false;
@@ -120,6 +122,9 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         return this.authService.user?.poiId?.toString() === this.idPoi;
     }
 
+    get isConnect(): boolean {
+        return this.authService.user?.access_token !== undefined;
+    }
     ngAfterViewInit() {
         if (this.scrollContainer) {
             this.checkScrollPosition();
@@ -197,15 +202,21 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
         });
     }
 
-    getPoiQuests(id: string | null): void {
+    getPoiQuests(id: string | null, page: number = 1): void {
         if (!id) {
             return;
         }
         this.poisService
-            .getPoiQuests(id, '1', '12', this.authService.user?.access_token !== undefined)
+            .getPoiQuests(
+                id,
+                page.toString(),
+                '12',
+                this.authService.user?.access_token !== undefined,
+            )
             .subscribe({
                 next: (response) => {
-                    this.quests = response.data;
+                    this.quests = this.quests.concat(response.data);
+                    this.nbrPagePoiQuest += 1;
                 },
             });
     }
@@ -318,6 +329,15 @@ export class PoiPageComponent implements OnInit, AfterViewInit {
 
         if (isScrolledToRight) {
             this.getPoiNear(this.nbrPagePoiNear);
+        }
+    }
+
+    scrollPoiQuest(event: Event) {
+        const element = event.target as HTMLElement;
+        const isScrolledToRight = element.scrollWidth - element.scrollLeft === element.clientWidth;
+
+        if (isScrolledToRight) {
+            this.getPoiQuests(this.idPoi, this.nbrPagePoiNear);
         }
     }
 

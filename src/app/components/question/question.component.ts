@@ -66,10 +66,10 @@ export class QuestionComponent implements OnInit, OnChanges {
     ngOnChanges(_: SimpleChanges): void {
         this.timer = 10;
         this.loadingImage = true;
-        clearInterval(this.interval);
+        /*        clearInterval(this.interval);
         setTimeout(() => {
             this.updateTimer();
-        }, 1500);
+        }, 1500);*/
     }
 
     private updateTimer() {

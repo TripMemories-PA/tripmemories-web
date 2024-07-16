@@ -49,7 +49,7 @@ export class FeedPageComponent implements OnInit {
 
     ngOnInit(): void {
         this.items = [{ label: 'Pour vous' }];
-        if (this.authServices.user?.access_token !== undefined) {
+        if (this.authServices.user?.access_token !== undefined && !this.authServices.user?.poiId) {
             this.items.push({ label: 'Mes amis' });
         }
         this.activeItem = this.items[0];

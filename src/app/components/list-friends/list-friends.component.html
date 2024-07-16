@@ -1,4 +1,7 @@
-<div class="p-4 flex flex-row flex-wrap gap-12 justify-center">
+<div *ngIf="loading">
+    <p-progressBar mode="indeterminate" [style]="{ height: '6px', width: '100%' }"></p-progressBar>
+</div>
+<div *ngIf="!loading" class="p-4 flex flex-row flex-wrap gap-12 justify-center">
     <ng-container *ngIf="friends && friends.length > 0; else noFriends">
         <div *ngFor="let friend of friends" class="mb-4 w-1/4">
             <app-friend-card (reload)="getFriends()" [user]="friend"></app-friend-card>

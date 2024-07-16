@@ -2,10 +2,20 @@
     <div class="mt-3">
         <ng-container>
             <div class="flex flex-row items-center gap-2">
-                <p class="text-3xl font-bold text-['Urbanist']">
-                    {{ user?.firstname }} {{ user?.lastname }}
+                <p
+                    *ngIf="user && user.userTypeId !== 3"
+                    class="text-3xl font-bold text-['Urbanist']"
+                >
+                    {{ user.firstname }} {{ user.lastname }}
+                </p>
+                <p
+                    *ngIf="user && user.userTypeId === 3"
+                    class="text-3xl font-bold text-['Urbanist']"
+                >
+                    {{ poi.name }}
                 </p>
                 <div
+                    *ngIf="user && user.userTypeId !== 3"
                     class="relative w-7 h-7 rounded-full border-2 border-solid border-black cursor-pointer"
                 >
                     <img
@@ -20,7 +30,9 @@
             </div>
         </ng-container>
         <p class="text-xl mt-3 text-['Urbanist']">&#64;{{ user?.username }}</p>
-        <p class="text-md font-bold text-['Urbanist']">France</p>
+        <p *ngIf="user && user.userTypeId !== 3" class="text-md font-bold text-['Urbanist']">
+            France
+        </p>
     </div>
     <div
         *ngIf="user && user.userTypeId !== 3"

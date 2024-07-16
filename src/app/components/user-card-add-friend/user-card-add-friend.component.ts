@@ -48,7 +48,7 @@ export class UserCardAddFriendComponent {
         this.friendRequestsService.createFriendRequest(this.user.id!).subscribe({
             next: () => {
                 this.isLoading = false;
-                this.message = 'Friend request sent';
+                this.message = "Demande d'ami envoyée";
             },
             error: (error: Error) => {
                 this.isLoading = false;

@@ -1,7 +1,7 @@
 import { Component, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { MenubarModule } from 'primeng/menubar';
 import { MenuItem } from 'primeng/api';
-import { NgIf, NgOptimizedImage } from '@angular/common';
+import { NgClass, NgIf, NgOptimizedImage } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { AuthService } from '../../services/auth/auth.service';
 import { NavigationEnd, Router } from '@angular/router';
@@ -22,6 +22,7 @@ import { Subscription } from 'rxjs';
         InputTextModule,
         ReactiveFormsModule,
         FormsModule,
+        NgClass,
     ],
     templateUrl: './header.component.html',
     styleUrl: './header.component.css',
@@ -50,6 +51,10 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.subscriptions.unsubscribe();
     }
 
+    get poiAvatar(): string | undefined {
+        return sessionStorage.getItem('poiAvatar') ?? undefined;
+    }
+
     ngOnInit() {
         this.updateMenuItems();
         this.subscriptions.add(
@@ -67,8 +72,11 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
                     url.includes('/user') ||
                     url.includes('/poi') ||
                     url.includes('/meets') ||
-                    url.includes('/conversations')
+                    url.includes('/conversations') ||
+                    url.includes('/login') ||
+                    url.includes('/register')
                 );
+                console.log(this.showBackgroundColor);
             }
         });
     }

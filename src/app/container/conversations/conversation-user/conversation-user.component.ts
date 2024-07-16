@@ -23,6 +23,8 @@ import { fr } from 'date-fns/locale';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ConfigService } from '../../../services/config/config.service';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'app-conversation-user',
@@ -37,6 +39,7 @@ import { ConfigService } from '../../../services/config/config.service';
         FormsModule,
         NgIf,
         PickerComponent,
+        InputTextareaModule,
     ],
     templateUrl: './conversation-user.component.html',
     styleUrl: './conversation-user.component.css',
@@ -48,6 +51,7 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
         private authService: AuthService,
         private router: Router,
         private configService: ConfigService,
+        private location: Location,
     ) {}
     @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
 
@@ -221,5 +225,9 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
     ngOnDestroy(): void {
         this.channel?.unsubscribe();
         this.pusher.unsubscribe(this.user.channel as string);
+    }
+
+    goBack() {
+        this.location.back();
     }
 }

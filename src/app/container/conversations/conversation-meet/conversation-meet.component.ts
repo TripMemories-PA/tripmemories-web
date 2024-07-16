@@ -26,6 +26,8 @@ import { AvatarModule } from 'primeng/avatar';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { ConfigService } from '../../../services/config/config.service';
+import { InputTextareaModule } from 'primeng/inputtextarea';
+import { Location } from '@angular/common';
 
 @Component({
     selector: 'app-conversation-meet',
@@ -42,6 +44,7 @@ import { ConfigService } from '../../../services/config/config.service';
         SlicePipe,
         NgIf,
         PickerComponent,
+        InputTextareaModule,
     ],
     templateUrl: './conversation-meet.component.html',
     styleUrl: './conversation-meet.component.css',
@@ -52,6 +55,7 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked, OnDe
         private _activatedRoute: ActivatedRoute,
         private authService: AuthService,
         private configService: ConfigService,
+        private location: Location,
     ) {}
 
     @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
@@ -229,5 +233,9 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked, OnDe
 
     isDateMarker(item: any): item is { date: string } {
         return 'date' in item;
+    }
+
+    goBack() {
+        this.location.back();
     }
 }

@@ -50,7 +50,7 @@ export class FeedPageComponent implements OnInit {
     ngOnInit(): void {
         this.items = [{ label: 'Pour vous' }];
         if (this.authServices.user?.access_token !== undefined) {
-            this.items.push({ label: 'Amis' });
+            this.items.push({ label: 'Mes amis' });
         }
         this.activeItem = this.items[0];
         this.getGeneralPosts();

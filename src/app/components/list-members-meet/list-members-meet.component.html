@@ -9,7 +9,7 @@
 >
     <div class="dialog-content">
         <div class="summary">
-            <span
+            <span *ngIf="hasTicket"
                 >{{ total }} acheté{{ total > 1 ? 's' : '' }} - {{ waitingTotal }} en attente{{
                     waitingTotal > 1 ? 's' : ''
                 }}</span
@@ -24,8 +24,9 @@
                         <div class="user-username">&#64;{{ user.username }}</div>
                     </div>
                     <div class="user-status">
-                        <span class="status-label">Statut</span>
+                        <span *ngIf="hasTicket" class="status-label">Statut</span>
                         <span
+                            *ngIf="hasTicket"
                             [ngClass]="{
                                 'status-purchased': user.hasPaid,
                                 'status-pending': !user.hasPaid
@@ -37,7 +38,7 @@
                             label="Bannir l'utilisateur"
                             icon="pi pi-ban"
                             class="p-button-danger mt-2"
-                            *ngIf="owner"
+                            *ngIf="owner && userId !== user.id"
                             [disabled]="userId === user.id"
                             (click)="visibleBan = true"
                         ></button>

@@ -59,7 +59,10 @@ export class ChangeProfilPicComponent {
                 this.isLoading = false;
                 this.ok = 'Image enregistrée';
 
-                const user: User = JSON.parse(localStorage.getItem('user') as string);
+                const user: User = JSON.parse(
+                    (localStorage.getItem('user') as string) ??
+                        (sessionStorage.getItem('user') as string),
+                );
                 user.avatar = { url: value.pic };
                 localStorage.setItem('user', JSON.stringify(user));
                 this.authService.setUser(user);

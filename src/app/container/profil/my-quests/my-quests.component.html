@@ -15,9 +15,10 @@
 </button>
 <div class="flex flex-row flex-wrap gap-20">
     <app-my-mission-card
-        *ngFor="let quest of quests"
+        *ngFor="let quest of quests; index as i"
         [quest]="quest"
         [isPoi]="true"
+        [questNbr]="i + 1"
         (reloadQuest)="reloadQuests()"
     ></app-my-mission-card>
 </div>

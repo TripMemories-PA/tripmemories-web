@@ -32,6 +32,10 @@ export class ProfilService {
         return this.http.put(`${URL}`, user);
     }
 
+    updatePassword(password: string) {
+        return this.http.put(`${URL}/password`, { password });
+    }
+
     getMe() {
         return this.http.get<User>(`${URL}`);
     }

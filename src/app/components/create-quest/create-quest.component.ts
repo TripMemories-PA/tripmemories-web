@@ -86,6 +86,8 @@ export class CreateQuestComponent implements OnInit {
     removeImage() {
         this.file = null;
         this.fileUp.clear();
+        this.labels = [];
+        this.questRequest.imageId = -1;
     }
 
     ngOnInit() {

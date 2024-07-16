@@ -41,6 +41,7 @@ export class ListMembersMeetComponent implements OnChanges {
     @Input() meetId?: string | number = '';
     @Input() owner: boolean = false;
     @Input() userId: string = '';
+    @Input() hasTicket: boolean = true;
     @Output() reloadMeet: EventEmitter<any> = new EventEmitter();
 
     @Input() displayDialog: boolean = false;

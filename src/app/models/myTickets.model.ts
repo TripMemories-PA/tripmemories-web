@@ -7,6 +7,7 @@ export class MyTicketsModel {
     qrCode: string;
     ticketId: number;
     userId: number;
+    meetId: number | null = null;
     createdAt: Date;
     updatedAt: Date;
     ticket: TicketModel;
@@ -18,6 +19,7 @@ export class MyTicketsModel {
         qrCode: string,
         ticketId: number,
         userId: number,
+        meetId: number | null,
         createdAt: Date,
         updatedAt: Date,
         ticket: TicketModel,
@@ -28,6 +30,7 @@ export class MyTicketsModel {
         this.qrCode = qrCode;
         this.ticketId = ticketId;
         this.userId = userId;
+        this.meetId = meetId;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
         this.ticket = ticket;

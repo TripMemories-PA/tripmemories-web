@@ -31,7 +31,8 @@
                 </div>
             </div>
             <h4 class="text-sm">
-                Nombre de personne pour le billet: {{ ticket?.ticket?.groupSize }}
+                Nombre de personne pour le billet:
+                {{ ticket?.meetId !== null ? ticket?.ticket?.groupSize : 1 }}
             </h4>
             <h2 class="p-mt-2 text-xl font-bold">{{ ticket?.ticket?.title }}</h2>
             <h3 class="text-sm">

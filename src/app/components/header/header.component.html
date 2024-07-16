@@ -1,4 +1,9 @@
-<p-menubar class="{{ showBackgroundColor ? 'test' : '' }}" [model]="items">
+<p-menubar
+    [ngClass]="{
+        test: showBackgroundColor
+    }"
+    [model]="items"
+>
     <ng-template pTemplate="start">
         <img
             ngSrc="assets/logo/logo_tripmemories_header.png"

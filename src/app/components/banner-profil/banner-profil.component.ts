@@ -6,7 +6,6 @@ import { AuthService } from '../../services/auth/auth.service';
 import { DomSanitizer } from '@angular/platform-browser';
 import { NgIf, NgOptimizedImage } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
-import { PoisService } from '../../services/pois/pois.service';
 
 @Component({
     selector: 'app-banner-profil',

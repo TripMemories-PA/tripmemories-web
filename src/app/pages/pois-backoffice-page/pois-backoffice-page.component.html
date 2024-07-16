@@ -44,7 +44,16 @@
         <ng-template pTemplate="body" let-poi>
             <tr>
                 <td>{{ poi.id }}</td>
-                <td>{{ poi.name }}</td>
+                <td>
+                    <div class="flex">
+                        <span>
+                            {{ poi.name }}
+                        </span>
+                        <span *ngIf="poi.isManaged">
+                            <p-badge class="ml-2" value="Géré" severity="success"></p-badge>
+                        </span>
+                    </div>
+                </td>
                 <td>
                     {{
                         (poi.address ? poi.address + ', ' : ' ') +

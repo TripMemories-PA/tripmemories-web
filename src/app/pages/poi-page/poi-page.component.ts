@@ -235,6 +235,15 @@ export class PoiPageComponent implements OnInit {
         });
     }
 
+    reloadPosts() {
+        if (!this.idPoi) {
+            return;
+        }
+        this.showDialog = false;
+        this.nbrPagePoiPost = 1;
+        this.getPoiPosts(this.idPoi, this.nbrPagePoiPost);
+    }
+
     getPoiQuests(id: string | null, page: number = 1): void {
         if (!id) {
             return;

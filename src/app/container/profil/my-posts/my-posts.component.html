@@ -35,7 +35,7 @@
     [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
 >
     <ng-template pTemplate="content">
-        <app-create-post-card></app-create-post-card>
+        <app-create-post-card (reload)="reloadPosts()"></app-create-post-card>
     </ng-template>
 </p-dialog>
 <p-paginator

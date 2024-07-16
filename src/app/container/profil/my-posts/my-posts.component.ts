@@ -202,4 +202,9 @@ export class MyPostsComponent implements OnInit, OnChanges {
             });
         }
     }
+
+    reloadPosts() {
+        this.ngOnInit();
+        this.showDialog = false;
+    }
 }

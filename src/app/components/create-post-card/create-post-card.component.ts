@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { RatingModule } from 'primeng/rating';
 import { InputTextModule } from 'primeng/inputtext';
 import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
@@ -54,6 +54,7 @@ export class CreatePostCardComponent implements OnInit {
 
     @Input() inputPoiId?: number;
     @Input() inputPoiName?: string;
+    @Output() reload: EventEmitter<any> = new EventEmitter();
 
     post: PostCreationModel = {
         title: '',
@@ -101,7 +102,7 @@ export class CreatePostCardComponent implements OnInit {
                         this.success = 'Post créé avec succès, la page va se recharger';
                         this.loading = false;
                         setTimeout(() => {
-                            window.location.reload();
+                            this.reload.emit();
                         }, 5000);
                     },
                     error: (error) => {
@@ -154,6 +155,7 @@ export class CreatePostCardComponent implements OnInit {
     ngOnInit(): void {
         this.loadingPoi = true;
         if (this.inputPoiId && this.inputPoiName) {
+            this.post.poiId = this.inputPoiId;
             return;
         }
         this.poiService.getPOIs('1', '20').subscribe({

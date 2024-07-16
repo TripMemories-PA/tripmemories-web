@@ -23,9 +23,10 @@
                         <div class="user-name">{{ user.firstname }}</div>
                         <div class="user-username">&#64;{{ user.username }}</div>
                     </div>
-                    <div *ngIf="hasTicket" class="user-status">
-                        <span class="status-label">Statut</span>
+                    <div class="user-status">
+                        <span *ngIf="hasTicket" class="status-label">Statut</span>
                         <span
+                            *ngIf="hasTicket"
                             [ngClass]="{
                                 'status-purchased': user.hasPaid,
                                 'status-pending': !user.hasPaid
@@ -37,7 +38,7 @@
                             label="Bannir l'utilisateur"
                             icon="pi pi-ban"
                             class="p-button-danger mt-2"
-                            *ngIf="owner"
+                            *ngIf="owner && userId !== user.id"
                             [disabled]="userId === user.id"
                             (click)="visibleBan = true"
                         ></button>

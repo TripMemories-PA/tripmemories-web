@@ -16,6 +16,11 @@ import { BasketPageComponent } from './pages/basket-page/basket-page.component';
 import { QuizzPageComponent } from './pages/quizz-page/quizz-page.component';
 import { RankingPageComponent } from './pages/ranking-page/ranking-page.component';
 import { MeetPageComponent } from './pages/meet-page/meet-page.component';
+import { BackofficePageComponent } from './pages/backoffice-page/backoffice-page.component';
+import { PoisBackofficePageComponent } from './pages/pois-backoffice-page/pois-backoffice-page.component';
+import { CommentsBackofficePageComponent } from './pages/comments-backoffice-page/comments-backoffice-page.component';
+import { PostsBackofficePageComponent } from './pages/posts-backoffice-page/posts-backoffice-page.component';
+import { PoisAccountsBackofficePageComponent } from './pages/pois-accounts-backoffice-page/pois-accounts-backoffice-page.component';
 import { ConversationUserComponent } from './container/conversations/conversation-user/conversation-user.component';
 import { ConversationMeetComponent } from './container/conversations/conversation-meet/conversation-meet.component';
 
@@ -99,6 +104,26 @@ export const routes: Routes = [
     {
         path: 'feed',
         component: FeedPageComponent,
+    },
+    {
+        path: 'backoffice/users',
+        component: BackofficePageComponent,
+    },
+    {
+        path: 'backoffice/pois-accounts',
+        component: PoisAccountsBackofficePageComponent,
+    },
+    {
+        path: 'backoffice/pois',
+        component: PoisBackofficePageComponent,
+    },
+    {
+        path: 'backoffice/comments',
+        component: CommentsBackofficePageComponent,
+    },
+    {
+        path: 'backoffice/posts',
+        component: PostsBackofficePageComponent,
     },
     {
         path: '',

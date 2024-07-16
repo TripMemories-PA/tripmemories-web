@@ -7,6 +7,7 @@ import { PoisPostResponse, PoisSearchResponse } from '../../models/response/pois
 import { TicketModel } from '../../models/ticket.model';
 import { QuestionResponse } from '../../models/response/question.response';
 import { MeetsResponse } from '../../models/response/meets.response';
+import { StorePoiRequest } from '../../models/request/storePoi.request';
 import { QuestResponse } from '../../models/response/quest.response';
 import { ICreatePoi } from '../../models/interface/ICreatePoi';
 import { IFileImage } from '../../models/interface/FileImage';
@@ -96,6 +97,25 @@ export class PoisService {
 
     getPoisTickets(id: string) {
         return this.http.get<TicketModel[]>(`${URL}/${id}/tickets`, httpOptions);
+    }
+
+    getPoiSales(id: string, startDate?: string, endDate?: string) {
+        const params = new URLSearchParams();
+        if (startDate) {
+            params.append('startDate', startDate);
+        }
+        if (endDate) {
+            params.append('endDate', endDate);
+        }
+        return this.http.get(`${URL}/${id}/sales?${params.toString()}`);
+    }
+
+    getTypes() {
+        return this.http.get(`${URL}/types`);
+    }
+
+    storePoi(data: StorePoiRequest) {
+        return this.http.post(`${URL}`, data);
     }
 
     storeCover(file: File) {

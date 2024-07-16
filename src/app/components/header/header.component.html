@@ -16,7 +16,16 @@
     </ng-template>
     <ng-template pTemplate="end">
         <div class="flex justify-center items-center gap-6">
-            <i
+            <!--            <div class="card flex justify-content-center">
+                <p-menu #menu class="menu-search" [model]="itemsSearch" [popup]="true" />
+                <p-button
+                    (onClick)="menu.toggle($event)"
+                    label="Rechercher"
+                    iconPos="right"
+                    icon="pi pi-chevron-down"
+                />
+            </div>-->
+            <!--            <i
                 *ngIf="!showSearchInput"
                 class="pi pi-search cursor-pointer text-lg text-[#1f3759] custom-shadow"
                 (click)="toggleSearchInput()"
@@ -32,7 +41,7 @@
                         placeholder="Rechercher..."
                     />
                 </span>
-            </div>
+            </div>-->
             <button
                 *ngIf="!auth.user?.access_token"
                 class="bg-inherit text-white text-shadow-sm shadow-black border-none font-['Urbanist'] font-semibold"

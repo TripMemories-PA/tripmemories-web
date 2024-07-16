@@ -56,6 +56,25 @@
             <emoji-mart
                 *ngIf="showEmojiPicker"
                 style="position: absolute; bottom: 60px; right: 80px; z-index: 1000"
+                [i18n]="{
+                    search: 'Rechercher',
+                    emojilist: 'Liste d\'emojis',
+                    notfound: 'Aucun emoji trouvé',
+                    clear: 'Réinitialiser',
+                    categories: {
+                        search: 'Résultats de recherche',
+                        recent: 'Les plus utilisés',
+                        people: 'Personnes & Smileys',
+                        nature: 'Animaux & Nature',
+                        foods: 'Aliments & Boissons',
+                        activity: 'Activités',
+                        places: 'Voyages & Lieux',
+                        objects: 'Objets',
+                        symbols: 'Symboles',
+                        flags: 'Drapeaux',
+                        custom: 'Personnalisé'
+                    }
+                }"
                 (emojiClick)="addEmoji($event)"
             ></emoji-mart>
         </div>

@@ -11,6 +11,7 @@ import { NgForOf, NgIf } from '@angular/common';
 import { PaginatorModule } from 'primeng/paginator';
 import { MyMissionCardComponent } from '../../../components/my-mission-card/my-mission-card.component';
 import { CreateQuestComponent } from '../../../components/create-quest/create-quest.component';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'app-my-quests',
@@ -24,6 +25,7 @@ import { CreateQuestComponent } from '../../../components/create-quest/create-qu
         MyMissionCardComponent,
         NgIf,
         CreateQuestComponent,
+        ProgressBarModule,
     ],
     templateUrl: './my-quests.component.html',
     styleUrl: './my-quests.component.css',
@@ -53,7 +55,10 @@ export class MyQuestsComponent implements OnInit {
     previousPageUrl: string | null = '';
     showDialog: boolean = false;
 
+    loading: boolean = false;
+
     ngOnInit(): void {
+        this.loading = true;
         if (this.authService.user?.access_token && this.authService.user.userTypeId === 3) {
             this.poiId = this.authService.user.poiId as number;
             this.poisService.getPoiQuests(this.poiId.toString(), '1', '12', true).subscribe({
@@ -69,8 +74,12 @@ export class MyQuestsComponent implements OnInit {
                     this.nextPageUrl = response.meta.nextPageUrl;
                     this.previousPageUrl = response.meta.previousPageUrl;
                     this.itemsPerPage = response.meta.perPage;
+                    this.loading = false;
                 },
-                error: (error) => {},
+                error: (error) => {
+                    this.loading = false;
+                    console.error(error);
+                },
             });
         }
     }

@@ -1,5 +1,5 @@
 import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { provideRouter } from '@angular/router';
+import { provideRouter, RouterModule } from '@angular/router';
 import { routes } from './app.routes';
 import { HTTP_INTERCEPTORS, HttpClient, HttpClientModule } from '@angular/common/http';
 import { RequestInterceptor } from './services/request.interceptor';
@@ -15,6 +15,7 @@ export function HttpLoaderFactory(httpClient: HttpClient) {
 export const appConfig: ApplicationConfig = {
     providers: [
         importProvidersFrom(HttpClientModule),
+        importProvidersFrom(RouterModule.forRoot(routes, { scrollPositionRestoration: 'enabled' })),
         provideRouter(routes),
         {
             provide: HTTP_INTERCEPTORS,

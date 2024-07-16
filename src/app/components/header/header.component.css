@@ -12,10 +12,11 @@
   margin: auto;
 }
 
-::ng-deep p-menubar ul {
+
+::ng-deep .menu-search .p-menu-list {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  gap: 20px;
 }
 
 ::ng-deep .p-menuitem {
@@ -24,9 +25,11 @@
   font-weight: bold;
 }
 
-::ng-deep .p-menu-list {
-  margin: 150px
+::ng-deep .p-submenu-icon {
+  color: white;
+  text-shadow: black 0 0 5px;
 }
+
 ::ng-deep .p-menubar-end {
   margin: 0
 }

@@ -1,6 +1,9 @@
-<div class="flex {{ widthImage > heightImage ? 'flex-col' : 'flex-row' }}">
+<div *ngIf="generalLoading" class="loader">
+    <app-loading-spinner></app-loading-spinner>
+</div>
+<div *ngIf="!generalLoading" class="flex {{ widthImage > heightImage ? 'flex-col' : 'flex-row' }}">
     <div class="relative flex justify-center items-center">
-        <p class="title-poi text-center z-10 absolute">
+        <p class="title-poi text-center z-10 absolute text-shadow-lg">
             {{ poi.name }}
         </p>
         <div *ngIf="widthImage < heightImage" class="h-full w-[600px] relative">
@@ -37,22 +40,6 @@
             <h2 class="text-6xl text-[var(--primary)] font-bold font-['Urbanist']">
                 {{ poi.name }}
             </h2>
-            <div class="flex flex-row gap-2 absolute right-2 top-2">
-                <button
-                    *ngIf="nbrQuestions > 0"
-                    pButton
-                    class="p-button-rounded p-button-primary p-button-outlined"
-                    label="Démarrer un quiz sur ce lieu"
-                    (click)="openDialogQuiz()"
-                ></button>
-                <button
-                    pButton
-                    class="p-button-rounded p-button-primary p-button-outlined"
-                    label="Créer un meet (rencontre) pour ce lieu"
-                    *ngIf="!isSameId"
-                    (click)="openDialogMeet()"
-                ></button>
-            </div>
             <h4 class="font-['Urbanist'] text-[#5B5B5B] text-xl">
                 {{ poi.city?.name
                 }}<span class="text-xs">&nbsp;&nbsp;{{ poi.address }} {{ poi.city?.zipCode }}</span>
@@ -91,7 +78,7 @@
                     [city]="poi.city?.name"
                 ></app-post-card>
             </div>
-            <span *ngIf="poiPosts.length === 0" class="text-2xl text-red-500 font-['Urbanist']">
+            <span *ngIf="poiPosts.length === 0" class="text-2xl text-gray-400 font-['Urbanist']">
                 Aucun post pour le moment</span
             >
         </div>
@@ -152,9 +139,20 @@
             class="mt-16"
         >
             <div class="flex flex-row justify-between">
-                <h3 class="text-4xl font-bold font-['Urbanist']">
-                    Les meets disponible pour "{{ poi.name }}"
-                </h3>
+                <div class="flex flex-row justify-between mb-10">
+                    <h3 class="text-4xl font-bold font-['Urbanist']">
+                        Les meets disponible pour "{{ poi.name }}"
+                    </h3>
+                    <div class="flex flex-row gap-2 ml-16">
+                        <button
+                            pButton
+                            class="p-button-rounded p-button-primary p-button-outlined"
+                            label="Créer un meet (rencontre)"
+                            *ngIf="!isSameId"
+                            (click)="openDialogMeet()"
+                        ></button>
+                    </div>
+                </div>
                 <div class="flex flex-row ml-auto gap-2">
                     <div
                         class="rounded-full w-10 h-10 flex justify-center items-center cursor-pointer select-none"
@@ -207,7 +205,7 @@
                     [link]="meetModel.id.toString()"
                 ></app-meet-card-poi>
             </div>
-            <span *ngIf="meets.length === 0" class="text-2xl text-red-500 font-['Urbanist']">
+            <span *ngIf="meets.length === 0" class="text-2xl text-gray-400 font-['Urbanist']">
                 Aucun Meet actuellement, soyez le premier à en créer un</span
             >
         </div>
@@ -220,17 +218,31 @@
         >
             <div class="flex flex-row justify-between">
                 <h3 class="text-4xl font-bold font-['Urbanist']">Les missions disponibles</h3>
+                <div class="flex flex-row gap-2">
+                    <button
+                        *ngIf="nbrQuestions > 0"
+                        pButton
+                        class="p-button-rounded p-button-primary p-button-outlined"
+                        label="Démarrer un quiz sur ce lieu"
+                        (click)="openDialogQuiz()"
+                    ></button>
+                </div>
             </div>
-            <div class="flex flex-row flex-nowrap gap-10 overflow-x-auto post-scrollbar p-4">
+            <div
+                #scrollContainerQuest
+                (scroll)="scrollPoiQuest($event)"
+                class="flex flex-row flex-nowrap gap-10 overflow-x-auto post-scrollbar p-4"
+            >
                 <app-my-mission-card
                     *ngFor="let quest of quests; index as i"
                     [quest]="quest"
                     [isPoi]="false"
                     [done]="quest.done"
                     [questNbr]="i + 1"
+                    [isConnect]="isConnect"
                 ></app-my-mission-card>
             </div>
-            <span *ngIf="quests.length === 0" class="text-2xl text-red-500 font-['Urbanist'] mt-6">
+            <span *ngIf="quests.length === 0" class="text-2xl text-gray-400 font-['Urbanist'] mt-6">
                 Aucune missions n'est disponibles pour le moment, patience cela peut arriver très
                 vite</span
             >
@@ -294,7 +306,7 @@
                     [link]="currentlyAt.id?.toString()"
                 ></app-currently-at-card>
             </div>
-            <span *ngIf="poiNear.length === 0" class="text-2xl text-red-500 font-['Urbanist']">
+            <span *ngIf="poiNear.length === 0" class="text-2xl text-gray-400 font-['Urbanist']">
                 Aucun lieu proche dans ce coin</span
             >
         </div>

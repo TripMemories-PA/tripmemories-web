@@ -6,11 +6,12 @@ import { FriendCardComponent } from '../friend-card/friend-card.component';
 import { MyFriendsResponse } from '../../models/response/myFriends.response';
 import { MetaModel } from '../../models/meta.model';
 import { PaginatorModule } from 'primeng/paginator';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @Component({
     selector: 'app-list-friends',
     standalone: true,
-    imports: [NgForOf, FriendCardComponent, NgIf, PaginatorModule],
+    imports: [NgForOf, FriendCardComponent, NgIf, PaginatorModule, ProgressBarModule],
     templateUrl: './list-friends.component.html',
     styleUrl: './list-friends.component.css',
 })
@@ -19,6 +20,8 @@ export class ListFriendsComponent implements OnInit {
 
     friends: User[] = [];
     meta: MetaModel = new MetaModel();
+
+    loading: boolean = false;
 
     currentPage: number = 1;
 
@@ -31,6 +34,7 @@ export class ListFriendsComponent implements OnInit {
     previousPageUrl: string | null = '';
 
     ngOnInit() {
+        this.loading = true;
         this.getFriends();
     }
 
@@ -48,8 +52,10 @@ export class ListFriendsComponent implements OnInit {
                 this.lastPageUrl = friends.meta.lastPageUrl;
                 this.nextPageUrl = friends.meta.nextPageUrl;
                 this.previousPageUrl = friends.meta.previousPageUrl;
+                this.loading = false;
             },
             error: (error) => {
+                this.loading = false;
                 console.error(error);
             },
         });

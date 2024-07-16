@@ -2,6 +2,10 @@
   "primeng": {
     "today": "Aujourd'hui",
     "clear": "Réinitialiser",
+    "weak": "Faible",
+    "medium": "Moyen",
+    "strong": "Fort",
+    "passwordPrompt": "Saisir un mot de passe",
     "dayNamesMin": [
       "Di",
       "Lu",
@@ -10,6 +14,15 @@
       "Je",
       "Ve",
       "Sa"
+    ],
+    "dayNames": [
+      "Dimanche",
+      "Lundi",
+      "Mardi",
+      "Mercredi",
+      "Jeudi",
+      "Vendredi",
+      "Samedi"
     ],
     "monthNames": [
       "Janvier",

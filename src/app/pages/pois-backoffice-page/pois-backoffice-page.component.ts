@@ -13,6 +13,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { CityService } from '../../services/city/city.service';
 import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
+import { BadgeModule } from 'primeng/badge';
 
 @Component({
     selector: 'app-pois-backoffice-page',
@@ -29,6 +30,7 @@ import { FileSelectEvent, FileUploadModule } from 'primeng/fileupload';
         DropdownModule,
         InputTextareaModule,
         FileUploadModule,
+        BadgeModule,
     ],
     templateUrl: './pois-backoffice-page.component.html',
     styleUrl: './pois-backoffice-page.component.css',

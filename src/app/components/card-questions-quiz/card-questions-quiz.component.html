@@ -92,7 +92,12 @@
         [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
     >
         <ng-template pTemplate="content">
-            <app-create-question [questionModel]="question" [update]="true"></app-create-question>
+            <app-create-question
+                [questionModel]="question"
+                [update]="true"
+                (reload)="reload.emit()"
+                (closeDialog)="closeDialog()"
+            ></app-create-question>
         </ng-template>
     </p-dialog>
 </div>

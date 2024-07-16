@@ -50,4 +50,8 @@ export class CardQuestionsQuizComponent {
             },
         });
     }
+
+    closeDialog() {
+        this.visible = false;
+    }
 }

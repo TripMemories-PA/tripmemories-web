@@ -187,7 +187,7 @@ export class PoisBackofficePageComponent implements OnInit {
     }
 
     saveImage() {
-        this.poiService.storeCover(this.poi.cover!, this.poi.cover!.name).subscribe({
+        this.poiService.storeCover(this.poi.cover!).subscribe({
             next: (data: any) => {
                 this.savePoi(data);
             },

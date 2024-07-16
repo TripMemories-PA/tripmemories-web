@@ -102,7 +102,7 @@ export class PoisService {
         return this.http.get(`${URL}/types`);
     }
 
-    storeCover(file: File, id: string) {
+    storeCover(file: File) {
         const formData: FormData = new FormData();
         formData.append('file', file, file.name);
         return this.http.post(`${URL}/cover`, formData);

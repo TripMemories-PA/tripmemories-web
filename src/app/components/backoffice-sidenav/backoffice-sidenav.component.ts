@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 import { ListboxModule } from 'primeng/listbox';
@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
     templateUrl: './backoffice-sidenav.component.html',
     styleUrl: './backoffice-sidenav.component.css',
 })
-export class BackofficeSidenavComponent {
+export class BackofficeSidenavComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private router: Router,
@@ -25,30 +25,35 @@ export class BackofficeSidenavComponent {
     items = [
         {
             label: 'Comptes utilisateurs',
+            route: '/backoffice/users',
             command: () => {
                 this.router.navigate(['/backoffice/users']);
             },
         },
         {
             label: 'Comptes POI',
+            route: '/backoffice/pois-accounts',
             command: () => {
                 this.router.navigate(['/backoffice/pois-accounts']);
             },
         },
         {
             label: "Points d'intérêts (POI)",
+            route: '/backoffice/pois',
             command: () => {
                 this.router.navigate(['/backoffice/pois']);
             },
         },
         {
             label: 'Posts',
+            route: '/backoffice/posts',
             command: () => {
                 this.router.navigate(['/backoffice/posts']);
             },
         },
         {
             label: 'Commentaires',
+            route: '/backoffice/comments',
             command: () => {
                 this.router.navigate(['/backoffice/comments']);
             },
@@ -61,6 +66,13 @@ export class BackofficeSidenavComponent {
             },
         },
     ];
+
+    ngOnInit(): void {
+        const url = this.router.url;
+        this.selectedItem = this.items.find((item) => {
+            return item.route === url;
+        });
+    }
 
     goTo() {
         this.selectedItem.command();

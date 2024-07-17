@@ -1,4 +1,7 @@
-<div>
+<div *ngIf="generalLoading" class="loader">
+    <app-loading-spinner></app-loading-spinner>
+</div>
+<div *ngIf="!generalLoading">
     <div class="relative flex justify-center items-center">
         <p class="title-poi text-center z-10 absolute">
             {{ meet && meet.title && meet.title.slice(0, 20) }}...

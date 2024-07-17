@@ -11,11 +11,18 @@
         (click)="visible = true"
     ></button>
     <div class="flex flex-row gap-6 flex-wrap justify-center">
-        <app-ticket-card *ngFor="let ticket of tickets" [ticket]="ticket" />
+        <app-ticket-card
+            *ngFor="let ticket of tickets"
+            [ticket]="ticket"
+            (reload)="getPoiTickets()"
+        />
     </div>
 </div>
 <p-dialog [(visible)]="visible" [draggable]="false" [modal]="true" header="Créer un ticket">
     <ng-template pTemplate="content">
-        <app-create-ticket></app-create-ticket>
+        <app-create-ticket
+            (closeDialog)="closeDialog()"
+            (reload)="getPoiTickets()"
+        ></app-create-ticket>
     </ng-template>
 </p-dialog>

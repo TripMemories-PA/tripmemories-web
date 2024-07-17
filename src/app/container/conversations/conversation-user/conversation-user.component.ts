@@ -124,9 +124,11 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
     }
 
     submitMessage() {
-        if (!this.message.content) {
+        if (!this.message.content || this.message.content.trim() === '') {
             return;
         }
+        this.message.content = this.message.content.trim();
+        console.log(this.message.content);
         this.userService.storeMessage(this.user.id as string, this.message).subscribe({
             next: (_) => {
                 this.message.content = '';
@@ -178,6 +180,7 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
     processMessages(messages: MessageModel[]): (MessageModel | { date: string })[] {
         const result: (MessageModel | { date: string })[] = [];
         let lastDate: Date | null = null;
+
         for (const message of messages) {
             const messageDate = new Date(message.createdAt);
             if (isNaN(messageDate.valueOf())) {
@@ -189,17 +192,27 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
             }
             result.push(message);
         }
+
         return result.sort((a, b) => {
             if (this.isDateMarker(a) && this.isDateMarker(b)) {
                 return 0;
             }
             if (this.isDateMarker(a)) {
-                return -1;
+                return (
+                    new Date((b as MessageModel).createdAt).getTime() -
+                    new Date((a as { date: string }).date).getTime()
+                );
             }
             if (this.isDateMarker(b)) {
-                return 1;
+                return (
+                    new Date((a as MessageModel).createdAt).getTime() -
+                    new Date((b as { date: string }).date).getTime()
+                );
             }
-            return a.createdAt < b.createdAt ? -1 : 1;
+            return (
+                new Date((a as MessageModel).createdAt).getTime() -
+                new Date((b as MessageModel).createdAt).getTime()
+            );
         });
     }
 
@@ -211,7 +224,7 @@ export class ConversationUserComponent implements OnInit, AfterViewChecked, OnDe
     addEmoji(event: EmojiEvent) {
         const emoji = event.emoji;
         this.message.content += emoji.native;
-        this.showEmojiPicker = false; // Optional: close picker after selection
+        this.showEmojiPicker = false;
     }
 
     toggleEmojiPicker() {

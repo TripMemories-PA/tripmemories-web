@@ -18,4 +18,5 @@ export class PostModel {
     image?: IFileImage;
     createdBy?: User;
     poi?: PoiModel;
+    isReported?: boolean;
 }

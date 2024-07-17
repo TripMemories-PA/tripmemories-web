@@ -10,6 +10,7 @@ export class CommentModel {
     createdBy: User;
     likesCount: number;
     isLiked: boolean;
+    isReported: boolean;
 
     constructor(
         id: number,
@@ -21,6 +22,7 @@ export class CommentModel {
         createdBy: User,
         likesCount: number,
         isLiked: boolean,
+        isReported: boolean,
     ) {
         this.id = id;
         this.postId = postId;
@@ -31,5 +33,6 @@ export class CommentModel {
         this.createdBy = createdBy;
         this.likesCount = likesCount;
         this.isLiked = isLiked;
+        this.isReported = isReported;
     }
 }

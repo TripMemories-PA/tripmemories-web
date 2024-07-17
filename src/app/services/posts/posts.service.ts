@@ -56,6 +56,10 @@ export class PostsService {
         return this.http.delete(`${URL}/${id}`);
     }
 
+    reportPost(id: number | string) {
+        return this.http.post(`${URL}/${id}/report`, {});
+    }
+
     sendImagePost(data: FormData) {
         return this.http.post<IFileImage>(`${URL}/image`, data);
     }

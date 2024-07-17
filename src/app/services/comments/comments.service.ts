@@ -28,6 +28,10 @@ export class CommentsService {
         return this.http.delete(`${URL}/${id}/like`);
     }
 
+    reportComment(id: number | string) {
+        return this.http.post(`${URL}/${id}/report`, {});
+    }
+
     getComments(page: string, perPage: string) {
         const params = new URLSearchParams();
         params.append('page', page);

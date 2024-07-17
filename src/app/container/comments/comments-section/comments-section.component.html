@@ -49,6 +49,7 @@
                         [isLiked]="comment.isLiked"
                         [commentId]="comment.id"
                         [isMyComment]="comment.createdById === IdAuthor"
+                        [hasBeenReported]="comment.isReported"
                         (emitter)="loadInitialComments()"
                         class="mb-3"
                     ></app-comment>

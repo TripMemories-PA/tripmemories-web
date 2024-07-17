@@ -165,9 +165,10 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked, OnDe
     }
 
     submitMessage() {
-        if (!this.message.content) {
+        if (!this.message.content || this.message.content.trim() === '') {
             return;
         }
+        this.message.content = this.message.content.trim();
         this.meetService.storeMessage(this.meet?.id.toString() as string, this.message).subscribe({
             next: (_) => {
                 this.message.content = '';
@@ -202,24 +203,34 @@ export class ConversationMeetComponent implements OnInit, AfterViewChecked, OnDe
             }
             result.push(message);
         }
+
         return result.sort((a, b) => {
             if (this.isDateMarker(a) && this.isDateMarker(b)) {
                 return 0;
             }
             if (this.isDateMarker(a)) {
-                return -1;
+                return (
+                    new Date((b as MessageModel).createdAt).getTime() -
+                    new Date((a as { date: string }).date).getTime()
+                );
             }
             if (this.isDateMarker(b)) {
-                return 1;
+                return (
+                    new Date((a as MessageModel).createdAt).getTime() -
+                    new Date((b as { date: string }).date).getTime()
+                );
             }
-            return a.createdAt < b.createdAt ? -1 : 1;
+            return (
+                new Date((a as MessageModel).createdAt).getTime() -
+                new Date((b as MessageModel).createdAt).getTime()
+            );
         });
     }
 
     addEmoji(event: EmojiEvent) {
         const emoji = event.emoji;
         this.message.content += emoji.native;
-        this.showEmojiPicker = false; // Optional: close picker after selection
+        this.showEmojiPicker = false;
     }
 
     toggleEmojiPicker() {

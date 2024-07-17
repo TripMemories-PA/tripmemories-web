@@ -59,6 +59,8 @@
                     [dropdown]="true"
                     (completeMethod)="searchPoi($event)"
                     optionLabel="name"
+                    [placeholder]="inputPoiName"
+                    [disabled]="inputPoiId !== undefined || loading"
                     [virtualScroll]="true"
                     [virtualScrollItemSize]="38"
                 />
@@ -92,6 +94,8 @@
                 (completeMethod)="searchPoi($event)"
                 optionLabel="name"
                 [virtualScroll]="true"
+                [placeholder]="inputPoiName"
+                [disabled]="inputPoiId !== undefined || loading"
                 [virtualScrollItemSize]="38"
             />
         </div>

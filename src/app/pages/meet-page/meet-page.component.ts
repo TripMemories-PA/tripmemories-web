@@ -17,6 +17,8 @@ import { TicketModel } from '../../models/ticket.model';
 import { PoisService } from '../../services/pois/pois.service';
 import { MonumentCardFeedComponent } from '../../components/monument-card-feed/monument-card-feed.component';
 import { ChatCardMeetComponent } from '../../components/chat-card-meet/chat-card-meet.component';
+import { catchError, combineLatest, finalize, from, of } from 'rxjs';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 
 @Component({
     selector: 'app-meet-page',
@@ -33,6 +35,7 @@ import { ChatCardMeetComponent } from '../../components/chat-card-meet/chat-card
         NgForOf,
         MonumentCardFeedComponent,
         ChatCardMeetComponent,
+        LoadingSpinnerComponent,
     ],
     templateUrl: './meet-page.component.html',
     styleUrl: './meet-page.component.css',
@@ -56,6 +59,8 @@ export class MeetPageComponent implements OnInit {
 
     displayDialog: boolean = false;
 
+    generalLoading: boolean = true;
+
     constructor(
         private _activatedRoutes: ActivatedRoute,
         private router: Router,
@@ -69,12 +74,33 @@ export class MeetPageComponent implements OnInit {
             if (params.has('id')) {
                 const meetId = params.get('id') as string;
                 this.idMeet = meetId;
-                this.getMeet(meetId);
-                this.getMessageMeet(meetId);
+                this.loadData(meetId);
             } else {
                 this.router.navigate(['/']);
             }
         });
+    }
+
+    private loadData(id: string) {
+        const meets$ = this.getMeet(id);
+        const messages$ = this.getMessageMeet(id);
+
+        const sources = from([meets$, messages$]);
+
+        combineLatest([sources])
+            .pipe(
+                finalize(() => {
+                    setTimeout(() => {
+                        this.generalLoading = false;
+                    }, 2000);
+                }),
+                catchError((error) => {
+                    console.error('Error loading data', error);
+                    this.generalLoading = false;
+                    return of([]);
+                }),
+            )
+            .subscribe();
     }
 
     get isOwner(): boolean {

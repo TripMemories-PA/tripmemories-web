@@ -51,4 +51,8 @@ export class ShopPageComponent implements OnInit {
             },
         });
     }
+
+    closeDialog() {
+        this.visible = false;
+    }
 }

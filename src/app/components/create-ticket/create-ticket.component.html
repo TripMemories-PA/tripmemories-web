@@ -23,13 +23,14 @@
         <h3>Nombre de personne pour le ticket</h3>
         <p-dropdown
             [options]="nbrPeopleOptions"
-            [(ngModel)]="ticketRequest.groupSize"
+            [(ngModel)]="selectedNbrPeople"
             [filter]="true"
             filterBy="label"
             [showClear]="true"
             [virtualScroll]="true"
             [virtualScrollItemSize]="38"
             optionLabel="label"
+            (ngModelChange)="updateGroupSize()"
             [placeholder]="
                 ticketRequest.groupSize
                     ? ticketRequest.groupSize.toString()
@@ -41,12 +42,13 @@
         <h3>Stock</h3>
         <p-dropdown
             [options]="nbrStockOptions"
-            [(ngModel)]="ticketRequest.quantity"
+            [(ngModel)]="selectedStockOptions"
             [filter]="true"
             filterBy="label"
             [showClear]="true"
             [virtualScroll]="true"
             [virtualScrollItemSize]="38"
+            (ngModelChange)="updateQuantity()"
             optionLabel="label"
             [placeholder]="
                 ticketRequest.quantity ? ticketRequest.quantity.toString() : 'Sélectionne le stock'

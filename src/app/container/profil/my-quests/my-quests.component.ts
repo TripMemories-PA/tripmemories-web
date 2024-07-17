@@ -112,7 +112,6 @@ export class MyQuestsComponent implements OnInit {
     }
 
     reloadQuests() {
-        this.showDialog = false;
         this.poisService.getPoiQuests(this.poiId.toString(), '1', '12', true).subscribe({
             next: (response) => {
                 this.quests = response.data;
@@ -126,6 +125,7 @@ export class MyQuestsComponent implements OnInit {
                 this.nextPageUrl = response.meta.nextPageUrl;
                 this.previousPageUrl = response.meta.previousPageUrl;
                 this.itemsPerPage = response.meta.perPage;
+                this.showDialog = false;
             },
             error: (error) => {},
         });

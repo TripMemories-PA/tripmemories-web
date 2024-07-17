@@ -91,7 +91,12 @@
         [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }"
     >
         <ng-template pTemplate="content">
-            <app-create-ticket [ticket]="ticket" [update]="true"></app-create-ticket>
+            <app-create-ticket
+                [ticket]="ticket"
+                [update]="true"
+                (reload)="reload.emit()"
+                (closeDialog)="closeDialog()"
+            ></app-create-ticket>
         </ng-template>
     </p-dialog>
 </div>

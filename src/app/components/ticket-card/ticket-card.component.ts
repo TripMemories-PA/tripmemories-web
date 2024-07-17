@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
 import { DialogModule } from 'primeng/dialog';
@@ -29,6 +29,7 @@ import { TicketService } from '../../services/ticket/ticket.service';
 })
 export class TicketCardComponent {
     @Input() ticket?: TicketModel;
+    @Output() reload: EventEmitter<any> = new EventEmitter();
     visible: boolean = false;
     visibleDelete: boolean = false;
     loading: boolean = false;
@@ -42,10 +43,15 @@ export class TicketCardComponent {
             next: () => {
                 this.loading = false;
                 this.visible = false;
+                this.reload.emit();
             },
             error: () => {
                 this.loading = false;
             },
         });
+    }
+
+    closeDialog() {
+        this.visible = false;
     }
 }

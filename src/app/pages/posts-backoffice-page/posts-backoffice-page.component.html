@@ -18,6 +18,7 @@
                 <th>Titre</th>
                 <th>Image</th>
                 <th>Contenu</th>
+                <th>Signalements</th>
                 <th>Supprimer</th>
             </tr>
         </ng-template>
@@ -45,6 +46,7 @@
                         (onClick)="openContentDialog(post.content)"
                     />
                 </td>
+                <td>{{ post.reportsCount }}</td>
                 <td>
                     <p-button
                         icon="pi pi-trash"

@@ -16,6 +16,7 @@
                 <th>Écrit par</th>
                 <th>Le</th>
                 <th>Contenu</th>
+                <th>Signalements</th>
                 <th>Supprimer</th>
             </tr>
         </ng-template>
@@ -29,6 +30,7 @@
                 </td>
                 <td>{{ comment.createdAt | date: 'dd/MM/yyyy HH:mm' }}</td>
                 <td>{{ comment.content }}</td>
+                <td>{{ comment.reportsCount }}</td>
                 <td>
                     <p-button
                         icon="pi pi-trash"

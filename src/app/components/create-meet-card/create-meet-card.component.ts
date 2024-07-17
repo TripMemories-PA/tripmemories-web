@@ -84,7 +84,7 @@ export class CreateMeetCardComponent implements OnInit {
         title: '',
         description: '',
         date: undefined,
-        size: 0,
+        size: 2,
         poiId: this.inputPoiId ?? -1,
         ticketId: null,
     };
